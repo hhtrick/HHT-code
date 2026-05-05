@@ -1,0 +1,16 @@
+torch
+pytorch-lightning
+transformers
+peft
+accelerate
+scikit-learn
+numpy
+pandas
+matplotlib
+pyyaml
+torch_geometric
+rdkit
+mordred
+filelock
+ray[tune]
+tensorboard

@@ -1,0 +1,902 @@
+[
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]OCC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene oxide",
+          "smiles": "C1CO1",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene glycol (PEG); polymer grade PEG1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          58
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline polyethylene oxide homopolymer characterized by ethylene oxide repeat units. Thermal characterization was performed using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, following the ISO 11357-2 standard. The data reflects the second heating cycle, which eliminates prior thermal history to evaluate the intrinsic melting behavior of the recrystallized material.",
+      "reasoning_analysis": "Increasing Factors: The high stereoregularity of the homopolymer chain facilitates efficient packing into crystalline lamellae, which is essential for defining a distinct melting transition. Additionally, the polarity of the ether oxygen atoms introduces dipole-dipole interactions that enhance intermolecular cohesion within the crystal lattice, stabilizing the solid phase. Decreasing Factors: The flexible C-O-C backbone linkages exhibit low rotational energy barriers, resulting in a high entropy of fusion that thermodynamically limits the melting temperature compared to polymers with rigid aromatic structures. Furthermore, the finite molecular weight inherent to polymer samples introduces chain ends that act as defects within the crystal lattice, potentially depressing the equilibrium melting point. Dominant Factor: The intrinsic flexibility of the polyethylene oxide backbone is the dominant factor governing the baseline melting temperature, setting it at a moderate level relative to high-performance polymers. However, the use of the second heating cycle in the processing history ensures that the observed Tm is not artificially depressed by quenching effects, allowing the crystalline stability derived from the chemical regularity to be fully expressed."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a poly(ethylene oxide) homopolymer derived from ethylene oxide monomers. Thermal analysis was performed using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere. The experimental protocol adhered to the ISO 11357-2 standard, utilizing a heating rate of 10 °C/min during the second heating cycle to assess the thermal transitions.",
+      "reasoning_analysis": "Increasing Factors: The high structural regularity of the poly(ethylene oxide) homopolymer facilitates efficient chain packing and crystallization, establishing a stable crystal lattice that requires significant thermal energy to disrupt. Additionally, the use of a second heating cycle in the processing history erases prior thermal history and processing-induced defects, allowing for the formation of more uniform crystals during the controlled cooling phase which typically yields a sharper and potentially higher onset melting temperature compared to the first heating of a raw sample. Decreasing Factors: The inherent flexibility of the ether linkages in the polymer backbone increases the entropy of the melt state, which thermodynamically lowers the melting temperature relative to polymers with rigid backbones. Furthermore, the standard cooling rate associated with a typical DSC cycle prior to the second heating may limit the time available for crystal perfection and lamellar thickening, potentially resulting in a slightly lower observed melting point compared to samples subjected to prolonged isothermal crystallization or annealing. Dominant Factor: The intrinsic chemical composition, specifically the high regularity of the ethylene oxide repeat units, is the dominant factor establishing the baseline melting temperature. While the second heating cycle standardizes the thermal history to reveal this intrinsic property accurately, the fundamental chain flexibility and packing ability dictated by the monomer structure ultimately govern the thermodynamic equilibrium melting point."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]OCC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene oxide",
+          "smiles": "C1CO1",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene glycol (PEG); polymer grade PEG5; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          64
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The material is a semi-crystalline poly(ethylene oxide) homopolymer synthesized from ethylene oxide monomers. Thermal analysis was conducted via differential scanning calorimetry using a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min in accordance with ISO 11357-2 standards, with data recorded during the second heating cycle to ensure consistent thermal history.",
+      "reasoning_analysis": "Increasing Factors: The homopolymer nature guarantees high chemical regularity, enabling efficient packing into crystalline lamellae that stabilize the solid phase and require substantial thermal energy to melt. The semi-crystalline hierarchical structure confirms the existence of these ordered regions, where intermolecular interactions contribute positively to the enthalpy of fusion. Decreasing Factors: The backbone contains flexible ether linkages and methylene groups which increase chain mobility and the entropy of the melt state; according to the thermodynamic relationship Tm = ΔHf/ΔSf, a higher entropy of fusion qualitatively depresses the melting temperature compared to rigid-chain polymers. Additionally, the specific thermal history imposed by the second heating cycle implies crystallization occurred during the preceding DSC cooling ramp, which may result in less perfect crystals compared to slow-cooled bulk processed samples, potentially lowering the observed Tm. Dominant Factor: The intrinsic flexibility of the poly(ethylene oxide) backbone is the dominant factor governing the Tm, as it fundamentally sets the entropy penalty for ordering. While the processing protocol standardizes the measurement by erasing prior thermal history, the chemical structure's allowance for high chain mobility ultimately limits the thermal stability of the crystalline phase."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a poly(ethylene oxide) homopolymer derived from ethylene oxide monomers without the inclusion of any additives or fillers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min in accordance with ISO 11357-2. The reported properties correspond to the second heating cycle, ensuring the elimination of prior thermal history to assess the inherent thermal characteristics of the polymer.",
+      "reasoning_analysis": "Increasing Factors: The homopolymer architecture composed exclusively of ethylene oxide repeat units provides high structural regularity and symmetry, facilitating efficient chain packing into crystalline lamellae which supports a distinct melting transition. Additionally, the processing history specifies a second heating cycle, which erases variable prior thermal histories and allows the polymer to crystallize under controlled cooling conditions, stabilizing the crystalline morphology against random processing variations. Decreasing Factors: The chemical structure features flexible ether linkages and a lack of bulky side groups, resulting in high chain mobility and a high entropy of fusion that thermodynamically lowers the melting temperature relative to polymers with rigid backbones. Furthermore, the standard cooling rate associated with the DSC cycle prior to the second heating may generate thinner lamellar crystals compared to slow-cooled or annealed samples, potentially depressing the observed Tm according to the Gibbs-Thomson effect. Dominant Factor: The intrinsic chemical composition is the dominant factor, as the high flexibility of the poly(ethylene oxide) backbone fundamentally establishes the baseline melting temperature range, overriding the minor morphological variations introduced by the standardized thermal cycling protocol."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene",
+          "smiles": "C=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE1; reported melt flow rate / melt volume rate / viscosity number: 0.85 g (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          135
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "This sample comprises a semi-crystalline polyethylene homopolymer synthesized from ethylene monomers. Thermal analysis was conducted using differential scanning calorimetry under a nitrogen atmosphere with a heating rate of 10 °C/min, following the ISO 11357-2 standard. The data reflects the second heating cycle, which eliminates previous thermal history to characterize the intrinsic melting behavior of the material.",
+      "reasoning_analysis": "Increasing Factors: The high structural symmetry of the ethylene repeat unit facilitates efficient chain packing and the formation of stable crystalline lamellae, inherently establishing a defined melting transition. The semi-crystalline hierarchical structure indicates the presence of ordered regions where increased lamellar thickness would drive the Tm higher according to the Thomson-Gibbs equation. Additionally, the nitrogen atmosphere prevents oxidative degradation during heating, preserving molecular integrity. Decreasing Factors: The processing history utilizes a standard second heating cycle without specific annealing steps, meaning the crystal perfection is limited by the instrument's cooling rate rather than optimized thermal treatment, potentially restricting the maximum Tm. Furthermore, the reliance on spontaneous crystallization without nucleating additives may result in less perfect crystals compared to nucleated systems. Dominant Factor: The intrinsic chemical symmetry of the polyethylene backbone and its ability to form a semi-crystalline morphology qualitatively dominate the Tm behavior, as the fundamental thermodynamics of chain folding and crystal stability outweigh the standardizing effects of the DSC protocol."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The investigated material is a polyethylene homopolymer derived from ethylene monomers, formulated without any additional additives or fillers. Thermal characterization was performed using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min. In accordance with ISO 11357-2, the melting behavior was evaluated during the second heating cycle to ensure the elimination of prior thermal history effects.",
+      "reasoning_analysis": "Increasing Factors: The linear chemical architecture of the polyethylene backbone, devoid of bulky side groups or comonomers, enables high structural regularity and efficient chain packing into crystalline lamellae. This high degree of crystallinity and strong intermolecular van der Waals forces inherently drive the Tm upward. Decreasing Factors: There are no plasticizing additives or chemical branches present to disrupt the crystal lattice or increase free volume. However, the kinetic constraints imposed by the DSC thermal cycle, specifically the cooling rate preceding the second heating, may limit lamellar thickness compared to equilibrium crystallization, potentially resulting in a slightly lower observed Tm due to crystal size effects. Dominant Factor: The intrinsic symmetry and linearity of the ethylene repeat unit constitute the dominant factor, establishing a high thermodynamic baseline for the Tm, while the standardized second heating protocol ensures that the measured value reflects the material's inherent crystalline stability rather than processing-induced variations."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene",
+          "smiles": "C=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE7; reported melt flow rate / melt volume rate / viscosity number: 12 g (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          135
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a semi-crystalline polyethylene homopolymer derived from ethylene monomers without the inclusion of additives or fillers. Thermal characterization was performed using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, following the ISO 11357-2 standard. The melting temperature was evaluated during the second heating cycle to eliminate the effects of the material's prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The high structural symmetry of the polyethylene backbone allows for efficient chain packing into lamellar crystals, maximizing intermolecular van der Waals forces and intrinsically driving the Tm upward. The semi-crystalline nature confirms the existence of these ordered regions required for melting, and the 10 °C/min heating rate introduces kinetic superheating that may slightly elevate the observed Tm relative to equilibrium conditions. Decreasing Factors: The protocol specifies a second heating cycle without mention of prior isothermal annealing, which limits the thickening of crystal lamellae and prevents the Tm from reaching its theoretical maximum for perfectly formed crystals. Additionally, the absence of nucleating additives means crystallization during the preceding cooling cycle relies on homogeneous nucleation, potentially resulting in less perfect crystalline domains compared to nucleated systems. Dominant Factor: The intrinsic chemical regularity and linearity of the ethylene homopolymer chain qualitatively dominate the melting behavior. This fundamental structural characteristic dictates the capacity for crystallization and sets the baseline Tm, outweighing the kinetic influences of the heating rate or the specific thermal history erasure protocol."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The investigated material is a polyethylene homopolymer derived from ethylene monomers. Thermal characterization was performed using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min. The melting behavior was evaluated during the second heating cycle in accordance with the ISO 11357-2 standard to ensure consistent thermal history prior to measurement.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition features a linear polyethylene backbone with high structural symmetry and no bulky side groups, facilitating efficient chain packing and the formation of stable crystalline lamellae which intrinsically elevates the Tm. The homopolymer nature ensures high chemical regularity, minimizing lattice defects that would otherwise destabilize the crystal phase. Decreasing Factors: The provided processing history describes a standard characterization protocol without specific thermal annealing or slow-cooling treatments prior to the measurement cycle. This lack of optimized thermal history may result in the formation of thinner lamellae during the DSC cooling phase compared to industrially annealed samples, potentially limiting the upper bound of the observed Tm. Dominant Factor: The intrinsic chemical architecture of the linear polyethylene homopolymer is the dominant factor governing the melting behavior. While the standard DSC protocol standardizes the thermal history, the high chain regularity and purity fundamentally establish the baseline crystalline stability, overriding minor morphological variations introduced by the measurement cycle."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene",
+          "smiles": "C=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene ultra-high molecular weight (UHMWPE); polymer grade UHMWPE1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          133
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample is characterized as a semi-crystalline polyethylene homopolymer derived from ethylene monomers. Thermal properties were evaluated using differential scanning calorimetry on a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere, following the ISO 11357-2 standard. The measurement protocol employed a heating rate of 10 °C/min during the second heating cycle to eliminate prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The high chemical regularity and symmetry of the polyethylene backbone facilitate efficient chain packing into crystalline lamellae, which inherently elevates the energy required for the solid-to-liquid transition. The confirmed semi-crystalline hierarchical structure indicates significant ordered regions that contribute to a distinct melting endotherm. Decreasing Factors: The processing history specifies a second heating cycle, which erases the original thermal history and relies on crystallinity developed during the instrument's cooling phase; this often yields less perfect crystals with thinner lamellae compared to slowly cooled samples, potentially depressing the observed Tm. Additionally, the 10 °C/min heating rate introduces kinetic effects that may prevent the system from reaching equilibrium melting conditions. Dominant Factor: The intrinsic chain symmetry and homopolymer regularity qualitatively dominate the thermal behavior, ensuring a robust melting transition defined by the chemical structure, despite the standardized thermal erasure and kinetic limitations imposed by the DSC protocol."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The material under investigation is a polyethylene homopolymer synthesized from ethylene monomers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere, employing a heating rate of 10 °C/min during the second heating cycle in accordance with ISO 11357-2 standards to ensure the elimination of prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The linear architecture and high stereoregularity of the polyethylene backbone promote dense chain packing and high crystallinity, which strengthens intermolecular van der Waals interactions and elevates the melting temperature (Tm). The use of a nitrogen atmosphere during the measurement prevents thermo-oxidative degradation, preserving the molecular weight and structural integrity necessary for maintaining a high Tm. Decreasing Factors: The high conformational flexibility of the aliphatic backbone contributes to a large entropy of fusion, which inherently lowers the thermodynamic melting point compared to rigid-rod polymers. Additionally, the crystallization occurring during the DSC cooling cycle prior to the second heating may yield lamellae with lower thickness perfection compared to slowly annealed samples, potentially reducing the observed Tm. Dominant Factor: The structural symmetry and linearity of the homopolymer composition qualitatively dominate the melting behavior, as the fundamental ability to crystallize dictates the existence and position of the melting transition more significantly than the kinetic variations introduced by the standard characterization protocol."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene",
+          "smiles": "C=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE13; reported melt flow rate / melt volume rate / viscosity number: 25 g (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          134
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The material is characterized as a semi-crystalline polyethylene homopolymer synthesized from ethylene monomers without the incorporation of additional additives or fillers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min, following the ISO 11357-2 protocol. Measurements were taken during the second heating cycle to erase previous thermal history and establish a standardized thermal baseline.",
+      "reasoning_analysis": "Increasing Factors: The high structural regularity and symmetry of the ethylene repeat units facilitate efficient packing into crystalline lamellae, maximizing intermolecular van der Waals forces and intrinsically driving the Tm upward. The confirmed semi-crystalline hierarchical structure indicates the presence of stable ordered domains that require significant thermal energy to disrupt. Decreasing Factors: The processing history specifies a second heating cycle, which erases the initial thermal history of the sample; this removes any prior annealing effects that might have thickened the crystalline lamellae and elevated the Tm, limiting the observed value to the crystallinity developed during the standardized DSC cooling ramp. Furthermore, the absence of nucleating agents or reinforcing fillers means there are no external additives to potentially stabilize the crystal phase or restrict chain mobility at the interface. Dominant Factor: The intrinsic chain symmetry and packing efficiency of the polyethylene backbone qualitatively dominate the thermal behavior. While the second heating cycle standardizes the thermal history, the fundamental thermodynamic stability of the polyethylene crystal lattice ensures that the structural regularity remains the primary determinant of the melting temperature, overriding the effects of the standardized measurement protocol."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a polyethylene homopolymer derived from ethylene monomers with no added fillers or plasticizers. Thermal characterization was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min, adhering to the ISO 11357-2 standard during the second heating cycle to ensure a standardized thermal history.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition consists of a linear polyethylene backbone with high structural symmetry, facilitating efficient chain packing into thick lamellar crystals that maximize intermolecular van der Waals forces and drive the Tm upward. Additionally, the processing history specifies a second heating cycle, which erases prior thermal history and permits recrystallization, typically promoting the formation of more perfect crystals that melt at higher temperatures compared to kinetically trapped structures. Decreasing Factors: The inherent flexibility of the aliphatic carbon-carbon backbone lacks the rotational barriers associated with bulky side groups or aromatic rings, inherently limiting the thermal stability relative to rigid-chain polymers. Furthermore, the specific cooling rate preceding the second heating cycle, though not explicitly detailed, dictates lamellar thickness; rapid cooling would result in thinner crystals with lower thermodynamic stability, thereby depressing the observed Tm. Dominant Factor: The intrinsic crystallinity potential derived from the linear, symmetric polyethylene backbone is the dominant factor governing the Tm, as the fundamental chemical structure dictates the maximum lattice energy, while the second heating cycle primarily serves to standardize the measurement of this inherent property."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC[*]",
+      "monomers": [
+        {
+          "name": "Ethylene",
+          "smiles": "C=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene ultra-high molecular weight (UHMWPE); polymer grade UHMWPE2; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          132
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a semi-crystalline polyethylene homopolymer derived from ethylene monomers. Thermal characterization was performed using differential scanning calorimetry on a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere, adhering to ISO 11357-2 standards. The melting transition was evaluated during the second heating cycle at a rate of 10 °C/min to normalize the thermal history of the material prior to data acquisition.",
+      "reasoning_analysis": "Increasing Factors: The high structural symmetry and linearity of the polyethylene backbone facilitate efficient chain packing into crystalline lamellae, maximizing intermolecular van der Waals interactions and driving the Tm higher. The semi-crystalline hierarchical structure indicates the presence of ordered regions where lamellar thickness contributes positively to the melting temperature via the Gibbs-Thomson effect. Additionally, the use of a second heating cycle eliminates variable prior thermal history, ensuring the measured Tm reflects a standardized crystalline morphology developed under controlled conditions. Decreasing Factors: The absence of polar functional groups or bulky side chains limits intermolecular forces to weak dispersion interactions, which inherently lowers the energy required for the crystal-to-melt transition compared to polymers with stronger specific interactions. Furthermore, the cooling rates inherent to the standard DSC protocol prior to the second heating may limit the time available for crystal perfection and lamellar thickening, potentially resulting in thinner crystallites that melt at lower temperatures than slowly cooled bulk materials. Dominant Factor: The intrinsic chain symmetry of the ethylene repeat units is the dominant factor, as it enables the formation of the semi-crystalline morphology necessary for a distinct Tm to exist, overriding the limiting effects of weak intermolecular forces by allowing dense packing that stabilizes the crystalline phase against thermal disruption."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a polyethylene homopolymer defined by a linear ethylene repeat unit structure without any additional additives or fillers. Thermal characterization was performed using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min following the ISO 11357-2 standard, with the melting behavior evaluated during the second heating cycle to eliminate prior thermal history effects.",
+      "reasoning_analysis": "Increasing Factors: The high stereoregularity and linearity of the polyethylene backbone facilitate efficient chain packing and the formation of thick lamellae, intrinsically driving the Tm upward relative to branched or irregular analogs. Additionally, the nitrogen atmosphere during analysis prevents thermo-oxidative degradation, preserving molecular weight and crystal stability. Decreasing Factors: The flexible aliphatic backbone results in a high entropy of fusion, which thermodynamically limits the Tm compared to polymers with rigid backbones. Furthermore, the reliance on the second heating cycle without explicit isothermal annealing means the observed Tm reflects crystals formed during non-isothermal cooling, which may be less perfect than those from an optimized thermal treatment. Dominant Factor: The intrinsic chemical regularity and symmetry of the ethylene homopolymer structure serve as the dominant factor, establishing the fundamental thermodynamic baseline for melting, while the standardized DSC protocol primarily functions to reveal this intrinsic property with minimal kinetic artifact."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC(C)[*]",
+      "monomers": [
+        {
+          "name": "Propylene",
+          "smiles": "CC=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP3; reported melt flow rate / melt volume rate / viscosity number: 3.5 g (10 min)-1(230 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          166
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "This sample comprises a semi-crystalline polypropylene homopolymer synthesized from propylene monomers without the inclusion of additives. Thermal characterization was conducted using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, following ISO 11357-2 standards. The data reflects the second heating cycle, which eliminates previous thermal history to isolate the melting behavior associated with the material's inherent crystalline morphology.",
+      "reasoning_analysis": "Increasing Factors: The homopolymer composition ensures high chemical regularity along the backbone, facilitating efficient chain packing into stable lamellar crystals. Additionally, the semi-crystalline hierarchical structure implies a high degree of stereoregularity, likely isotactic, which maximizes intermolecular cohesive energy density and lattice stability, inherently driving the Tm upward. Decreasing Factors: The methyl side groups introduce steric hindrance relative to linear polyethylene, slightly limiting packing efficiency. Furthermore, the processing history indicates a standard DSC protocol where the cooling rate between the first and second heating cycles is relatively rapid compared to slow annealing processes; this typically results in thinner lamellar crystals, which depresses the observed Tm according to the Thomson-Gibbs equation. Dominant Factor: The intrinsic stereoregularity and chemical identity of the polypropylene backbone serve as the dominant factor, as they are the fundamental prerequisites for the existence of the crystalline phase. While the thermal protocol modulates crystal perfection, the chemical structure establishes the baseline thermodynamic stability of the crystalline regions that defines the melting transition."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample is characterized as a polypropylene homopolymer synthesized from propylene monomers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere to prevent oxidative degradation. The measurement protocol adhered to ISO 11357-2 standards, employing a heating rate of 10 °C/min and recording data during the second heating cycle to eliminate the effects of prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition as a homopolymer ensures a high degree of structural regularity along the backbone, assuming isotactic stereoregularity, which facilitates efficient chain packing into stable crystalline lamellae and maximizes the lattice energy required for melting. Furthermore, the use of a nitrogen atmosphere during the processing history prevents thermo-oxidative degradation, preserving the molecular weight and crystal perfection necessary to maintain a high intrinsic melting temperature. Decreasing Factors: The reliance on the second heating cycle means the crystalline morphology was formed during the instrument's cooling phase; if this cooling rate was relatively fast compared to industrial annealing, it may result in thinner lamellae with lower thermal stability, thereby reducing the observed Tm. Additionally, any inherent atactic fractions within the homopolymer matrix would act as defects within the crystalline lattice, disrupting order and depressing the melting point. Dominant Factor: The intrinsic stereoregularity and homopolymer purity of the polypropylene chains qualitatively dominate the final Tm behavior, as these structural features dictate the fundamental thermodynamic limit of crystallinity, whereas the standardized DSC thermal history primarily serves to reveal this intrinsic property rather than fundamentally altering the polymer's chemical potential for melting."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC(C)[*]",
+      "monomers": [
+        {
+          "name": "Propylene",
+          "smiles": "CC=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP1; reported melt flow rate / melt volume rate / viscosity number: 25 g (10 min)-1(230 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          163
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample is characterized as a semi-crystalline polypropylene homopolymer synthesized from propylene monomers. Thermal analysis was conducted using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere, utilizing a heating rate of 10 °C/min in accordance with the ISO 11357-2 standard. The reported data reflects the second heating cycle, ensuring that the thermal history prior to measurement was standardized through a controlled melting and recrystallization process.",
+      "reasoning_analysis": "Increasing Factors: The presence of methyl side groups on the polypropylene backbone, assuming isotactic stereoregularity implied by the semi-crystalline structure, facilitates the formation of stable 3/1 helical conformations that pack efficiently into a monoclinic crystal lattice, thereby increasing the lattice energy and driving the Tm upward relative to less regular polyolefins. Additionally, the semi-crystalline hierarchical structure indicates the presence of ordered lamellae which require significant thermal energy to disrupt compared to amorphous regions. Decreasing Factors: The standard DSC protocol involves a cooling phase prior to the second heating cycle which occurs at a finite rate, kinetically limiting the growth of crystal lamellae thickness; according to the Gibbs-Thomson equation, thinner lamellae exhibit a lower melting temperature than equilibrium crystals. Furthermore, the absence of specific nucleating agents in the chemical composition may result in a broader distribution of crystal sizes and slightly less perfect crystalline regions compared to nucleated systems. Dominant Factor: While the thermal history imposed by the DSC cooling cycle influences the lamellar thickness and thus the precise observed Tm, the dominant factor is the intrinsic chemical structure and stereoregularity of the polypropylene chains, as this dictates the fundamental ability of the polymer to crystallize and establishes the baseline thermodynamic stability of the helical crystal phase."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a polypropylene homopolymer derived from propylene monomers. Thermal characterization was performed using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min. The melting temperature was evaluated during the second heating cycle following ISO 11357-2 standards to erase previous thermal history.",
+      "reasoning_analysis": "Increasing Factors: The homopolymer architecture ensures high chemical regularity along the backbone, facilitating efficient chain packing into crystalline lamellae which inherently elevates the Tm. The methyl side groups induce a helical conformation that stabilizes the alpha-crystalline phase, contributing to the thermal stability of the crystal lattice. Furthermore, the utilization of the second heating cycle eliminates prior thermal history effects such as physical aging or processing-induced orientation, allowing the measurement to reflect the equilibrium melting behavior of the crystals formed during cooling. Decreasing Factors: The presence of methyl pendant groups introduces steric hindrance relative to linear polyethylene, reducing the packing density and inherently lowering the Tm compared to unbranched analogues. Any stereoirregularities within the homopolymer chain would act as impurities within the crystal lattice, depressing the Tm based on melting point depression theory. Additionally, the finite heating rate of 10 °C/min may introduce minor thermal lag effects compared to quasi-isothermal conditions. Dominant Factor: The intrinsic chain regularity and stereoregularity of the polypropylene homopolymer dominate the Tm behavior, as crystallinity is a prerequisite for observing a melting transition. While the second heating cycle standardizes the thermal history, the chemical architecture dictates the maximum achievable lamellar thickness and stability, making the composition the primary driver of the observed melting temperature."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]CC(C)[*]",
+      "monomers": [
+        {
+          "name": "Propylene",
+          "smiles": "CC=C",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP6; reported melt flow rate / melt volume rate / viscosity number: 20 g (10 min)-1(230 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          166
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample is characterized as a semi-crystalline polypropylene homopolymer synthesized from propylene monomers without the incorporation of any additives or fillers. Thermal analysis was conducted using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, following the ISO 11357-2 standard. The melting behavior was assessed during the second heating cycle to ensure a uniform thermal history prior to data acquisition.",
+      "reasoning_analysis": "Increasing Factors: The semi-crystalline hierarchical structure implies a sufficient degree of stereoregularity, likely isotactic, which facilitates efficient chain packing into a helical conformation within the crystal lattice, thereby increasing the lattice energy and driving the Tm upward. Additionally, the homopolymer composition ensures chemical uniformity along the backbone, preventing comonomer-induced crystal defects that would otherwise destabilize the crystalline phase. Decreasing Factors: The methyl side groups introduce steric hindrance relative to linear polyethylene, forcing a 3/1 helical conformation that is thermodynamically less stable than a planar zigzag, inherently limiting the maximum theoretical Tm. Furthermore, the standard cooling rate implied prior to the second heating cycle in the processing history limits the time available for lamellar thickening and crystal perfection, resulting in an observed Tm that is depressed relative to the equilibrium melting temperature due to the Gibbs-Thomson effect. Dominant Factor: The intrinsic stereoregularity of the polypropylene backbone is the primary determinant enabling crystallization; however, the thermal history standardized by the second heating cycle protocol dominantly influences the specific observed Tm by dictating the distribution of lamellar thicknesses within the semi-crystalline morphology."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The material under investigation is a polypropylene homopolymer derived exclusively from propylene monomers, containing no additives or fillers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min, with the melting temperature determined during the second heating cycle according to ISO 11357-2 to ensure the removal of previous thermal history.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition consists of a polypropylene homopolymer, where the high structural regularity of the repeat units facilitates efficient chain packing and the formation of a stable crystalline lattice, inherently driving the Tm upward relative to random copolymers. The absence of additives or plasticizers ensures no interference with intermolecular forces or crystal growth. Decreasing Factors: The presence of methyl side groups on the backbone introduces steric hindrance compared to linear polyethylene, which inherently limits the packing density and lattice energy, thereby setting a lower baseline Tm than simpler linear analogs. Furthermore, the processing history describes a standard DSC protocol without specific isothermal annealing, meaning the lamellar thickness is determined by the standard cooling rate within the instrument rather than optimized for maximum crystal perfection, potentially limiting the observed Tm. Dominant Factor: The intrinsic stereoregularity and homopolymer nature of the polypropylene backbone dominate the final Tm behavior, as these chemical factors define the fundamental thermodynamic stability of the crystal phase, while the 2nd heating cycle protocol primarily serves to standardize the measurement by erasing prior thermal history rather than fundamentally altering the material's melting potential."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]O[*]",
+      "monomers": [
+        {
+          "name": "Formaldehyde",
+          "smiles": "C=O",
+          "ratio_value": null,
+          "ratio_unit": null
+        },
+        {
+          "name": "Cyclic ether comonomer",
+          "smiles": null,
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C8; reported melt flow rate / melt volume rate / viscosity number: 8 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          167
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample is a semi-crystalline copolymer synthesized from formaldehyde and a cyclic ether comonomer, characterized by an oxygen-rich backbone structure and no incorporated additives. Thermal characterization was conducted using differential scanning calorimetry under a nitrogen atmosphere with a heating rate of 10 °C/min, adhering to the ISO 11357-2 standard during the second heating cycle to eliminate prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The polyacetal backbone consisting of repeating oxygen and methylene units facilitates strong dipole interactions and chain stiffness, promoting the formation of stable crystalline lamellae. Additionally, the absence of plasticizing additives ensures that intermolecular forces remain uncompromised, supporting a higher energy requirement for the solid-to-liquid transition. Decreasing Factors: The incorporation of a cyclic ether comonomer creates a copolymer structure that introduces structural irregularities into the crystal lattice, disrupting periodicity and reducing lamellar perfection compared to a homopolymer. Furthermore, the processing history specifies a second heating cycle which erases prior thermal history, preventing any artificial elevation of the melting temperature that might result from prolonged annealing or oriented processing. Dominant Factor: The structural disruption caused by the cyclic ether comonomer within the semi-crystalline matrix is the dominant factor. While the acetal backbone provides the fundamental capability for crystallization, the intentional inclusion of comonomer units dictates the upper limit of crystal perfection, qualitatively resulting in a lower melting temperature relative to a pure polyoxymethylene homopolymer due to the reduced thermodynamic stability of the crystalline phase."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The material is a copolymer synthesized from formaldehyde and a cyclic ether comonomer, forming a polyacetal structure without additional additives. Thermal analysis was conducted using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere. The protocol adhered to ISO 11357-2 standards, employing a heating rate of 10 °C/min during the second heating cycle to eliminate prior thermal history before characterizing the melting behavior.",
+      "reasoning_analysis": "Increasing Factors: The primary backbone structure consists of methylene oxide units capable of efficient chain packing and crystallization. Furthermore, the utilization of a second heating cycle in the processing history erases previous thermal stresses and orientation, allowing the polymer to crystallize under standardized conditions which can maximize the observed melting peak relative to a non-equilibrated first heating scan. Decreasing Factors: The incorporation of the cyclic ether comonomer introduces structural irregularities along the polymer chain compared to a pure formaldehyde homopolymer. These comonomer units act as defects within the crystal lattice, reducing the overall degree of crystallinity and thermodynamic stability of the lamellae, which inherently depresses the melting temperature. Dominant Factor: The chemical architecture defined by the copolymerization is the dominant factor influencing the Tm. While the standardized thermal protocol ensures consistent measurement, the intrinsic disruption of chain regularity caused by the cyclic ether comonomer qualitatively dictates a lower melting temperature relative to the corresponding homopolymer system."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]O[*]",
+      "monomers": [
+        {
+          "name": "Formaldehyde",
+          "smiles": "C=O",
+          "ratio_value": null,
+          "ratio_unit": null
+        },
+        {
+          "name": "Cyclic ether comonomer",
+          "smiles": null,
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C9; reported melt flow rate / melt volume rate / viscosity number: 11 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          169
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline copolymer derived from formaldehyde and a cyclic ether comonomer, characterized by an ether-linked backbone without additional additives. Thermal analysis was conducted using differential scanning calorimetry under a nitrogen atmosphere at a heating rate of 10 °C/min according to ISO 11357-2, with data acquired during the second heating cycle to negate prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The rigid polyacetal backbone and semi-crystalline morphology enable efficient chain packing and strong intermolecular forces within the crystalline lamellae, supporting a distinct melting transition. The absence of additives prevents plasticization effects that would otherwise weaken interchain interactions. Decreasing Factors: The incorporation of cyclic ether comonomers introduces structural defects into the polyoxymethylene lattice, reducing chain regularity and limiting crystalline lamellar thickness compared to a homopolymer. Additionally, the use of the second heating cycle in the processing history erases any prior thermal annealing that might have perfected the crystals, ensuring the measured Tm reflects the intrinsic copolymer structure rather than processing-induced crystallinity enhancement. Dominant Factor: The compositional irregularity introduced by the cyclic ether comonomer is the dominant factor, as the disruption of the crystalline lattice inherent to copolymerization qualitatively lowers the melting temperature relative to a polyoxymethylene homopolymer, overriding the baseline stability provided by the semi-crystalline structure."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The material is characterized as a copolymer derived from formaldehyde and a cyclic ether comonomer, forming a polyoxymethylene-based architecture without additional additives. Thermal characterization was performed using differential scanning calorimetry on a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min according to ISO 11357-2, with the melting temperature determined from the second heating cycle to ensure a standardized thermal history.",
+      "reasoning_analysis": "Increasing Factors: The polyoxymethylene backbone possesses a simple linear structure with small hydrogen substituents, facilitating efficient chain packing and high crystallinity potential which intrinsically supports a distinct melting transition. Furthermore, the utilization of the second heating cycle in the processing history eliminates prior thermal stresses and physical aging, ensuring the observed Tm reflects the equilibrium melting behavior of crystallites formed under controlled cooling conditions. Decreasing Factors: The incorporation of the cyclic ether comonomer introduces structural irregularities along the polymer chain, acting as defects within the crystalline lattice that reduce lamellar thickness and thermodynamic stability. Additionally, the absence of specific nucleating additives in the chemical composition relies on spontaneous crystallization, which may yield less perfect crystal structures compared to nucleated systems, potentially depressing the melting onset. Dominant Factor: The compositional modification via copolymerization is the dominant factor governing the Tm behavior. While the processing history standardizes the thermal state, the inherent disruption of chain regularity caused by the cyclic ether comonomer units qualitatively lowers the melting temperature relative to a polyoxymethylene homopolymer by limiting the maximum achievable crystal perfection and stability."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]O[*]",
+      "monomers": [
+        {
+          "name": "Formaldehyde",
+          "smiles": "C=O",
+          "ratio_value": null,
+          "ratio_unit": null
+        },
+        {
+          "name": "Cyclic ether comonomer",
+          "smiles": null,
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C10; reported melt flow rate / melt volume rate / viscosity number: 11 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          167
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a semi-crystalline copolymer synthesized from formaldehyde and a cyclic ether comonomer, featuring a polyacetal backbone. Thermal characterization was performed using a Mettler Toledo DSC instrument under a nitrogen atmosphere with a heating rate of 10 °C/min according to ISO 11357-2, utilizing the second heating cycle to normalize thermal history.",
+      "reasoning_analysis": "Increasing Factors: The polyacetal backbone consisting of repeating oxymethylene units possesses high chain stiffness and symmetry, facilitating efficient packing into crystalline lamellae, which inherently supports a distinct melting transition. Additionally, the utilization of the second heating cycle in the processing history ensures that the measured Tm reflects a standardized crystalline morphology formed under controlled cooling, eliminating variations from prior thermal histories that might otherwise obscure the melting endotherm. Decreasing Factors: The presence of the cyclic ether comonomer introduces structural irregularities along the polymer chain compared to a pure polyoxymethylene homopolymer. These comonomer units act as defects within the crystal lattice, reducing the overall degree of crystallinity and limiting the thickness of the crystalline lamellae, which thermodynamically depresses the melting temperature. Dominant Factor: The structural disruption caused by the cyclic ether comonomer is the dominant factor governing the Tm behavior. While the backbone supports crystallization, the copolymer architecture inherently limits the perfection and size of the crystalline domains compared to a homopolymer, qualitatively establishing a lower Tm baseline than what would be observed for a pristine polyoxymethylene homopolymer of equivalent molecular weight."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a polyacetal-based copolymer synthesized from formaldehyde and a cyclic ether comonomer, featuring a backbone structure characterized by repeating oxygen linkages. Thermal characterization was performed using differential scanning calorimetry on a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere, adhering to ISO 11357-2 standards with a heating rate of 10 °C/min during the second heating cycle to standardize thermal history.",
+      "reasoning_analysis": "Increasing Factors: The inherent polyacetal backbone chemistry promotes strong intermolecular cohesion and efficient chain packing, which supports the formation of stable crystalline domains capable of sustaining higher thermal energy before melting. Furthermore, the utilization of a second heating cycle during analysis erases prior thermal history, allowing the polymer to recrystallize under controlled cooling conditions that favor the development of more perfect lamellae compared to a purely as-processed state. Decreasing Factors: The presence of the cyclic ether comonomer establishes a copolymer architecture that introduces sequence irregularities along the polymer chain. These comonomer units act as defects within the crystal lattice, disrupting the periodicity required for high crystallinity and thermodynamically depressing the melting temperature relative to a homopolymer. Additionally, the absence of nucleating additives may result in lower crystallinity degrees if crystallization kinetics are slow. Dominant Factor: The structural disruption caused by the copolymerization is the dominant factor influencing the Tm. While the backbone chemistry provides a high baseline potential for thermal stability, the inclusion of comonomer units fundamentally limits the crystal perfection and lattice energy, qualitatively resulting in a lower melting temperature compared to a pure polyoxymethylene homopolymer."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]O[*]",
+      "monomers": [
+        {
+          "name": "Formaldehyde",
+          "smiles": "C=O",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylen-homopolymer (POM-H); polymer grade POM-H3; reported melt flow rate / melt volume rate / viscosity number: 21 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          175
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline polyoxymethylene homopolymer synthesized from formaldehyde monomers. Thermal characterization was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min according to ISO 11357-2, with the melting behavior assessed during the second heating cycle to eliminate initial thermal history.",
+      "reasoning_analysis": "Increasing Factors: The homopolymer composition ensures high chain regularity, facilitating efficient packing into a crystalline lattice, while the ether linkages in the backbone provide strong dipole-dipole interactions that increase the cohesive energy density required for melting. The confirmed semi-crystalline hierarchical structure indicates the presence of ordered lamellae which stabilizes the solid phase. Decreasing Factors: The reliance on the standard DSC cooling cycle prior to the second heating may result in lower crystal perfection compared to samples subjected to prolonged thermal annealing, potentially limiting the observed melting temperature. Additionally, the presence of chain ends inherent to finite molecular weight polymers introduces defects that disrupt lattice stability. Dominant Factor: The intrinsic structural regularity of the polyoxymethylene backbone combined with strong intermolecular dipole forces qualitatively dominates the thermal behavior, establishing a stable crystalline phase that dictates the melting temperature despite potential limitations from cooling rates or chain ends."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a polyoxymethylene homopolymer derived exclusively from formaldehyde monomers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min, following the ISO 11357-2 protocol. The measurement was taken during the second heating cycle to erase previous thermal history and standardize the crystalline morphology prior to determining the melting behavior.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition consists of a highly regular polyoxymethylene backbone, which promotes exceptional chain symmetry and facilitates tight packing into a crystalline lattice. The homopolymer structure ensures there are no structural defects from comonomers to disrupt the crystal structure, while the strong dipole-dipole interactions between the ether oxygens and methylene groups increase the cohesive energy density, driving the Tm upward. Decreasing Factors: The processing history indicates a standard DSC cooling rate inherent to the second heating cycle protocol, which may not allow sufficient time for the growth of maximally thick lamellae compared to slow annealing processes, potentially limiting the upper bound of the observed Tm. Additionally, polyoxymethylene is inherently susceptible to thermal degradation via unzipping if end-groups are not stabilized, which could introduce chain defects that lower thermal stability. Dominant Factor: The intrinsic structural regularity and high degree of crystallinity afforded by the homopolymer formaldehyde architecture qualitatively dominate the thermal behavior, ensuring a sharp and robust melting transition that outweighs the minor variations introduced by the standard thermal cycling protocol."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]NC(=O)CCCCCCCCC(=O)NCCCCCCCCCC[*]",
+      "monomers": [
+        {
+          "name": "Decamethylenediamine",
+          "smiles": "NCCCCCCCCCCN",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Sebacic acid",
+          "smiles": "OC(=O)CCCCCCCCC(=O)O",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 10.10 (PA 10.10); polymer grade PA10.10-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          202
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a semi-crystalline polyamide synthesized from equimolar ratios of decamethylenediamine and sebacic acid, structurally defined as polyamide 10,10. No additives or fillers are present in the composition. The thermal properties were characterized using differential scanning calorimetry under a nitrogen atmosphere with a heating rate of 10 °C/min following ISO 11357-2, specifically analyzing the melting behavior during the second heating cycle to eliminate prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The regular arrangement of amide groups along the backbone enables the formation of a dense intermolecular hydrogen bonding network, which significantly increases the cohesive energy density and stabilizes the crystalline phase against thermal agitation. The stoichiometric equivalence of the diamine and diacid monomers ensures high structural regularity, facilitating efficient chain packing into stable lamellar crystals. Decreasing Factors: The extensive aliphatic methylene sequences within both monomer units introduce significant chain flexibility and reduce the concentration of hydrogen bonds per unit length compared to shorter-chain polyamides, thereby lowering the energy barrier for crystal disruption. Additionally, the processing history specifies a second heating cycle, which erases any thermal history or crystal perfection induced during initial synthesis, ensuring the observed Tm reflects only the crystallinity developed during the standard DSC cooling ramp rather than potentially more stable processing-induced morphologies. Dominant Factor: While the long methylene segments reduce the cohesive energy density relative to shorter-chain analogs, the strong hydrogen bonding network remains the dominant factor enabling the formation of a stable semi-crystalline structure with a distinct melting transition; the standardized second heating protocol further ensures that the observed Tm is representative of the intrinsic material stability rather than transient processing artifacts."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The material is a polyamide condensation polymer synthesized from equimolar ratios of Decamethylenediamine and Sebacic acid, resulting in a structure characterized by long aliphatic segments interspersed with amide linkages. The formulation contains no additives or fillers. Thermal characterization was performed using differential scanning calorimetry under a nitrogen atmosphere at a heating rate of 10 °C/min, specifically utilizing the second heating cycle according to ISO 11357-2 standards to negate previous thermal history.",
+      "reasoning_analysis": "Increasing Factors: The regular arrangement of amide groups facilitates strong interchain hydrogen bonding, which significantly enhances cohesive energy density and stabilizes the crystalline lattice, driving the Tm upward. Additionally, the structural symmetry between the diamine and diacid components promotes efficient chain packing within the crystal phase. Decreasing Factors: The extended methylene sequences reduce the density of hydrogen bonds per unit chain length compared to shorter-chain polyamides, qualitatively lowering the thermal energy required to disrupt the crystal lattice. Furthermore, the processing history indicates a standard second heating cycle without explicit annealing, implying the crystals formed during the prior cooling ramp may lack the perfection achieved through specialized thermal treatments. Dominant Factor: The intrinsic cohesive energy provided by the hydrogen bonding network is the primary determinant establishing the existence of a distinct melting transition, while the specific length of the methylene spacers modulates this baseline, making the balance between interchain attraction and chain flexibility the dominant influence on the final Tm behavior."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]NC(=O)CCCCC[*]",
+      "monomers": [
+        {
+          "name": "Caprolactam",
+          "smiles": "O=C1CCCCN1",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": true
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 6 (PA 6); polymer grade PA6-5; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          221
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline homopolymer synthesized from caprolactam monomers, chemically identified as polyamide 6, without the incorporation of additives. Characterization was performed via differential scanning calorimetry using a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, following the ISO 11357-2 standard. The reported properties correspond to the second heating cycle, ensuring that the prior thermal history was erased before the measurement of the melting behavior.",
+      "reasoning_analysis": "Increasing Factors: The presence of amide linkages within the backbone facilitates strong intermolecular hydrogen bonding, which significantly increases the cohesive energy density and lattice stability, thereby driving the Tm upward. Additionally, the semi-crystalline hierarchical structure indicates the formation of ordered lamellae, which is a prerequisite for a defined melting transition. Decreasing Factors: The aliphatic methylene sequences between amide groups introduce conformational flexibility to the polymer chain, which reduces the backbone stiffness and lowers the Tm compared to aromatic polyamides. Regarding processing, while the 2nd heating cycle standardizes thermal history, the specific cooling rate applied before this cycle is not specified; if rapid cooling occurred, it could result in less perfect crystallites with lower thermal stability, potentially depressing the observed Tm. Dominant Factor: The extensive hydrogen bonding network inherent to the polyamide chemistry is the dominant factor, establishing a robust crystalline lattice that dictates a distinct melting transition, outweighing the flexibility introduced by the aliphatic segments and standardizing the effect of the thermal protocol used during characterization."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a polyamide 6 homopolymer derived from caprolactam monomers, featuring a linear aliphatic backbone with amide linkages. Thermal characterization was performed using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere at a heating rate of 10 °C/min in accordance with ISO 11357-2, where the data reflects the second heating cycle to isolate the intrinsic melting behavior.",
+      "reasoning_analysis": "Increasing Factors: The presence of regular amide linkages along the polymer backbone facilitates strong intermolecular hydrogen bonding, which significantly increases the cohesive energy density and stabilizes the crystalline lattice against thermal disruption. Furthermore, the homopolymer architecture ensures high chain regularity, allowing for efficient packing and the formation of stable crystalline domains that require higher energy to melt. Decreasing Factors: The aliphatic methylene sequences between the amide groups introduce conformational flexibility to the chain, which lowers the rigidity of the backbone compared to aromatic polyamides, thereby reducing the thermal energy required to initiate melting. Additionally, the crystallization occurring during the cooling phase prior to the second heating cycle may produce lamellae with finite thicknesses that are less perfect than those formed during slow annealing, potentially limiting the observed melting point relative to equilibrium conditions. Dominant Factor: The extensive hydrogen bonding network inherent to the polyamide chemistry is the dominant factor governing the melting temperature. While chain flexibility and crystallization kinetics modulate the precise transition, the strong intermolecular forces establish the fundamental thermal stability of the crystalline phase, ensuring a distinct melting transition is observed during the standardized second heating cycle."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]NC(=O)CCCCCCCCC(=O)NCCCCCC[*]",
+      "monomers": [
+        {
+          "name": "Hexamethylenediamine",
+          "smiles": "NCCCCCCN",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Sebacic acid",
+          "smiles": "OC(=O)CCCCCCCCC(=O)O",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 6.10/6.6 (PA 6.10/6.6); polymer grade PA6.10/6.6-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          203
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline polyamide synthesized from equimolar quantities of hexamethylenediamine and sebacic acid. Thermal analysis was conducted via differential scanning calorimetry using a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, following ISO 11357-2 protocols. The data reflects the second heating cycle, thereby negating the influence of initial thermal history.",
+      "reasoning_analysis": "Increasing Factors: The presence of regular amide linkages facilitates strong intermolecular hydrogen bonding, which significantly enhances cohesive energy density and stabilizes the crystalline lattice against thermal disruption. Additionally, the equimolar ratio of monomers ensures structural regularity, promoting efficient chain packing and higher crystallinity, while the semi-crystalline hierarchical structure confirms the existence of ordered lamellae that require substantial energy to melt. The use of the second heating cycle in the processing history eliminates prior thermal inconsistencies, allowing the measurement to reflect the intrinsic stability of the crystals formed under standardized cooling conditions. Decreasing Factors: The incorporation of sebacic acid introduces long aliphatic methylene sequences between the polar amide groups. Compared to polyamides with shorter diacid components, this increased methylene-to-amide ratio dilutes the density of hydrogen bonds per unit volume, thereby reducing the overall interchain attraction strength. Furthermore, the flexible aliphatic spacers increase chain entropy in the melt, which can thermodynamically lower the melting point relative to more rigid or densely hydrogen-bonded analogs. Dominant Factor: The dominant factor governing the Tm is the balance between the strong hydrogen bonding network and the dilution effect of the long methylene spacers. While the hydrogen bonding establishes a high baseline melting temperature characteristic of polyamides, the specific chain length of the sebacic acid moiety qualitatively lowers the Tm relative to shorter-chain polyamides, with the standardized second heating cycle ensuring this behavior reflects the material's inherent structural thermodynamics rather than processing artifacts."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a polyamide formed via the condensation of hexamethylenediamine and sebacic acid in a 50 mol% equimolar ratio. Thermal characterization was performed using differential scanning calorimetry (DSC) with a Mettler Toledo instrument under a nitrogen atmosphere. Adhering to ISO 11357-2 standards, the analysis utilized a heating rate of 10 °C/min during the second heating cycle to eliminate previous thermal history.",
+      "reasoning_analysis": "Increasing Factors: The presence of amide linkages enables strong interchain hydrogen bonding, which significantly increases cohesive energy density and stabilizes the crystalline lattice, thereby driving the Tm upward. Additionally, the equimolar stoichiometry of the monomers promotes high molecular weight and structural regularity, facilitating efficient chain packing and crystallization. Decreasing Factors: The incorporation of sebacic acid introduces long methylene sequences into the polymer backbone. These flexible aliphatic spacers reduce the density of hydrogen bonds per unit chain length compared to shorter-chain polyamides, increasing chain mobility and logically depressing the Tm relative to analogs with shorter diacid components. Dominant Factor: The intrinsic chemical architecture, defined by the specific balance between hydrogen bonding density and methylene flexibility, qualitatively dominates the final Tm behavior. While the processing history involving a second heating cycle standardizes the thermal history to reveal inherent properties, it is the fundamental monomer structure that dictates the thermodynamic stability of the crystalline phase."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]OCCCOC(=O)c1ccc(C(=O)[*])cc1",
+      "monomers": [
+        {
+          "name": "1,3-Propanediol",
+          "smiles": "OCCCO",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Terephthalic acid",
+          "smiles": "OC(=O)c1ccc(C(=O)O)cc1",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polytrimethylene terephthalate (PTT); polymer grade PTT-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          228
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline polyester derived from the condensation of 1,3-propanediol and terephthalic acid in equimolar ratios. The composition contains no additional additives or fillers. Thermal analysis was conducted using differential scanning calorimetry under a nitrogen atmosphere at a heating rate of 10 °C/min, following ISO 11357-2 protocols. The data reflects the second heating cycle, which eliminates previous thermal history to characterize the inherent melting behavior of the material.",
+      "reasoning_analysis": "Increasing Factors: The incorporation of rigid aromatic terephthalate units into the polymer backbone restricts chain mobility and enhances intermolecular cohesive energy, which drives the melting temperature upward. Additionally, the regular alternating structure of the monomers facilitates efficient chain packing into a semi-crystalline lattice, establishing the thermodynamic necessity for a distinct melting transition. Decreasing Factors: The presence of the flexible aliphatic 1,3-propanediol spacer introduces conformational freedom compared to fully aromatic polyesters, reducing the overall backbone stiffness and lowering the energy required for the crystal-to-melt transition. Furthermore, the use of a second heating cycle without specific isothermal annealing implies that the crystals formed during the standardized cooling may possess less perfection or thinner lamellae than equilibrium crystals, potentially resulting in an observed Tm lower than the theoretical equilibrium value. Dominant Factor: The intrinsic chemical architecture, specifically the balance between the rigid aromatic segments and the flexible aliphatic spacer, qualitatively dominates the Tm behavior by defining the fundamental thermodynamic stability of the crystal lattice, while the standardized measurement protocol ensures this inherent property is assessed without enhancement from external thermal treatments."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The polymer sample comprises a polyester synthesized from equimolar amounts of 1,3-propanediol and terephthalic acid, resulting in a structured backbone without additional additives. Thermal analysis was conducted using differential scanning calorimetry under a nitrogen atmosphere with a heating rate of 10 °C/min, following ISO 11357-2 standards. The data reflects the second heating cycle, which eliminates prior thermal history to ensure the measurement captures the intrinsic thermal transitions of the material.",
+      "reasoning_analysis": "Increasing Factors: The inclusion of rigid terephthalic acid units within the polymer backbone imposes significant chain stiffness and enables strong intermolecular pi-pi interactions, which inherently increases the thermal energy required to disrupt the crystal lattice. Additionally, the precise 50 mol% stoichiometric balance between monomers ensures high structural regularity and molecular weight, facilitating efficient chain packing and crystallinity that supports a distinct melting transition. Decreasing Factors: The presence of the flexible 1,3-propanediol aliphatic spacer introduces conformational freedom between the aromatic rings, reducing the overall cohesive energy density compared to fully aromatic polyesters. Furthermore, the odd number of methylene units in the diol segment may lead to a crystal unit cell geometry that is less densely packed than even-numbered homologs, potentially lowering the lattice stability. Dominant Factor: The intrinsic chemical architecture, defined by the balance between the rigid aromatic segments and the flexible aliphatic spacers, qualitatively dominates the melting behavior. While the standardized second heating cycle ensures the observed Tm reflects the intrinsic crystalline stability rather than processing-induced defects, the backbone stiffness provided by the terephthalate groups remains the primary driver establishing the magnitude of the Tm."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]NC(=O)CCCCCCCCC(=O)NCCCC[*]",
+      "monomers": [
+        {
+          "name": "Tetramethylenediamine",
+          "smiles": "NCCCCN",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Sebacic acid",
+          "smiles": "OC(=O)CCCCCCCCC(=O)O",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 4.10 (PA 4.10); polymer grade PA4.10-3; reported melt flow rate / melt volume rate / viscosity number: 210 cm3g-1.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          245
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample is a semi-crystalline polyamide synthesized from an equimolar composition of Tetramethylenediamine and Sebacic acid monomers, forming a regular backbone with alternating amide linkages and aliphatic spacers. No external additives or fillers were incorporated into the polymer matrix. Thermal analysis was conducted using differential scanning calorimetry under a nitrogen atmosphere with a heating rate of 10 °C/min, following ISO 11357-2 standards, where the melting behavior was evaluated during the second heating cycle to normalize thermal history.",
+      "reasoning_analysis": "Increasing Factors: The presence of regular amide linkages enables strong intermolecular hydrogen bonding, which significantly restricts chain mobility and stabilizes the crystalline lattice, thereby driving the Tm upward. Additionally, the equimolar stoichiometry of the diamine and diacid monomers ensures high structural regularity, facilitating efficient chain packing and enhancing crystallinity. Decreasing Factors: The long aliphatic methylene sequences, particularly the eight-carbon spacer derived from sebacic acid, introduce conformational flexibility into the polymer backbone, which reduces the cohesive energy density per unit length compared to polyamides with shorter spacers, potentially lowering the Tm. Dominant Factor: The strong intermolecular hydrogen bonding network inherent to the polyamide chemistry qualitatively dominates the thermal behavior, establishing a robust crystalline phase; however, the specific length of the methylene spacers modulates this effect, while the standardized 2nd heating cycle processing ensures the measured Tm reflects the equilibrium crystal stability rather than kinetic artifacts from initial sample preparation."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a polyamide derived from an equimolar condensation of tetramethylenediamine and sebacic acid monomers. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min following ISO 11357-2 standards, utilizing the second heating cycle to negate previous thermal history.",
+      "reasoning_analysis": "Increasing Factors: The presence of regular amide linkages facilitates strong intermolecular hydrogen bonding, which significantly stabilizes the crystalline lattice and drives the Tm higher. Additionally, the even-numbered carbon sequences in both the diamine and diacid components promote efficient chain packing and symmetry, further supporting a stable crystalline phase. Decreasing Factors: The long methylene sequence contributed by the sebacic acid monomer increases backbone flexibility and reduces the density of hydrogen bonds per unit length compared to shorter-chain polyamides, which qualitatively lowers the thermal energy required to disrupt the crystal structure. Furthermore, the standard cooling rate inherent to the DSC protocol prior to the second heating may result in less perfect crystallinity compared to specialized annealing treatments. Dominant Factor: The intrinsic chemical structure, specifically the dense hydrogen bonding network and even-even structural regularity, dominates the thermal behavior by establishing a robust crystalline framework, while the processing history primarily serves to standardize the measurement of this intrinsic property rather than fundamentally altering it."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]OCCOC(=O)c1ccc(C(=O)[*])cc1",
+      "monomers": [
+        {
+          "name": "Ethylene glycol",
+          "smiles": "OCCO",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Terephthalic acid",
+          "smiles": "OC(=O)c1ccc(C(=O)O)cc1",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene terephthalate (PET); polymer grade PET-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          251
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline polyester synthesized from equimolar amounts (50 mol% each) of ethylene glycol and terephthalic acid monomers. The material was characterized using differential scanning calorimetry (DSC) under a nitrogen atmosphere with a heating rate of 10 °C/min according to ISO 11357-2 standards, specifically employing the second heating cycle to normalize thermal history prior to property measurement.",
+      "reasoning_analysis": "Increasing Factors: The incorporation of rigid aromatic terephthalate units within the polymer backbone significantly restricts chain flexibility and enhances intermolecular interactions, requiring substantial thermal energy to disrupt the crystalline lattice. Additionally, the structural symmetry of the repeat unit promotes efficient packing into semi-crystalline lamellae, which stabilizes the solid phase. Decreasing Factors: The ethylene glycol segments introduce aliphatic methylene groups that provide conformational freedom compared to wholly aromatic polyesters, potentially lowering the melting temperature relative to more rigid analogs. Furthermore, the standard cooling rate inherent in the DSC first cycle may limit the time available for crystal perfection and lamellar thickening compared to slow annealing processes, which can result in a slightly depressed observed melting point. Dominant Factor: The intrinsic chain stiffness imparted by the aromatic rings and the resulting semi-crystalline morphology dominate the thermal behavior, establishing a robust melting transition, while the standardized DSC protocol ensures this value reflects the material's inherent crystalline stability under controlled thermal conditions rather than external processing variations."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a condensation polymer synthesized from equimolar amounts of ethylene glycol and terephthalic acid, resulting in a polyethylene terephthalate backbone. Thermal characterization was conducted using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere. The measurement protocol adhered to ISO 11357-2 standards, utilizing a heating rate of 10 °C/min during the second heating cycle to ensure consistent thermal history prior to data acquisition.",
+      "reasoning_analysis": "Increasing Factors: The incorporation of terephthalic acid introduces rigid aromatic rings into the polymer backbone, which significantly restricts chain segment mobility through steric hindrance and enhances intermolecular interactions via pi-pi stacking, thereby driving the melting temperature higher. Additionally, the stoichiometric balance of monomers promotes a regular alternating structure that facilitates efficient chain packing and crystallinity, further supporting a higher Tm. Decreasing Factors: The presence of ethylene glycol units introduces aliphatic flexibility into the chain compared to fully aromatic polyesters, which allows for greater segmental motion and qualitatively lowers the Tm relative to rigid-rod polymers. Furthermore, the processing history specifies a second heating cycle without mention of prior annealing; this erases thermal history and limits crystal perfection to that formed during the standard DSC cooling rate, preventing the observed Tm from being elevated by long-term structural ordering. Dominant Factor: The intrinsic chain stiffness conferred by the aromatic terephthalate units is the dominant factor governing the thermal behavior, establishing a high baseline melting temperature that outweighs the flexibility introduced by the ethylene glycol spacers or the standardizing effect of the second heating measurement protocol."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]NC(=O)CCCCC(=O)NCCCCCC[*]",
+      "monomers": [
+        {
+          "name": "Hexamethylenediamine",
+          "smiles": "NCCCCCCN",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Adipic acid",
+          "smiles": "OC(=O)CCCCC(=O)O",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 6.6 (PA 6.6); polymer grade PA6.6-3; reported melt flow rate / melt volume rate / viscosity number: 150 cm3g-1.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          261
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a semi-crystalline polyamide synthesized from equimolar amounts of hexamethylenediamine and adipic acid. Thermal characterization was conducted using differential scanning calorimetry under a nitrogen atmosphere at a heating rate of 10 °C/min following ISO 11357-2 protocols, with data recorded during the second heating cycle to standardize thermal history.",
+      "reasoning_analysis": "Increasing Factors: The high density of intermolecular hydrogen bonds between amide linkages significantly increases the enthalpy of fusion, requiring substantial thermal energy to disrupt the crystal lattice. Additionally, the structural regularity provided by the even-numbered methylene sequences in both monomers facilitates efficient chain packing and high crystallinity. Decreasing Factors: The presence of flexible aliphatic methylene spacers between the rigid amide groups increases the entropy of fusion relative to aromatic polyamides, which inherently limits the maximum achievable melting temperature. Furthermore, the use of the second heating cycle ensures that the measured Tm reflects the crystallinity developed during the instrument's controlled cooling phase rather than any prior synthesis history, where standard cooling rates may yield less perfect crystals than slow annealing. Dominant Factor: The extensive hydrogen bonding network combined with the high symmetry of the repeat unit qualitatively dominates the thermal behavior, establishing a high melting temperature characteristic of aliphatic polyamides, while the standardized second heating cycle ensures this intrinsic property is measured free from prior thermal history effects."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a polyamide synthesized from equimolar amounts of hexamethylenediamine and adipic acid, resulting in a poly(hexamethylene adipamide) structure. Thermal analysis was conducted using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, adhering to ISO 11357-2 standards. The reported thermal properties were derived from the second heating cycle to eliminate prior thermal history effects.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition features a linear polyamide backbone with regular amide linkages capable of forming strong intermolecular hydrogen bonds, which significantly increases the enthalpy of fusion required to disrupt the crystal lattice. Additionally, the symmetry provided by the equimolar hexamethylenediamine and adipic acid segments promotes efficient chain packing and high crystallinity, further driving the Tm upward. Decreasing Factors: The processing history specifies a second heating cycle following an instrument-controlled cooling ramp; if the preceding cooling rate was rapid relative to the crystallization kinetics of the polyamide, it may result in thinner lamellae or less perfect crystals compared to slowly cooled samples, potentially yielding a slightly lower observed Tm. Dominant Factor: The dense hydrogen bonding network and high structural regularity inherent to the polyamide chemistry overwhelmingly dominate the thermal behavior, establishing a high thermodynamic stability for the crystalline phase that minimizes the relative impact of the standardized DSC cooling history on the final Tm."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": "[*]NC(=O)CCCCC(=O)NCCCC[*]",
+      "monomers": [
+        {
+          "name": "Tetramethylenediamine",
+          "smiles": "NCCCCN",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        },
+        {
+          "name": "Adipic acid",
+          "smiles": "OC(=O)CCCCC(=O)O",
+          "ratio_value": 50,
+          "ratio_unit": "mol%"
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 4.6 (PA 4.6); polymer grade PA4.6-1; reported melt flow rate / melt volume rate / viscosity number: 185 cm3g-1.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          291
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a semi-crystalline polyamide formed from the stoichiometric polycondensation of tetramethylenediamine and adipic acid monomers. No additives or fillers were incorporated into the polymer matrix. The thermal properties were characterized using differential scanning calorimetry under a nitrogen atmosphere with a heating rate of 10 °C/min according to ISO 11357-2 standards, where the melting behavior was assessed during the second heating cycle to eliminate previous thermal history.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition features a high density of amide linkages due to the short tetramethylene spacer in the diamine monomer, which significantly enhances the density of intermolecular hydrogen bonding and promotes strong cohesive energy density within the crystal lattice. Additionally, the structural regularity of the alternating monomer sequence facilitates efficient chain packing, stabilizing the crystalline phase. Decreasing Factors: The aliphatic methylene sequences within the backbone introduce conformational flexibility and entropy that oppose the rigid ordered state required for melting. Furthermore, the crystallization kinetics during the standard DSC cooling cycle prior to the second heating may yield crystallites with lower perfection or smaller size compared to industrially annealed samples, which can modestly depress the observed melting onset. Dominant Factor: The high concentration of intermolecular hydrogen bonds inherent to the tetramethylenediamine-adipic acid chemistry qualitatively dominates the thermal behavior, establishing a high energy barrier for lattice disruption that dictates an elevated melting temperature relative to polyamides with lower amide group density."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "The sample comprises a polyamide synthesized from an equimolar ratio of tetramethylenediamine and adipic acid, each constituting 50 mol% of the monomer feed. Thermal characterization was performed using differential scanning calorimetry on a Mettler Toledo instrument under a nitrogen atmosphere with a heating rate of 10 °C/min. The data was collected during the second heating cycle in accordance with ISO 11357-2 standards to normalize the thermal history prior to measurement.",
+      "reasoning_analysis": "Increasing Factors: The chemical composition features a high density of amide linkages resulting from the short tetramethylenediamine segment, which significantly enhances intermolecular hydrogen bonding and promotes tight crystal packing. The stoichiometric balance of monomers supports high molecular weight and structural regularity, further driving the melting temperature upward. Decreasing Factors: The aliphatic methylene sequences within the backbone introduce chain flexibility that limits thermal stability compared to rigid aromatic systems. Additionally, the processing history specifies a second heating cycle, which erases any prior thermal annealing that might have perfected the crystal lattice, thereby preventing an elevation of the observed Tm due to historical thermal treatment. Dominant Factor: The intrinsic chemical architecture, specifically the high concentration of hydrogen bonds per unit length characteristic of this polyamide variant, qualitatively dominates the thermal behavior. This strong intermolecular cohesion establishes a high melting temperature baseline that outweighs the flexibility of the aliphatic segments and the standardizing effect of the measurement protocol."
+    }
+  },
+  {
+    "doi": null,
+    "title": "Applicability of Polymeric Materials as Phase Change Materials",
+    "year": 2018,
+    "chemical_composition": {
+      "repeat_unit_psmiles": null,
+      "monomers": [
+        {
+          "name": "Hexamethylenediamine",
+          "smiles": "NCCCCCCN",
+          "ratio_value": null,
+          "ratio_unit": null
+        },
+        {
+          "name": "Terephthalic acid",
+          "smiles": "OC(=O)c1ccc(C(=O)O)cc1",
+          "ratio_value": null,
+          "ratio_unit": null
+        },
+        {
+          "name": "Caprolactam",
+          "smiles": "O=C1CCCCN1",
+          "ratio_value": null,
+          "ratio_unit": null
+        }
+      ],
+      "additives": [],
+      "is_homopolymer": false
+    },
+    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polythalamide 6T/6 (PA 6T/6); polymer grade PA6T/6-1; reported melt flow rate / melt volume rate / viscosity number: 130 cm3g-1.",
+    "hierarchical_structure": "Semi-crystalline",
+    "properties": {
+      "Tm": {
+        "value": [
+          300
+        ],
+        "unit": "°C"
+      }
+    },
+    "analysis_with_hierarchical_structure": {
+      "descriptive_text": "The sample consists of a semi-crystalline copolyamide derived from the polymerization of hexamethylenediamine, terephthalic acid, and caprolactam. Thermal characterization was performed via differential scanning calorimetry using a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere, adhering to ISO 11357-2 protocols with a heating rate of 10 °C/min during the second heating cycle to ensure a standardized thermal history.",
+      "reasoning_analysis": "Increasing Factors: The incorporation of terephthalic acid introduces rigid aromatic rings into the polymer backbone, significantly increasing chain stiffness and enhancing intermolecular cohesive energy density through pi-pi interactions, which drives the melting temperature upward. The semi-crystalline hierarchical structure indicates sufficient regularity to form stable lamellae, supporting a distinct melting transition. Decreasing Factors: The presence of caprolactam units introduces comonomer irregularity into the hexamethylenediamine-terephthalic acid sequence, disrupting the crystalline lattice perfection compared to a pure poly(hexamethylene terephthalamide) homopolymer. Additionally, the aliphatic segments derived from caprolactam and hexamethylenediamine provide greater chain flexibility than the aromatic segments, which lowers the energy required for the solid-to-liquid transition. Dominant Factor: The chemical composition serves as the primary determinant, where the rigid aromatic units establish a high thermal threshold; however, the specific processing history involving the 2nd heating cycle ensures that the observed Tm is not inflated by annealing effects from prior slow cooling, thereby reflecting the intrinsic melting behavior of the copolymer crystals formed under standardized conditions."
+    },
+    "analysis_without_hierarchical_structure": {
+      "descriptive_text": "This copolyamide sample is composed of hexamethylenediamine, terephthalic acid, and caprolactam monomers, indicating a semi-aromatic polyamide architecture without additional additives or fillers. The thermal properties were characterized using differential scanning calorimetry on a Mettler Toledo DSC 1 instrument under a nitrogen atmosphere with a heating rate of 10 °C/min, adhering to the ISO 11357-2 standard, with data recorded during the second heating cycle to eliminate the effects of prior thermal history.",
+      "reasoning_analysis": "Increasing Factors: The incorporation of terephthalic acid introduces rigid aromatic rings directly into the polymer backbone, significantly increasing chain stiffness and restricting segmental mobility while enhancing intermolecular hydrogen bonding and potential pi-pi interactions, which intrinsically drives the melting temperature upward compared to purely aliphatic polyamides. Decreasing Factors: The presence of caprolactam alongside the diamine and diacid indicates a copolymer architecture rather than a homopolymer, introducing structural irregularities that disrupt the packing efficiency within the crystal lattice and reduce crystalline perfection, qualitatively lowering the melting temperature relative to the corresponding high-melting homopolymer according to copolymer melting point depression theory. Dominant Factor: The dominant factor governing the final melting temperature behavior is the interplay between the high intrinsic rigidity of the semi-aromatic segments and the crystalline disorder induced by copolymerization, where the aromatic content establishes a high thermal stability baseline that is subsequently modulated by the comonomer incorporation preventing the formation of perfect crystals."
+    }
+  }
+]

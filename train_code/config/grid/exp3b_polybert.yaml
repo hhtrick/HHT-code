@@ -1,0 +1,25 @@
+# ==============================================================
+# Exp 3b: PolyBERT structural stream hyperparameter search (frozen backbone)
+# Freeze PolyBERT backbone, search pooling strategy and MLP regression head
+# Evaluate on training and validation sets only, test set not involved
+# Before use, ensure config/config_stru_article.py has:
+#   STRUCT_ENCODER = "polybert", FROZEN_BACKBONE = True
+# ==============================================================
+description: "Exp 3b: PolyBERT structural stream hyperparameter search (frozen backbone)"
+
+base_config: "config.config_stru_article"
+
+grid:
+  MLP_HIDDEN_DIM:
+    _generate: "pairs_d1_eq_2d2"
+    d1: [512, 256, 128, 64]
+    d2: [256, 128, 64, 32]
+
+linked_grid:
+  _struct_pool:
+    params: [STRUCT_POOLING_TYPE, STRUCT_PROJ_DIM]
+    values:
+      - ["mean_pooling", 128]
+      - ["attention_pooling", 64]
+      - ["attention_pooling", 128]
+      - ["attention_pooling", 256]

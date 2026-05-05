@@ -1,0 +1,35 @@
+# ==============================================================
+# Exp 1: Semantic stream frozen backbone hyperparameter search
+# Freeze backbone, search pooling strategy and MLP regression head
+# Training set input [1,2,3,4,5,6,7,8,9] (dynamic sampling), validation set input [1]
+# Evaluate on training and validation sets only, test set not involved
+# Before use, ensure config/config_article.py has:
+#   FROZEN_BACKBONE = True
+#   INPUT_CONTENT = [1,2,3,4,5,6,7,8,9]
+#   EVAL_INPUT_CONTENT = [1]
+# ==============================================================
+description: "Exp 1: Semantic stream frozen hyperparameter search (pooling + MLP)"
+
+base_config: "config.config_article"
+
+grid:
+  MLP_HIDDEN_DIM:
+    _generate: "pairs_d1_eq_2d2"
+    d1: [512, 256, 128, 64]
+    d2: [256, 128, 64, 32]
+
+# Linked parameter group: pooling type and projection dimension bound search
+# last_token/mean/sum don't use projection dimension, appear once to avoid redundancy
+linked_grid:
+  _pool_proj:
+    params: [POOLING_TYPE, PROJ_DIM]
+    values:
+      - ["last_token", 128]
+      - ["mean_pooling", 128]
+      - ["sum_pooling", 128]
+      - ["attention_pooling", 64]
+      - ["attention_pooling", 128]
+      - ["attention_pooling", 256]
+      - ["sigmoid_pooling", 64]
+      - ["sigmoid_pooling", 128]
+      - ["sigmoid_pooling", 256]

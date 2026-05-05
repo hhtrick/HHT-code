@@ -1,0 +1,19 @@
+# ==============================================================
+# Exp 3a: PerioGT structural stream hyperparameter search
+# PerioGT always full-parameter training, no frozen/LoRA options
+# Evaluate on training and validation sets only, test set not involved
+# Before use, ensure config/config_stru_article.py has:
+#   STRUCT_ENCODER = "periogt"
+# ==============================================================
+description: "Exp 3a: PerioGT structural stream hyperparameter search"
+
+base_config: "config.config_stru_article"
+
+grid:
+  MLP_HIDDEN_DIM:
+    _generate: "pairs_d1_eq_2d2"
+    d1: [512, 256, 128, 64]
+    d2: [256, 128, 64, 32]
+  USE_PERIOGT_PROMPT:
+    - true
+    - false

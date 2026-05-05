@@ -1,0 +1,22 @@
+# ==============================================================
+# Exp 2: Semantic stream LoRA fine-tuning hyperparameter search
+# Pooling type and MLP head determined by Exp 1 and fixed
+# Evaluate on training and validation sets only, test set not involved
+# Before use, ensure config/config_article.py has:
+#   FROZEN_BACKBONE = False, LORA_DROPOUT = 0.1
+#   POOLING_TYPE and MLP_HIDDEN_DIM set to Exp 1 optimal values
+#   INPUT_CONTENT = [1,2,3,4,5,6,7,8,9]
+#   EVAL_INPUT_CONTENT = [1]
+# ==============================================================
+description: "Exp 2: Semantic stream LoRA fine-tuning hyperparameter search"
+
+base_config: "config.config_article"
+
+# LoRA rank and alpha bound search (alpha = 2 * r)
+linked_grid:
+  _lora_pair:
+    params: [LORA_R, LORA_ALPHA]
+    values:
+      - [4, 8]
+      - [8, 16]
+      - [16, 32]

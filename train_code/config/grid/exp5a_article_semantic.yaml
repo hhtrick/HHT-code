@@ -1,0 +1,29 @@
+# ==============================================================
+# Exp 5a: Article-aware loss — semantic stream hyperparameter search
+# Based on config.config_article
+# Search three article-aware loss component weights (consistency, bias, ranking)
+# MSE_WEIGHT keeps base_config default of 1.0
+# Uses frozen backbone, fixed pooling strategy and MLP regression head
+# ==============================================================
+description: "Exp 5a: Article-aware loss weight search (semantic stream, frozen backbone)"
+
+base_config: "config.config_article"
+
+grid:
+  ARTICLE_CONSISTENCY_WEIGHT:
+    - 0.0
+    - 0.01
+    - 0.1
+    - 0.2
+
+  ARTICLE_BIAS_WEIGHT:
+    - 0.0
+    - 0.01
+    - 0.1
+    - 0.2
+    
+  ARTICLE_RANKING_WEIGHT:
+    - 0.0
+    - 0.01
+    - 0.1
+    - 0.2
