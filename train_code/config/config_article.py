@@ -19,7 +19,7 @@ PATIENCE = 15                             # Early stopping patience: stop if val
 GRADIENT_CLIP_VAL = 1.0                   # Gradient clipping threshold to prevent gradient explosion
 GRADIENT_ACCUMULATION_STEPS = 1           # Gradient accumulation steps, effective batch = GRADIENT_ACCUMULATION_STEPS * BATCH_SIZE
 FLOAT32_MATMUL_PRECISION = "high"         # PyTorch matmul precision ('highest' | 'high' | 'medium')
-SPLIT_PKL = "split_random.pkl"             # Dataset split index filename (default: pure random split; change to 'split.pkl' for article-aware leaky split)
+SPLIT_PKL = "split_random.pkl"            # Dataset split index filename (default: pure random split; alternatives: 'split.pkl' for article-aware leaky split, 'split_article.pkl' for strict article-isolated split)
 
 # ======================== Model Parameters ========================
 MODEL_TYPE = "qwen3_4b_base"              # LLM type: 'qwen3_4b_instruct_2507' | 'qwen3_4b_thinking_2507' | 'qwen3_4b_base' | 'qwen3_8b_base' | 'qwen3_0_6b_base' | 'chemdfm_v1_5_8b' | 'qwen3_4b_base_cpt_1' | 'qwen3_4b_base_cpt_2' | 'qwen3_4b_base_cpt_3'
@@ -83,9 +83,9 @@ NOISE_ANNEAL = True                       # Whether to use cosine annealing to g
 
 MSE_WEIGHT = 1.0                          # w_mse: MSE loss weight (default 1.0; set to 0 to disable MSE entirely)
 
-ARTICLE_CONSISTENCY_WEIGHT = 0.2          # w_consist: Article consistency loss weight (0 disables)
-ARTICLE_BIAS_WEIGHT = 0.2                 # w_bias: Article bias loss weight (0 disables)
-ARTICLE_RANKING_WEIGHT = 0.2              # w_rank: Article ranking loss weight (0 disables)
+ARTICLE_CONSISTENCY_WEIGHT = 0          # w_consist: Article consistency loss weight (0 disables)
+ARTICLE_BIAS_WEIGHT = 0                 # w_bias: Article bias loss weight (0 disables)
+ARTICLE_RANKING_WEIGHT = 0              # w_rank: Article ranking loss weight (0 disables)
 
 # ======================== Ray Tune Grid Search Parallel Settings ========================
 RAY_GPU_FRACTION = 0.2                    # GPU share per trial

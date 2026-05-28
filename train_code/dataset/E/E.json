@@ -941,8 +941,7 @@
     "properties": {
       "E": {
         "value": [
-          0.01,
-          0.76
+          0.01
         ],
         "unit": "GPa"
       }
@@ -6529,7 +6528,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -6622,7 +6620,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -6758,7 +6755,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -7047,8 +7043,7 @@
     "properties": {
       "E": {
         "value": [
-          0.02,
-          0.04
+          0.02
         ],
         "unit": "GPa"
       }
@@ -7097,8 +7092,7 @@
     "properties": {
       "E": {
         "value": [
-          0.1,
-          0.2
+          0.1
         ],
         "unit": "GPa"
       }
@@ -10466,8 +10460,7 @@
     "properties": {
       "E": {
         "value": [
-          0.04,
-          0.1
+          0.04
         ],
         "unit": "GPa"
       }
@@ -19358,8 +19351,7 @@
     "properties": {
       "E": {
         "value": [
-          0.4,
-          0.6
+          0.4
         ],
         "unit": "GPa"
       }
@@ -26962,8 +26954,7 @@
     "properties": {
       "E": {
         "value": [
-          0.2,
-          0.4
+          0.2
         ],
         "unit": "GPa"
       }
@@ -27219,8 +27210,7 @@
     "properties": {
       "E": {
         "value": [
-          6,
-          7
+          6
         ],
         "unit": "GPa"
       }
@@ -33606,7 +33596,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -33857,7 +33846,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -34278,7 +34266,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -34328,7 +34315,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -34646,7 +34632,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -39810,8 +39795,7 @@
     "properties": {
       "E": {
         "value": [
-          1.36,
-          0.31
+          1.36
         ],
         "unit": "GPa"
       }
@@ -43188,8 +43172,7 @@
     "properties": {
       "E": {
         "value": [
-          1.83,
-          1.96
+          1.83
         ],
         "unit": "GPa"
       }
@@ -43457,8 +43440,7 @@
     "properties": {
       "E": {
         "value": [
-          4.03,
-          4.35
+          4.03
         ],
         "unit": "GPa"
       }
@@ -55106,8 +55088,7 @@
     "properties": {
       "E": {
         "value": [
-          0.6,
-          0.1
+          0.6
         ],
         "unit": "GPa"
       }
@@ -55512,8 +55493,7 @@
     "properties": {
       "E": {
         "value": [
-          5.7,
-          0.4
+          5.7
         ],
         "unit": "GPa"
       }
@@ -55641,8 +55621,7 @@
     "properties": {
       "E": {
         "value": [
-          5.1,
-          0.3
+          5.1
         ],
         "unit": "GPa"
       }
@@ -55734,8 +55713,7 @@
     "properties": {
       "E": {
         "value": [
-          4.3,
-          0.7
+          4.3
         ],
         "unit": "GPa"
       }
@@ -55784,8 +55762,7 @@
     "properties": {
       "E": {
         "value": [
-          5.2,
-          0.3
+          5.2
         ],
         "unit": "GPa"
       }
@@ -56049,8 +56026,7 @@
     "properties": {
       "E": {
         "value": [
-          4.9,
-          0.2
+          4.9
         ],
         "unit": "GPa"
       }
@@ -56393,8 +56369,7 @@
     "properties": {
       "E": {
         "value": [
-          5.6,
-          0.3
+          5.6
         ],
         "unit": "GPa"
       }
@@ -59405,8 +59380,7 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
-          0.01
+          0.0
         ],
         "unit": "GPa"
       }
@@ -60191,8 +60165,7 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
-          0.01
+          0.0
         ],
         "unit": "GPa"
       }
@@ -60228,7 +60201,6 @@
     "properties": {
       "E": {
         "value": [
-          0.0,
           0.0
         ],
         "unit": "GPa"
@@ -60987,8 +60959,7 @@
     "properties": {
       "E": {
         "value": [
-          1.9,
-          0.3
+          1.9
         ],
         "unit": "GPa"
       }

@@ -1212,8 +1212,7 @@
     "properties": {
       "UTS": {
         "value": [
-          25.6,
-          5.7
+          25.6
         ],
         "unit": "MPa"
       }
@@ -1809,8 +1808,7 @@
     "properties": {
       "UTS": {
         "value": [
-          38.5,
-          16.5
+          38.5
         ],
         "unit": "MPa"
       }
@@ -4382,8 +4380,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -4493,8 +4490,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -4693,8 +4689,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -4827,8 +4822,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -4969,8 +4963,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -5322,8 +5315,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -5469,8 +5461,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -5832,8 +5823,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.21,
-          1.88
+          0.21
         ],
         "unit": "MPa"
       }
@@ -12505,8 +12495,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -12585,8 +12574,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -12985,8 +12973,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -13029,8 +13016,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -13122,8 +13108,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -13166,8 +13151,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -13367,8 +13351,7 @@
     "properties": {
       "UTS": {
         "value": [
-          58,
-          59
+          58
         ],
         "unit": "MPa"
       }
@@ -16126,8 +16109,7 @@
     "properties": {
       "UTS": {
         "value": [
-          19,
-          23
+          19
         ],
         "unit": "MPa"
       }
@@ -16237,8 +16219,7 @@
     "properties": {
       "UTS": {
         "value": [
-          59,
-          65
+          59
         ],
         "unit": "MPa"
       }
@@ -16500,8 +16481,7 @@
     "properties": {
       "UTS": {
         "value": [
-          57,
-          68
+          57
         ],
         "unit": "MPa"
       }
@@ -75505,8 +75485,7 @@
     "properties": {
       "UTS": {
         "value": [
-          31.6,
-          36.53
+          31.6
         ],
         "unit": "MPa"
       }
@@ -75548,8 +75527,7 @@
     "properties": {
       "UTS": {
         "value": [
-          37.82,
-          41.43
+          37.82
         ],
         "unit": "MPa"
       }
@@ -75917,8 +75895,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.4746,
-          0.6254
+          0.4746
         ],
         "unit": "MPa"
       }
@@ -76240,8 +76217,7 @@
     "properties": {
       "UTS": {
         "value": [
-          2.7383,
-          3.0617
+          2.7383
         ],
         "unit": "MPa"
       }
@@ -76624,8 +76600,7 @@
     "properties": {
       "UTS": {
         "value": [
-          2.0444,
-          2.3956
+          2.0444
         ],
         "unit": "MPa"
       }
@@ -76741,8 +76716,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.7852,
-          0.9548
+          0.7852
         ],
         "unit": "MPa"
       }
@@ -76949,8 +76923,7 @@
     "properties": {
       "UTS": {
         "value": [
-          2.9482,
-          3.2518
+          2.9482
         ],
         "unit": "MPa"
       }
@@ -77191,8 +77164,7 @@
     "properties": {
       "UTS": {
         "value": [
-          2.1247,
-          2.3553
+          2.1247
         ],
         "unit": "MPa"
       }
@@ -77491,8 +77463,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.7359,
-          0.8841
+          0.7359
         ],
         "unit": "MPa"
       }
@@ -77789,8 +77760,7 @@
     "properties": {
       "UTS": {
         "value": [
-          1.2129,
-          1.3871
+          1.2129
         ],
         "unit": "MPa"
       }
@@ -78004,8 +77974,7 @@
     "properties": {
       "UTS": {
         "value": [
-          0.6459,
-          0.8341
+          0.6459
         ],
         "unit": "MPa"
       }
@@ -78126,8 +78095,7 @@
     "properties": {
       "UTS": {
         "value": [
-          3.1621,
-          3.4379
+          3.1621
         ],
         "unit": "MPa"
       }
@@ -84805,8 +84773,7 @@
     "properties": {
       "UTS": {
         "value": [
-          4900.0,
-          500.0
+          4900.0
         ],
         "unit": "MPa"
       }
@@ -85075,8 +85042,7 @@
     "properties": {
       "UTS": {
         "value": [
-          3000.0,
-          200.0
+          3000.0
         ],
         "unit": "MPa"
       }
@@ -85210,8 +85176,7 @@
     "properties": {
       "UTS": {
         "value": [
-          1630.0,
-          100.0
+          1630.0
         ],
         "unit": "MPa"
       }
@@ -85254,8 +85219,7 @@
     "properties": {
       "UTS": {
         "value": [
-          2900.0,
-          400.0
+          2900.0
         ],
         "unit": "MPa"
       }
@@ -85347,8 +85311,7 @@
     "properties": {
       "UTS": {
         "value": [
-          6300.0,
-          900.0
+          6300.0
         ],
         "unit": "MPa"
       }
@@ -85532,8 +85495,7 @@
     "properties": {
       "UTS": {
         "value": [
-          720.0,
-          50.0
+          720.0
         ],
         "unit": "MPa"
       }
@@ -85618,8 +85580,7 @@
     "properties": {
       "UTS": {
         "value": [
-          4180.0,
-          240.0
+          4180.0
         ],
         "unit": "MPa"
       }

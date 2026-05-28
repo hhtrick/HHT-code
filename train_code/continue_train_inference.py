@@ -55,13 +55,13 @@ from utils import (
 
 # ======================== Inference Parameter Settings ========================
 # Model weights folder (containing config.yaml, scaler.pkl, weights_seed*.pth, etc.)
-WEIGHTS_DIR = "autodl-tmp/semantic_24_2_chemdfm/Tm_chemdfm_v1_5_8b_20260416_161304"
+WEIGHTS_DIR = "autodl-tmp/results/E_chemdfm_v1_5_8b_20260507_160338"
 
 # Test set path (JSON file under val_dataset/, used directly as test set)
-TEST_FILE = "val_dataset/val_Tm_1.json"
+TEST_FILE = "val_dataset/val_E_article_1.json"
 
 # Dataset name (used to find training data under continue_train_dataset/)
-DATASET_NAME = "Tm"
+DATASET_NAME = "E_article"
 
 # Input type
 INPUT_TYPE = 2
@@ -967,8 +967,21 @@ def main():
     with open(TEST_FILE, "r", encoding="utf-8") as f:
         test_data = json.load(f)
     validate_input_type(test_data, INPUT_TYPE, label="test")
+
+    # Infer the actual property key (may differ from DATASET_NAME when the
+    # continue_train_dataset folder name != the properties dict key, e.g.
+    # DATASET_NAME="E_article" but the key in JSON is "E")
+    test_prop_key = dataset_name
+    if test_data:
+        test_props = test_data[0].get("properties", {})
+        if test_prop_key not in test_props:
+            for key in test_props:
+                if "value" in test_props[key]:
+                    test_prop_key = key
+                    break
+
     test_targets_raw = np.array(
-        [float(e["properties"][dataset_name]["value"][0]) for e in test_data],
+        [float(e["properties"][test_prop_key]["value"][0]) for e in test_data],
         dtype=np.float64,
     )
 
