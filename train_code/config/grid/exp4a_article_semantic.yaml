@@ -1,12 +1,13 @@
 # ==============================================================
-# Exp 5b: Article-aware loss — structural stream control hyperparameter search
-# Based on config.config_stru_article
+# Exp 4a: Article-aware loss — semantic stream hyperparameter search
+# Based on config.config_article
 # Search three article-aware loss component weights (consistency, bias, ranking)
-# Structure encoder manually specified by STRUCT_ENCODER in config_stru_article.py
+# MSE_WEIGHT keeps base_config default of 1.0
+# Uses frozen backbone, fixed pooling strategy and MLP regression head
 # ==============================================================
-description: "Exp 5b: Article-aware loss weight search (structural stream control)"
+description: "Exp 4a: Article-aware loss weight search (semantic stream, frozen backbone)"
 
-base_config: "config.config_stru_article"
+base_config: "config.config_article"
 
 grid:
   ARTICLE_CONSISTENCY_WEIGHT:
@@ -20,11 +21,9 @@ grid:
     - 0.01
     - 0.1
     - 0.2
-
+    
   ARTICLE_RANKING_WEIGHT:
     - 0.0
     - 0.01
     - 0.1
     - 0.2
-
-

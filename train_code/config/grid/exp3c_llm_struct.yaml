@@ -22,3 +22,6 @@ linked_grid:
       - ["attention_pooling", 64]
       - ["attention_pooling", 128]
       - ["attention_pooling", 256]
+      - ["sigmoid_pooling", 64]
+      - ["sigmoid_pooling", 128]
+      - ["sigmoid_pooling", 256]

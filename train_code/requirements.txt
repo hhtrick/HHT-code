@@ -1,16 +1,22 @@
 torch
 pytorch-lightning
-transformers
+transformers>=4.51.0
 peft
+sentencepiece
 accelerate
 scikit-learn
 numpy
 pandas
 matplotlib
 pyyaml
+tqdm
 torch_geometric
 rdkit
 mordred
 filelock
+networkx
+packaging
 ray[tune]
 tensorboard
+# Optional CUDA acceleration (install after compatible torch/CUDA):
+# python -m pip install flash-attn --no-build-isolation

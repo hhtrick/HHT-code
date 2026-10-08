@@ -473,7 +473,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 2.16 ± 0.06 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -522,7 +522,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.42 ± 0.03 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -577,7 +577,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.57 ± 0.05 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -619,7 +619,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.92 ± 0.04 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -788,7 +788,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of Bisphenol A",
-          "smiles": "C1C(O1)COC2=CC=C(C=C2)C(C)(C)C3=CC=C(C=C3)OCC4COC4O",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         }
@@ -831,7 +831,7 @@
       "monomers": [
         {
           "name": "1,3-glycerol diglycidyl ether",
-          "smiles": "C1COC1OCC(O)COCC1COC1",
+          "smiles": "C1C(O1)COCC(COCC2CO2)O",
           "ratio_value": 60,
           "ratio_unit": "wt%"
         },
@@ -2029,7 +2029,7 @@
     "title": "DGEBA thermosets modified with an amphiphilic star polymer. Study on the effect of the initiator on the curing process and morphology",
     "year": 2011,
     "chemical_composition": {
-      "repeat_unit_psmiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
@@ -2072,7 +2072,7 @@
     "title": "DGEBA thermosets modified with an amphiphilic star polymer. Study on the effect of the initiator on the curing process and morphology",
     "year": 2011,
     "chemical_composition": {
-      "repeat_unit_psmiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
@@ -2115,7 +2115,7 @@
     "title": "DGEBA thermosets modified with an amphiphilic star polymer. Study on the effect of the initiator on the curing process and morphology",
     "year": 2011,
     "chemical_composition": {
-      "repeat_unit_psmiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
@@ -2724,7 +2724,7 @@
         },
         {
           "name": "Diethyltoluenediamine",
-          "smiles": "CCc1cc(N)cc(CC)c1N",
+          "smiles": "Cc1c(N)c(CC)cc(CC)c1N",
           "ratio_value": 37,
           "ratio_unit": "wt%"
         }
@@ -2773,7 +2773,7 @@
         },
         {
           "name": "Diethyltoluenediamine",
-          "smiles": "CCc1cc(N)cc(CC)c1N",
+          "smiles": "Cc1c(N)c(CC)cc(CC)c1N",
           "ratio_value": 30,
           "ratio_unit": "wt%"
         }
@@ -2822,7 +2822,7 @@
         },
         {
           "name": "Diethyltoluenediamine",
-          "smiles": "CCc1cc(N)cc(CC)c1N",
+          "smiles": "Cc1c(N)c(CC)cc(CC)c1N",
           "ratio_value": 30,
           "ratio_unit": "wt%"
         }
@@ -2871,7 +2871,7 @@
         },
         {
           "name": "Diethyltoluenediamine",
-          "smiles": "CCc1cc(N)cc(CC)c1N",
+          "smiles": "Cc1c(N)c(CC)cc(CC)c1N",
           "ratio_value": 26,
           "ratio_unit": "wt%"
         }
@@ -2914,7 +2914,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c3ccc(OCC4COC4)cc3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 100,
           "ratio_unit": "phr"
         }
@@ -2969,7 +2969,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c3ccc(OCC4COC4)cc3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 100,
           "ratio_unit": "phr"
         }
@@ -3024,7 +3024,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c3ccc(OCC4COC4)cc3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 100,
           "ratio_unit": "phr"
         }
@@ -3085,7 +3085,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c3ccc(OCC4COC4)cc3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 100,
           "ratio_unit": "phr"
         }
@@ -3146,7 +3146,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c3ccc(OCC4COC4)cc3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 100,
           "ratio_unit": "phr"
         }
@@ -3277,7 +3277,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/(SICI)1097-4628(19970906)65:10<2025::AID-APP20>3.0.CO;2-3",
     "title": "Effects of Skydrol (A Hydraulic Fluid) on the Network Structure of TGDDM/DDS-Based Resins",
     "year": 1997,
     "chemical_composition": {
@@ -3326,7 +3326,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/(SICI)1097-4628(19970906)65:10<2025::AID-APP20>3.0.CO;2-3",
     "title": "Effects of Skydrol (A Hydraulic Fluid) on the Network Structure of TGDDM/DDS-Based Resins",
     "year": 1997,
     "chemical_composition": {
@@ -3375,7 +3375,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/(SICI)1097-4628(19970906)65:10<2025::AID-APP20>3.0.CO;2-3",
     "title": "Effects of Skydrol (A Hydraulic Fluid) on the Network Structure of TGDDM/DDS-Based Resins",
     "year": 1997,
     "chemical_composition": {
@@ -4084,7 +4084,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s002890170107",
     "title": "Epoxy networks based on solutions of silsesquioxanes functionalized with 3-glycidoxypropyl groups in diglycidylether of bisphenol A (DGEBA)",
     "year": 2000,
     "chemical_composition": {
@@ -4098,7 +4098,7 @@
         },
         {
           "name": "Methyltetrahydrophthalic anhydride",
-          "smiles": "CC1=CCC2C1C(=O)OC2=O",
+          "smiles": "CC1=CCC2C(=O)OC(=O)C2C1",
           "ratio_value": null,
           "ratio_unit": "stoichiometric"
         }
@@ -4508,7 +4508,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -4563,7 +4563,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -4612,7 +4612,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -4661,7 +4661,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -4716,7 +4716,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -4758,7 +4758,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -4807,7 +4807,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A",
-          "smiles": "CC(C)(C)c1ccc(OCC2CO2)cc1OCC3CO3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": null
         },
@@ -5844,7 +5844,7 @@
     "title": "Influence of nanosilica and methyl methacrylate–butadiene–styrene core–shell rubber particles on the physical-mechanical properties and cure kinetics of diglycidyl ether of bisphenol-A-based epoxy resin",
     "year": 2016,
     "chemical_composition": {
-      "repeat_unit_psmiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC3CO3)cc1",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol-A",
@@ -5905,7 +5905,7 @@
     "title": "Influence of nanosilica and methyl methacrylate–butadiene–styrene core–shell rubber particles on the physical-mechanical properties and cure kinetics of diglycidyl ether of bisphenol-A-based epoxy resin",
     "year": 2016,
     "chemical_composition": {
-      "repeat_unit_psmiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC3CO3)cc1",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol-A",
@@ -5964,7 +5964,7 @@
       "monomers": [
         {
           "name": "Hydrogenated bisphenol A diglycidyl ether",
-          "smiles": "CC(C1CCC(CC1)OCC2CO2)C3CCC(CC3)OCC4CO4",
+          "smiles": "CC(C)(C1CCC(OCC2CO2)CC1)C1CCC(OCC2CO2)CC1",
           "ratio_value": 2,
           "ratio_unit": "molar ratio parts"
         },
@@ -6047,7 +6047,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s42823-019-00104-1",
     "title": "Investigation of mechanical, thermal and electrical properties of hybrid composites reinforced with multi‑walled carbon nanotubes and fused silica particles",
     "year": 2019,
     "chemical_composition": {
@@ -6102,7 +6102,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s42823-019-00104-1",
     "title": "Investigation of mechanical, thermal and electrical properties of hybrid composites reinforced with multi‑walled carbon nanotubes and fused silica particles",
     "year": 2019,
     "chemical_composition": {
@@ -6714,7 +6714,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol F (EPON862)",
-          "smiles": "C1COC1OC2=CC=C(C=C2)CC3=CC=C(C=C3)OC4COC4",
+          "smiles": "C(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 3,
           "ratio_unit": "ratio"
         },
@@ -6756,7 +6756,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol F (EPON862)",
-          "smiles": "C1COC1OC2=CC=C(C=C2)CC3=CC=C(C=C3)OC4COC4",
+          "smiles": "C(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 3,
           "ratio_unit": "ratio"
         },
@@ -6805,7 +6805,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol F (EPON862)",
-          "smiles": "C1COC1OC2=CC=C(C=C2)CC3=CC=C(C=C3)OC4COC4",
+          "smiles": "C(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 3,
           "ratio_unit": "ratio"
         },
@@ -6854,7 +6854,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol F (EPON862)",
-          "smiles": "C1COC1OC2=CC=C(C=C2)CC3=CC=C(C=C3)OC4COC4",
+          "smiles": "C(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 3,
           "ratio_unit": "ratio"
         },
@@ -6903,7 +6903,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol F (EPON862)",
-          "smiles": "C1COC1OC2=CC=C(C=C2)CC3=CC=C(C=C3)OC4COC4",
+          "smiles": "C(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 3,
           "ratio_unit": "ratio"
         },
@@ -6952,7 +6952,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol F (EPON862)",
-          "smiles": "C1COC1OC2=CC=C(C=C2)CC3=CC=C(C=C3)OC4COC4",
+          "smiles": "C(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 3,
           "ratio_unit": "ratio"
         },
@@ -7237,7 +7237,7 @@
         },
         {
           "name": "Methyl-5-norbornen-2,3-dicarboxylic anhydride",
-          "smiles": "CC1=CC2CC(C2)C1C3C(=O)OC3=O",
+          "smiles": null,
           "ratio_value": 30,
           "ratio_unit": "wt%"
         }
@@ -7353,7 +7353,7 @@
       "monomers": [
         {
           "name": "Bisphenol A-type epoxy resin (E51)",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c3ccc(OCC4COC4)cc3",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": null,
           "ratio_unit": "equivalent"
         },
@@ -7492,7 +7492,7 @@
       "monomers": [
         {
           "name": "Diglycidyl ether of bisphenol A (Epon 828)",
-          "smiles": "CC(C)(c1ccc(OCC2COC2)cc1)c1ccc(OCC2COC2)cc1",
+          "smiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
           "ratio_value": 100,
           "ratio_unit": "parts by weight"
         },
@@ -7874,7 +7874,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/(SICI)1097-4628(19991121)74:8<1905::AID-APP4>3.0.CO;2-Q",
     "title": "Synthesis of Aralkyl Novolac Epoxy Resins and Their Modification with Polysiloxane Thermoplastic Polyurethane for Semiconductor Encapsulation",
     "year": 1999,
     "chemical_composition": {
@@ -7929,7 +7929,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/(SICI)1097-4628(19991121)74:8<1905::AID-APP4>3.0.CO;2-Q",
     "title": "Synthesis of Aralkyl Novolac Epoxy Resins and Their Modification with Polysiloxane Thermoplastic Polyurethane for Semiconductor Encapsulation",
     "year": 1999,
     "chemical_composition": {
@@ -7990,7 +7990,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/(SICI)1097-4628(19991121)74:8<1905::AID-APP4>3.0.CO;2-Q",
     "title": "Synthesis of Aralkyl Novolac Epoxy Resins and Their Modification with Polysiloxane Thermoplastic Polyurethane for Semiconductor Encapsulation",
     "year": 1999,
     "chemical_composition": {
@@ -8214,7 +8214,7 @@
     "title": "The effects of CNT alignment on electrical conductivity and mechanical properties of SWNT/epoxy nanocomposites",
     "year": 2008,
     "chemical_composition": {
-      "repeat_unit_psmiles": "CC(C)(c1ccc(OCC2CO2)cc1)c1ccc(OCC2CO2)cc1",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Bisphenol-A type epoxy resin (E-51)",

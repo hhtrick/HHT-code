@@ -2,26 +2,30 @@
 utils.py — General utility functions: datasets, embedding caching, evaluation metrics, visualization, etc.
 """
 import os
+import gc
 import json
 import pickle
 import random
+import tempfile
 import yaml
 import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import StandardScaler
+from target_scaling import fit_target_scaler
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple, Union
 
 from config.path import (
     DATASET_PATHS, get_split_pkl_path, EMBEDDING_CACHE_DIR,
     RESULT_DIR, ensure_dir, MODEL_PATHS,
 )
-from config.prompt import build_prompt
+from config.prompt import STRUCT_INPUT, build_prompt
+from models.llm_tokenization import llm_cache_key
 
 
 # ======================== Ratio Information Encoding ========================
@@ -127,14 +131,14 @@ def build_ratio_vector(monomer: Dict, is_homopolymer: bool,
 
 def extract_article_ids(data: List[Dict]) -> List[int]:
     """
-    Extract article group IDs from the dataset. Entries with the same title belong to the same article.
-    If title is empty, fall back to doi field; if both are empty, treat as a standalone article.
+    Extract article group IDs using DOI first, then title as fallback.
+    If both are empty, treat the record as a standalone article.
     Returns an integer list of the same length as data, where entries from the same article share the same ID.
     """
     title_to_id = {}
     article_ids = []
     for entry in data:
-        title = entry.get("title") or entry.get("doi") or ""
+        title = str(entry.get("doi") or "").strip().lower() or entry.get("title") or ""
         title = str(title).strip()
         if not title:
             # No title or doi, treat as standalone article
@@ -341,29 +345,33 @@ def extract_targets(data: List[Dict], dataset_name: str) -> np.ndarray:
 
 # ======================== ZScaler ========================
 
-def fit_scaler(targets: np.ndarray, train_indices: List[int]) -> StandardScaler:
-    scaler = StandardScaler()
-    train_vals = targets[train_indices].reshape(-1, 1)
-    scaler.fit(train_vals)
-    return scaler
+def fit_scaler(targets: np.ndarray, train_indices: List[int], *,
+               cfg=None, dataset_name=""):
+    return fit_target_scaler(targets, train_indices, cfg=cfg, property_name=dataset_name)
 
 
-def transform_targets(scaler: StandardScaler, targets: np.ndarray) -> np.ndarray:
+def transform_targets(scaler, targets: np.ndarray) -> np.ndarray:
     return scaler.transform(targets.reshape(-1, 1)).flatten()
 
 
-def inverse_transform(scaler: StandardScaler, values: np.ndarray) -> np.ndarray:
+def inverse_transform(scaler, values: np.ndarray) -> np.ndarray:
     return scaler.inverse_transform(values.reshape(-1, 1)).flatten()
 
 
 # ======================== Embedding Cache ========================
 
-def get_cache_npy_filename(dataset_name: str, model_key: str, input_type: int) -> str:
-    return f"{dataset_name}_{model_key}_type{input_type}_hidden.npy"
+def _llm_input_tag(input_type: Union[int, str]) -> str:
+    return STRUCT_INPUT if input_type == STRUCT_INPUT else f"type{input_type}"
 
 
-def get_cache_meta_filename(dataset_name: str, model_key: str, input_type: int) -> str:
-    return f"{dataset_name}_{model_key}_type{input_type}_meta.pkl"
+def get_cache_npy_filename(dataset_name: str, model_key: str, input_type: Union[int, str]) -> str:
+    key = llm_cache_key(model_key)
+    return f"{dataset_name}_{key}_{_llm_input_tag(input_type)}_hidden.npy"
+
+
+def get_cache_meta_filename(dataset_name: str, model_key: str, input_type: Union[int, str]) -> str:
+    key = llm_cache_key(model_key)
+    return f"{dataset_name}_{key}_{_llm_input_tag(input_type)}_meta.pkl"
 
 
 def get_struct_cache_npy_filename(dataset_name: str, encoder_name: str = "polybert") -> str:
@@ -374,11 +382,47 @@ def get_struct_cache_meta_filename(dataset_name: str, encoder_name: str = "polyb
     return f"{dataset_name}_{encoder_name}_struct_meta.pkl"
 
 
-def cache_exists(dataset_name: str, model_key: str) -> bool:
-    """Check whether all 9 types of embedding caches exist for the given dataset and model (memmap format)"""
-    for t in range(1, 10):
+def normalize_input_types(input_types=None) -> List[Union[int, str]]:
+    """Validate concrete prompt types, preserving their requested order."""
+    if input_types is None:
+        input_types = range(1, 10)
+    result = []
+    for value in input_types:
+        if value == STRUCT_INPUT:
+            if value not in result:
+                result.append(value)
+            continue
+        if isinstance(value, str) and value.lower().startswith("type"):
+            value = value[4:]
+        if isinstance(value, str) and value.isdigit():
+            value = int(value)
+        if isinstance(value, bool) or not isinstance(value, int) or value not in range(1, 10):
+            raise ValueError(f"Input must be 1-9, 'type1'-'type9', or 'struct', got {value!r}")
+        if value not in result:
+            result.append(value)
+    if not result:
+        raise ValueError("At least one input type is required.")
+    return result
+
+
+def required_llm_input_types(cfg: Dict[str, Any]) -> List[Union[int, str]]:
+    """Standalone LLM uses struct; semantic/hybrid paths retain their types."""
+    if not cfg.get("FROZEN_BACKBONE", True):
+        return []
+    if "STRUCT_ENCODER" in cfg and "ENABLE_HYBRID_ENCODING" not in cfg:
+        return [STRUCT_INPUT] if cfg["STRUCT_ENCODER"] == "llm" else []
+    types = list(cfg.get("INPUT_CONTENT", [1])) + list(cfg.get("EVAL_INPUT_CONTENT", [1]))
+    if cfg.get("ENABLE_HYBRID_ENCODING", False) and cfg.get("STRUCT_ENCODER") == "llm":
+        types.append(9)
+    return normalize_input_types(types)
+
+
+def cache_exists(dataset_name: str, model_key: str, input_types=None) -> bool:
+    """Check only requested types; both the array and metadata must exist."""
+    for t in normalize_input_types(input_types):
         npy_path = os.path.join(EMBEDDING_CACHE_DIR, get_cache_npy_filename(dataset_name, model_key, t))
-        if not os.path.exists(npy_path):
+        meta_path = os.path.join(EMBEDDING_CACHE_DIR, get_cache_meta_filename(dataset_name, model_key, t))
+        if not (os.path.isfile(npy_path) and os.path.isfile(meta_path)):
             return False
     return True
 
@@ -413,70 +457,110 @@ def load_periogt_cache(dataset_name: str) -> List[Dict]:
     return periogt_data
 
 
-def precompute_llm_embeddings(dataset_name: str, model_key: str,
-                              data: List[Dict], batch_size: int = 1):
-    """
-    Precompute LLM embeddings for all 9 input types and cache as numpy memmap format.
-    Each type saves two files:
-        - .npy: concatenated hidden_states (total_tokens, hidden_dim) float16
-        - .pkl: metadata (offsets, tokens)
-    Filename includes dataset name and model name, ensuring caches from different models/datasets do not mix.
-    """
-    # If all caches exist, return directly without loading model
-    if cache_exists(dataset_name, model_key):
-        print(f"  All LLM caches already exist for {dataset_name}/{model_key}, skipping model loading.")
-        return
-
+def load_embedding_llm(model_key: str):
+    """Load the raw-text wrapper used by training, with shared attention settings."""
     from models.base_model import LLM_REGISTRY
-
-    ensure_dir(EMBEDDING_CACHE_DIR)
-
-    model_path = MODEL_PATHS[model_key]
-    llm_cls = LLM_REGISTRY[model_key]
-    llm = llm_cls(model_path, device="cuda")
+    llm = LLM_REGISTRY[model_key](MODEL_PATHS[model_key], device="cuda")
+    print(f"[Input] {model_key}: raw text")
     llm.model.eval()
+    return llm
 
-    for input_type in range(1, 10):
-        npy_path = os.path.join(
-            EMBEDDING_CACHE_DIR,
-            get_cache_npy_filename(dataset_name, model_key, input_type)
+
+def _write_llm_embedding_type(llm, data, dataset_name, input_type,
+                              batch_size, npy_path, meta_path):
+    """Two tokenizer passes, one model pass; keep at most one hidden batch in RAM."""
+    offsets = []
+    total_tokens = 0
+    for i in range(0, len(data), batch_size):
+        texts = [build_prompt(e, dataset_name, input_type) for e in data[i:i + batch_size]]
+        inputs = llm.tokenize(texts)
+        for length in inputs["attention_mask"].sum(dim=1).cpu().tolist():
+            length = int(length)
+            offsets.append((total_tokens, total_tokens + length))
+            total_tokens += length
+        del inputs
+
+    temporary_paths = []
+    hidden_array = None
+    try:
+        for destination in (npy_path, meta_path):
+            fd, path = tempfile.mkstemp(prefix=os.path.basename(destination) + ".",
+                                        suffix=".partial", dir=os.path.dirname(destination))
+            os.close(fd)
+            temporary_paths.append(path)
+        hidden_array = np.lib.format.open_memmap(
+            temporary_paths[0], mode="w+", dtype=np.float16,
+            shape=(total_tokens, llm.hidden_dim),
         )
-        if os.path.exists(npy_path):
-            print(f"  Cache already exists: {npy_path}, skipping.")
-            continue
-
-        print(f"  Computing embeddings for type {input_type}...")
-        all_embeddings = []
-
+        tokens_list = []
         for i in range(0, len(data), batch_size):
-            batch_entries = data[i:i + batch_size]
-            texts = [build_prompt(e, dataset_name, input_type) for e in batch_entries]
+            texts = [build_prompt(e, dataset_name, input_type) for e in data[i:i + batch_size]]
             inputs = llm.tokenize(texts)
             with torch.no_grad():
-                hidden = llm.get_hidden_states(inputs)  # (B, seq, dim)
-
-            mask = inputs["attention_mask"]
+                hidden = llm.get_hidden_states(inputs)
             for j in range(hidden.size(0)):
-                seq_len = mask[j].sum().item()
-                # Save token strings for pooling weight visualization
-                token_ids = inputs["input_ids"][j, :int(seq_len)].cpu().tolist()
-                token_strs = llm.tokenizer.convert_ids_to_tokens(token_ids)
-                all_embeddings.append({
-                    "hidden_states": hidden[j, :seq_len].cpu().half(),
-                    "attention_mask": mask[j, :seq_len].cpu(),
-                    "tokens": token_strs,
-                })
+                valid = inputs["attention_mask"][j].bool()
+                start, end = offsets[i + j]
+                if int(valid.sum()) != end - start:
+                    raise ValueError("Token lengths changed between cache sizing and inference.")
+                hidden_array[start:end] = hidden[j, valid].detach().cpu().half().numpy()
+                token_ids = inputs["input_ids"][j, valid].cpu().tolist()
+                tokens_list.append(llm.tokenizer.convert_ids_to_tokens(token_ids))
+            hidden_array.flush()
+            del hidden, inputs, valid
+        del hidden_array
+        hidden_array = None
+        with open(temporary_paths[1], "wb") as f:
+            pickle.dump({"offsets": offsets, "tokens": tokens_list}, f)
+        os.replace(temporary_paths[0], npy_path)
+        # Metadata is published last; an interrupted first write is not a cache hit.
+        os.replace(temporary_paths[1], meta_path)
+    finally:
+        if hidden_array is not None:
+            del hidden_array
+        for path in temporary_paths:
+            if os.path.exists(path):
+                os.remove(path)
 
-        meta_path = os.path.join(
-            EMBEDDING_CACHE_DIR,
-            get_cache_meta_filename(dataset_name, model_key, input_type)
-        )
-        _save_embeddings_memmap(all_embeddings, npy_path, meta_path)
-        print(f"  Saved: {npy_path} ({len(all_embeddings)} entries)")
 
-    # Free GPU memory
-    del llm
-    torch.cuda.empty_cache()
+def precompute_llm_embeddings(dataset_name: str, model_key: str,
+                              data: List[Dict], batch_size: int = 1,
+                              input_types=None, llm=None):
+    """Cache selected types in the existing .npy/.pkl format, one type at a time.
+
+    Omitted input_types retains the legacy 1-9 API. A supplied wrapper is borrowed
+    so a batch caller can reuse one model across datasets; otherwise load lazily.
+    """
+    types = normalize_input_types(input_types)
+    if llm is not None and llm.MODEL_KEY != model_key:
+        raise ValueError("Borrowed LLM model does not match the requested cache.")
+    pending = [t for t in types if not cache_exists(dataset_name, model_key, [t])]
+    if not pending:
+        print(f"  Requested LLM caches already exist for {dataset_name}/{model_key}: {types}")
+        return
+    if not data or batch_size < 1:
+        raise ValueError("Embedding requires nonempty data and batch_size >= 1.")
+    ensure_dir(EMBEDDING_CACHE_DIR)
+    owns_model = llm is None
+    if owns_model:
+        llm = load_embedding_llm(model_key)
+    try:
+        for input_type in pending:
+            npy_path = os.path.join(EMBEDDING_CACHE_DIR,
+                                   get_cache_npy_filename(dataset_name, model_key, input_type))
+            meta_path = os.path.join(EMBEDDING_CACHE_DIR,
+                                    get_cache_meta_filename(dataset_name, model_key, input_type))
+            print(f"  Computing {dataset_name}/{model_key}/{_llm_input_tag(input_type)}...")
+            _write_llm_embedding_type(llm, data, dataset_name, input_type,
+                                      batch_size, npy_path, meta_path)
+            gc.collect()
+            torch.cuda.empty_cache()
+            print(f"  Saved: {npy_path} ({len(data)} entries)")
+    finally:
+        if owns_model:
+            del llm
+            gc.collect()
+            torch.cuda.empty_cache()
 
 
 def precompute_struct_embeddings(dataset_name: str, data: List[Dict],
@@ -518,7 +602,7 @@ def precompute_struct_embeddings(dataset_name: str, data: List[Dict],
 
 
 def load_cached_embeddings(dataset_name: str, model_key: str,
-                           input_type: int):
+                           input_type: Union[int, str]):
     """Load cached embeddings (memmap format)"""
     npy_path = os.path.join(
         EMBEDDING_CACHE_DIR,
@@ -795,7 +879,12 @@ def _make_yaml_serializable(obj):
 def save_config_yaml(cfg: Dict[str, Any], save_path: str):
     """Save the config dictionary as YAML"""
     ensure_dir(os.path.dirname(save_path))
-    serializable = _make_yaml_serializable(cfg)
+    # Drop the obsolete switch from imported historical configs. This is fixed
+    # provenance metadata, not an input-format option.
+    current_cfg = {k: v for k, v in cfg.items() if k != "USE_CHAT_TEMPLATE"}
+    if "MODEL_TYPE" in current_cfg:
+        current_cfg["_LLM_INPUT_FORMAT"] = "raw_text"
+    serializable = _make_yaml_serializable(current_cfg)
     with open(save_path, "w", encoding="utf-8") as f:
         yaml.dump(serializable, f, default_flow_style=False, allow_unicode=True)
 
@@ -1272,13 +1361,13 @@ class LiveStructDataset(Dataset):
 
 
 class LLMStructCachedDataset(Dataset):
-    """Frozen LLM struct flow dataset — uses cached type 9 embeddings"""
+    """Frozen standalone LLM dataset — uses the reduced structural input."""
 
-    def __init__(self, indices: List[int], cached_type9: List[Dict],
+    def __init__(self, indices: List[int], cached_struct: List[Dict],
                  targets: np.ndarray,
                  article_ids: Optional[List[int]] = None):
         self.indices = indices
-        self.cached_type9 = cached_type9
+        self.cached_struct = cached_struct
         self.targets = targets
         self.article_ids = article_ids
 
@@ -1287,7 +1376,7 @@ class LLMStructCachedDataset(Dataset):
 
     def __getitem__(self, idx):
         real_idx = self.indices[idx]
-        cached = self.cached_type9[real_idx]
+        cached = self.cached_struct[real_idx]
         result = {
             "text_hidden": cached["hidden_states"].float(),
             "text_mask": cached["attention_mask"],
@@ -1299,7 +1388,7 @@ class LLMStructCachedDataset(Dataset):
 
 
 class LLMStructLiveDataset(Dataset):
-    """Non-frozen LLM struct flow dataset — returns type 9 text for real-time inference"""
+    """Non-frozen standalone LLM dataset — returns reduced structural text."""
 
     def __init__(self, indices: List[int], data: List[Dict],
                  targets: np.ndarray, dataset_name: str,
@@ -1315,7 +1404,7 @@ class LLMStructLiveDataset(Dataset):
 
     def __getitem__(self, idx):
         real_idx = self.indices[idx]
-        text = build_prompt(self.data[real_idx], self.dataset_name, 9)
+        text = build_prompt(self.data[real_idx], self.dataset_name, STRUCT_INPUT)
         result = {
             "text": text,
             "target": torch.tensor(self.targets[real_idx], dtype=torch.float32),
@@ -1688,15 +1777,15 @@ def build_struct_dataloaders(
         collate = periogt_collate_fn
     elif encoder_name == "llm":
         if frozen:
-            # LLM struct flow frozen mode: use cached type 9 embeddings
+            # Standalone LLM: reduced structural fields, separate from type 9.
             model_key = cfg["MODEL_TYPE"]
-            cached_type9 = load_cached_embeddings(dataset_name, model_key, 9)
-            train_ds = LLMStructCachedDataset(split_indices["train"], cached_type9, targets_scaled, article_ids=train_article_ids)
-            val_ds = LLMStructCachedDataset(split_indices["val"], cached_type9, targets_scaled, article_ids=train_article_ids)
-            test_ds = LLMStructCachedDataset(split_indices["test"], cached_type9, targets_scaled, article_ids=train_article_ids)
+            cached_struct = load_cached_embeddings(dataset_name, model_key, STRUCT_INPUT)
+            train_ds = LLMStructCachedDataset(split_indices["train"], cached_struct, targets_scaled, article_ids=train_article_ids)
+            val_ds = LLMStructCachedDataset(split_indices["val"], cached_struct, targets_scaled, article_ids=train_article_ids)
+            test_ds = LLMStructCachedDataset(split_indices["test"], cached_struct, targets_scaled, article_ids=train_article_ids)
             collate = cached_collate_fn
         else:
-            # LLM struct flow non-frozen mode: return type 9 text
+            # Use the same reduced structural prompt in live mode.
             train_ds = LLMStructLiveDataset(split_indices["train"], data, targets_scaled, dataset_name, article_ids=train_article_ids)
             val_ds = LLMStructLiveDataset(split_indices["val"], data, targets_scaled, dataset_name, article_ids=train_article_ids)
             test_ds = LLMStructLiveDataset(split_indices["test"], data, targets_scaled, dataset_name, article_ids=train_article_ids)
@@ -1800,6 +1889,7 @@ def precompute_periogt_data(dataset_name: str, data: List[Dict],
     from models.PerioGT.vocab import Vocab
     from config.path import MODEL_PATHS, PERIOGT_CONFIG_PATH
     from sklearn.preprocessing import StandardScaler
+    from tqdm import tqdm
     import yaml
 
     # Load configuration
@@ -1886,7 +1976,7 @@ def precompute_periogt_data(dataset_name: str, data: List[Dict],
 
     # Also compute the fp/md for each SMILES itself (1-mer features)
     single_feat_cache = {}
-    for smi in valid_unique_smiles:
+    for smi in tqdm(valid_unique_smiles, desc="Single-molecule features", ncols=100):
         fp, md = compute_single_smiles_features(smi)
         if fp is not None:
             single_feat_cache[smi] = (fp, md)

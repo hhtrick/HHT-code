@@ -22,6 +22,7 @@ from config.path import (
     RESULT_DIR, TB_LOG_DIR,
     ensure_dir,
 )
+from config.prompt import STRUCT_INPUT
 from utils import (
     load_dataset, load_split_indices, extract_targets,
     fit_scaler, transform_targets, inverse_transform,
@@ -34,6 +35,7 @@ from utils import (
     precompute_periogt_data, load_periogt_cache, periogt_cache_exists,
     evaluate_test_set,
     extract_article_ids, _is_article_aware,
+    required_llm_input_types,
     CachedEmbeddingDataset, LiveInferenceDataset,
     StructOnlyDataset, LiveStructDataset,
     LLMStructCachedDataset, LLMStructLiveDataset,
@@ -53,6 +55,7 @@ from train import (
     _extract_grid_values,
     load_grid_yaml,
     _build_trainer_device_kwargs,
+    _grid_llm_cache_plan, training_split_configs,
 )
 
 # ======================== Training Parameter Settings ========================
@@ -64,7 +67,7 @@ CONFIG_MODULE = "config.config_article"
 
 # YAML grid search config file path (set to enable YAML grid search)
 # Set to None to use CONFIG_MODULE for single-config training
-# Example: "config/grid/exp7_transfer.yaml"
+# Example: "config/grid/exp1_semantic_frozen.yaml"
 GRID_YAML = None
 # ==============================================================
 
@@ -82,6 +85,8 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
     """
     torch.set_float32_matmul_precision(cfg["FLOAT32_MATMUL_PRECISION"])
     struct_only = _is_struct_only(cfg)
+    if struct_only and cfg.get("STRUCT_ENCODER") == "llm":
+        cfg["_LLM_STRUCT_INPUT"] = "monomer_smiles_ratios_is_homopolymer"
     ensure_dir(experiment_dir)
     # ratio_encoding.json is saved in the experiment directory (alongside model weights, results, etc.)
     ratio_path = os.path.join(experiment_dir, "ratio_encoding.json")
@@ -106,7 +111,8 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
 
     # Fit a separate scaler for each dataset
     for ds_name in dataset_names:
-        scaler = fit_scaler(all_targets_raw[ds_name], all_splits[ds_name]["train"])
+        scaler = fit_scaler(all_targets_raw[ds_name], all_splits[ds_name]["train"],
+                            cfg=cfg, dataset_name=ds_name)
         all_scalers[ds_name] = scaler
         all_targets_scaled[ds_name] = transform_targets(scaler, all_targets_raw[ds_name])
 
@@ -162,7 +168,7 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
                 if frozen_struct:
                     llm_key = cfg.get("MODEL_TYPE", "qwen3_4b_base")
                     precompute_llm_embeddings(ds_name, llm_key, data,
-                                              batch_size=1)
+                                              batch_size=1, input_types=required_llm_input_types(cfg))
             else:
                 if frozen_struct:
                     precompute_struct_embeddings(ds_name, data, encoder_name=encoder_name,
@@ -173,7 +179,7 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
             model_key = cfg["MODEL_TYPE"]
             if frozen:
                 precompute_llm_embeddings(ds_name, model_key, data,
-                                          batch_size=1)
+                                          batch_size=1, input_types=required_llm_input_types(cfg))
                 if cfg.get("ENABLE_HYBRID_ENCODING", False):
                     enc_name = cfg.get("STRUCT_ENCODER", "polybert")
                     if enc_name not in ("llm", "periogt"):
@@ -196,6 +202,8 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
     # Test set metrics for each dataset are restored separately via all_scalers[ds_name] after training (see test loop below).
     cfg["_SCALER_MEAN"] = 0.0
     cfg["_SCALER_STD"] = 1.0
+    cfg["_TARGET_TRANSFORM"] = "identity"
+    cfg["_NORMALIZED_METRICS"] = True  # Mixed properties have no common physical unit; per-property evaluation restores each scaler.
     # ---- Multi-seed training ----
     seeds = cfg["SEEDS"]
     all_results = {ds_name: [] for ds_name in dataset_names}
@@ -232,10 +240,10 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
                     collate = periogt_collate_fn
                 elif encoder_name == "llm" and frozen_struct:
                     llm_key = cfg.get("MODEL_TYPE", "qwen3_4b_base")
-                    cached_type9 = load_cached_embeddings(ds_name, llm_key, 9)
-                    train_ds = LLMStructCachedDataset(split["train"], cached_type9, targets_sc)
-                    val_ds = LLMStructCachedDataset(split["val"], cached_type9, targets_sc)
-                    test_ds = LLMStructCachedDataset(split["test"], cached_type9, targets_sc)
+                    cached_struct = load_cached_embeddings(ds_name, llm_key, STRUCT_INPUT)
+                    train_ds = LLMStructCachedDataset(split["train"], cached_struct, targets_sc)
+                    val_ds = LLMStructCachedDataset(split["val"], cached_struct, targets_sc)
+                    test_ds = LLMStructCachedDataset(split["test"], cached_struct, targets_sc)
                     collate = cached_collate_fn
                 elif encoder_name == "llm" and not frozen_struct:
                     train_ds = LLMStructLiveDataset(split["train"], data, targets_sc, ds_name)
@@ -507,18 +515,12 @@ def train_transfer_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
     fixed_cfg["_RATIO_ENCODING_PATH"] = ratio_path
 
     # Determine if precomputation might be needed
-    might_be_frozen = fixed_cfg.get("FROZEN_BACKBONE", True)
-    if not might_be_frozen:
-        for link_key, params in linked_unpacking.items():
-            if "FROZEN_BACKBONE" in params:
-                might_be_frozen = True
-                break
+    might_be_frozen = any(_extract_grid_values(
+        search_space, "FROZEN_BACKBONE", linked_unpacking,
+        fixed_cfg.get("FROZEN_BACKBONE", True),
+    ))
 
     # Extract all possible MODEL_TYPE and STRUCT_ENCODER values from search space
-    all_model_types = _extract_grid_values(
-        search_space, "MODEL_TYPE", linked_unpacking,
-        fixed_cfg.get("MODEL_TYPE", "qwen3_4b_base")
-    )
     all_struct_encoders = _extract_grid_values(
         search_space, "STRUCT_ENCODER", linked_unpacking,
         fixed_cfg.get("STRUCT_ENCODER", "polybert")
@@ -527,6 +529,9 @@ def train_transfer_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
     # Precompute embeddings for all datasets (before all trials, to avoid repeated large model loading)
     for ds_name in dataset_names:
         data = load_dataset(ds_name)
+        for model_key, input_types in _grid_llm_cache_plan(fixed_cfg, search_space, linked_unpacking).items():
+            precompute_llm_embeddings(ds_name, model_key, data,
+                                      batch_size=1, input_types=input_types)
         if struct_only:
             for encoder_name in all_struct_encoders:
                 if encoder_name == "periogt":
@@ -537,13 +542,7 @@ def train_transfer_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
                         use_prompt=True, use_cache=True,
                     )
                 elif encoder_name == "llm":
-                    if might_be_frozen:
-                        for llm_model_key in all_model_types:
-                            print(f"\n[Pre-compute] LLM type 9 embeddings for {ds_name} ({llm_model_key})")
-                            precompute_llm_embeddings(
-                                ds_name, llm_model_key, data,
-                                batch_size=1
-                            )
+                    pass  # Selected LLM inputs were prepared above.
                 elif might_be_frozen:
                     print(f"\n[Pre-compute] Struct embeddings for {ds_name} ({encoder_name})")
                     precompute_struct_embeddings(
@@ -551,12 +550,6 @@ def train_transfer_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
                         ratio_encoding_path=ratio_path,
                     )
         elif might_be_frozen:
-            for model_key in all_model_types:
-                print(f"\n[Pre-compute] LLM embeddings for {ds_name} ({model_key})")
-                precompute_llm_embeddings(
-                    ds_name, model_key, data,
-                    batch_size=1
-                )
             if fixed_cfg.get("ENABLE_HYBRID_ENCODING", False):
                 for encoder_name in all_struct_encoders:
                     if encoder_name == "periogt":
@@ -738,56 +731,38 @@ def train_transfer_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
 
 
 def main():
-    import copy
     from datetime import datetime
 
     ds_label = "_".join(TRAIN_DATASETS)
-
-    print(f"\n{'#'*70}")
-    print(f"  Transfer Training: {TRAIN_DATASETS}")
-    print(f"{'#'*70}")
-
+    yaml_full_path = None
     if GRID_YAML:
-        # ---- YAML Grid Search Mode ----
         yaml_full_path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), GRID_YAML
         )
         base_cfg, search_space, grid_param_names, linked_unpacking = \
             load_grid_yaml(yaml_full_path)
+    else:
+        base_cfg = load_config_as_dict(CONFIG_MODULE)
+        search_space, grid_param_names, linked_unpacking = {}, [], {}
 
-        if not search_space:
-            # No grid params in YAML, treat as single-config training
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            if _is_struct_only(base_cfg):
-                model_label = f"struct_{base_cfg.get('STRUCT_ENCODER', 'polybert')}"
-            else:
-                model_label = base_cfg.get('MODEL_TYPE', 'model')
-            exp_dir = os.path.join(RESULT_DIR, f"transfer_{ds_label}_{model_label}_{ts}")
-            ensure_dir(exp_dir)
-            train_transfer(base_cfg, TRAIN_DATASETS, exp_dir, skip_test=True)
-        else:
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            grid_dir = os.path.join(RESULT_DIR, f"transfer_{ds_label}_grid_{ts}")
-            ensure_dir(grid_dir)
+    for cfg in training_split_configs(base_cfg, TRAIN_DATASETS, grid_param_names):
+        split_label = os.path.splitext(cfg["SPLIT_PKL"])[0]
+        print(f"\n{'#'*70}\n  Transfer Training: {TRAIN_DATASETS}; split: {split_label}\n{'#'*70}")
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        if search_space:
+            grid_dir = os.path.join(RESULT_DIR, f"transfer_{ds_label}_{split_label}_grid_{ts}")
             train_transfer_ray_tune(
-                copy.deepcopy(base_cfg), search_space, TRAIN_DATASETS, grid_dir,
+                cfg, search_space, TRAIN_DATASETS, grid_dir,
                 grid_param_names=grid_param_names,
                 linked_unpacking=linked_unpacking,
                 yaml_path=yaml_full_path,
             )
-    else:
-        # ---- Single Config Module Mode ----
-        cfg = load_config_as_dict(CONFIG_MODULE)
-
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        if _is_struct_only(cfg):
-            model_label = f"struct_{cfg.get('STRUCT_ENCODER', 'polybert')}"
         else:
-            model_label = cfg.get('MODEL_TYPE', 'model')
-
-        exp_dir = os.path.join(RESULT_DIR, f"transfer_{ds_label}_{model_label}_{ts}")
-        ensure_dir(exp_dir)
-        train_transfer(cfg, TRAIN_DATASETS, exp_dir)
+            model_label = (f"struct_{cfg.get('STRUCT_ENCODER', 'polybert')}"
+                           if _is_struct_only(cfg) else cfg.get("MODEL_TYPE", "model"))
+            exp_dir = os.path.join(RESULT_DIR, f"transfer_{ds_label}_{model_label}_{split_label}_{ts}")
+            ensure_dir(exp_dir)
+            train_transfer(cfg, TRAIN_DATASETS, exp_dir, skip_test=bool(GRID_YAML))
 
 
 if __name__ == "__main__":

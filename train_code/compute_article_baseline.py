@@ -1,13 +1,13 @@
 """
 compute_article_baseline.py — Article-memorization hypothesis baseline computation
 
-For randomly split datasets (split_random.pkl and split_random_*pct.pkl at various training set ratios),
+For random/article splits (full and 20/40/60/80% training fractions),
 as well as continue-training scenarios (train=subset specified by split_continue_train.pkl["train"]
 from continue_train_dataset/{name}/{name}.json; test=val_dataset/val_{name}_*.json),
 construct a null model:
   The model is assumed to only remember article-level statistics; the prediction rule for each test sample is:
   - If the sample's article appeared in the training set → predict that article's mean (or median) in training
-  - If the sample's article did not appear in training → predict the global mean (or median) of the training set
+  - If the sample's article did not appear in training → predict the global training mean or median, respectively
 
 Compute R², MAE, RMSE from the predicted vs. true values of all test samples
 (three metrics output for each (dataset, split) combination).
@@ -15,7 +15,10 @@ Compute R², MAE, RMSE from the predicted vs. true values of all test samples
 Outputs three CSVs to autodl-tmp/baseline_results/:
   1. baseline_mean.csv     — mean strategy
   2. baseline_median.csv   — median strategy
-  3. baseline_best.csv     — for each (dataset, split), takes the strategy with higher R² and labels it
+  3. baseline_best.csv     — for each (dataset, split), takes the strategy with higher test R² and labels it
+
+The best-of-two output is a retrospective null reference, not validation-selected
+model performance. Predictions are aggregated and evaluated in original units.
 """
 import os
 import re
@@ -31,7 +34,9 @@ DATASETS = ["Tg", "Tm", "E", "UTS", "eps", "n"]
 
 # Split pkl filename patterns to scan under the main dataset directory
 # Includes split_random.pkl and split_random_20pct.pkl / 40pct / 60pct / 80pct etc.
-SPLIT_PKL_PATTERNS = ["split_random.pkl", "split_random_*pct.pkl", "split_article.pkl"]
+SPLIT_PKL_PATTERNS = ["split_random.pkl", "split_random_*pct.pkl",
+                      "split_article.pkl", "split_article_*pct.pkl"]
+ARTICLE_ID_MODE = "doi"  # DOI first, title fallback (same as training); "title" reproduces the old manuscript grouping
 
 # Split pkl filename under the continue-training dataset directory
 CONTINUE_TRAIN_SPLIT_PKL = "split_continue_train.pkl"
@@ -55,8 +60,16 @@ def _compute_metrics(preds: np.ndarray, targets: np.ndarray) -> dict:
     }
 
 
-def _get_title(entry: dict) -> str:
-    return entry.get("title", "") or ""
+def _get_article_key(entry: dict):
+    if ARTICLE_ID_MODE not in ("doi", "title"):
+        raise ValueError("ARTICLE_ID_MODE must be 'doi' or 'title'.")
+    if ARTICLE_ID_MODE == "doi":
+        doi = str(entry.get("doi") or "").strip().lower()
+        if doi:
+            return ("doi", doi)
+    title = str(entry.get("title") or "").strip()
+    # Unknown sources must not all become one article.
+    return ("title", title) if title else None
 
 
 def _get_value(entry: dict, prop_name: str) -> float:
@@ -87,16 +100,20 @@ def _baseline_from_train_test(
     train_values = np.array([_get_value(e, prop_name) for e in train_entries])
     if len(train_values) == 0:
         return {"R2": float("nan"), "RMSE": float("nan"), "MAE": float("nan")}
+    # Use the same statistic within seen articles and across all training
+    # targets when the test article is unseen.
     global_agg = float(agg_fn(train_values))
 
     article_train_values: dict = {}
     for e in train_entries:
-        article_train_values.setdefault(_get_title(e), []).append(_get_value(e, prop_name))
+        key = _get_article_key(e)
+        if key is not None:
+            article_train_values.setdefault(key, []).append(_get_value(e, prop_name))
     article_agg = {t: float(agg_fn(v)) for t, v in article_train_values.items()}
 
     test_targets = np.array([_get_value(e, prop_name) for e in test_entries])
     test_preds = np.array([
-        article_agg.get(_get_title(e), global_agg) for e in test_entries
+        article_agg.get(_get_article_key(e), global_agg) for e in test_entries
     ])
     return _compute_metrics(test_preds, test_targets)
 
@@ -123,6 +140,8 @@ def compute_baseline_for_random_split(
         "Dataset": dataset_name,
         "Split": os.path.splitext(os.path.basename(pkl_path))[0],
         "Strategy": strategy,
+        "Article_ID_Mode": ARTICLE_ID_MODE,
+        "Training_Dataset": dataset_name,
         "N_Train": len(train_entries),
         "N_Test": len(test_entries),
         **metrics,
@@ -145,7 +164,11 @@ def compute_baseline_for_continue_train(
     if not (os.path.exists(ct_json) and os.path.exists(ct_pkl)):
         return []
 
-    val_files = sorted(glob.glob(os.path.join(VAL_DATASET_DIR, f"val_{dataset_name}_*.json")))
+    # Exact dataset name followed by a numeric file index. In particular,
+    # val_E_article_1.json belongs to E_article, never to E's random split.
+    val_pattern = re.compile(rf"val_{re.escape(dataset_name)}_\d+\.json$")
+    val_files = sorted(p for p in glob.glob(os.path.join(VAL_DATASET_DIR, f"val_{dataset_name}_*.json"))
+                       if val_pattern.fullmatch(os.path.basename(p)))
     if not val_files:
         return []
 
@@ -164,9 +187,11 @@ def compute_baseline_for_continue_train(
         metrics = _baseline_from_train_test(train_entries, test_entries, prop_name, strategy)
         split_tag = f"continue_train__{os.path.splitext(os.path.basename(vf))[0]}"
         rows.append({
-            "Dataset": dataset_name,
+            "Dataset": prop_name,
             "Split": split_tag,
             "Strategy": strategy,
+            "Article_ID_Mode": ARTICLE_ID_MODE,
+            "Training_Dataset": dataset_name,
             "N_Train": len(train_entries),
             "N_Test": len(test_entries),
             **metrics,
@@ -176,19 +201,17 @@ def compute_baseline_for_continue_train(
 
 # ======================== Sort Key ========================
 
-_PCT_RE = re.compile(r"split_random_(\d+)pct")
+_PCT_RE = re.compile(r"split_(random|article)(?:_(\d+)pct)?$")
 
 
 def _split_sort_key(split_name: str):
-    """Sort splits semantically: 20pct < 40pct < 60pct < 80pct < 100% (split_random) < continue_train."""
-    m = _PCT_RE.match(split_name)
+    """Random fractions, article fractions, then continue-training datasets."""
+    m = _PCT_RE.fullmatch(split_name)
     if m:
-        return (0, int(m.group(1)))
-    if split_name == "split_random":
-        return (0, 100)
+        return (0 if m.group(1) == "random" else 1, int(m.group(2) or 100))
     if split_name.startswith("continue_train"):
-        return (1, split_name)
-    return (2, split_name)
+        return (2, split_name)
+    return (3, split_name)
 
 
 # ======================== Main Flow ========================
@@ -201,7 +224,7 @@ def main():
 
     for ds in DATASETS:
         ds_dir = os.path.join(DATASET_DIR, ds)
-        # ---- Collect all split_random*.pkl for this dataset ----
+        # ---- Collect configured random/article splits ----
         pkl_paths: list = []
         for pat in SPLIT_PKL_PATTERNS:
             pkl_paths.extend(glob.glob(os.path.join(ds_dir, pat)))
@@ -210,7 +233,7 @@ def main():
                            key=lambda p: _split_sort_key(os.path.splitext(os.path.basename(p))[0]))
 
         if not pkl_paths:
-            print(f"[WARN] No split_random*.pkl found in {ds_dir}, skipping random splits for {ds}")
+            print(f"[WARN] No matching split files found in {ds_dir}, skipping main splits for {ds}")
 
         for pkl_path in pkl_paths:
             mean_row = compute_baseline_for_random_split(ds, pkl_path, "mean")
@@ -225,8 +248,13 @@ def main():
                   f"RMSE={median_row['RMSE']:.4f}, MAE={median_row['MAE']:.4f}")
 
         # ---- Continue-training scenario ----
-        ct_mean = compute_baseline_for_continue_train(ds, "mean")
-        ct_median = compute_baseline_for_continue_train(ds, "median")
+        ct_names = [ds]
+        if os.path.isdir(CONTINUE_TRAIN_DATASET_DIR):
+            ct_names += sorted(name for name in os.listdir(CONTINUE_TRAIN_DATASET_DIR)
+                               if name.startswith(ds + "_") and os.path.isfile(os.path.join(
+                                   CONTINUE_TRAIN_DATASET_DIR, name, f"{name}.json")))
+        ct_mean = [row for name in ct_names for row in compute_baseline_for_continue_train(name, "mean")]
+        ct_median = [row for name in ct_names for row in compute_baseline_for_continue_train(name, "median")]
         for mean_row, median_row in zip(ct_mean, ct_median):
             mean_rows.append(mean_row)
             median_rows.append(median_row)
@@ -243,12 +271,12 @@ def main():
 
     df_mean = pd.DataFrame(mean_rows)
     df_mean.to_csv(os.path.join(OUTPUT_DIR, "baseline_mean.csv"),
-                   index=False, float_format="%.6f")
+                   index=False, float_format="%.17g", lineterminator="\n")
     print(f"\nSaved: {os.path.join(OUTPUT_DIR, 'baseline_mean.csv')}")
 
     df_median = pd.DataFrame(median_rows)
     df_median.to_csv(os.path.join(OUTPUT_DIR, "baseline_median.csv"),
-                     index=False, float_format="%.6f")
+                     index=False, float_format="%.17g", lineterminator="\n")
     print(f"Saved: {os.path.join(OUTPUT_DIR, 'baseline_median.csv')}")
 
     # ---- Best strategy CSV ----
@@ -266,7 +294,7 @@ def main():
     ]
     df_best = df_best[cols]
     df_best.to_csv(os.path.join(OUTPUT_DIR, "baseline_best.csv"),
-                   index=False, float_format="%.6f")
+                   index=False, float_format="%.17g", lineterminator="\n")
     print(f"Saved: {os.path.join(OUTPUT_DIR, 'baseline_best.csv')}")
 
 

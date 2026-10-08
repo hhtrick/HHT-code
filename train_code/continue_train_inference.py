@@ -37,16 +37,21 @@ from typing import Dict, Any, List, Optional
 from collections import OrderedDict
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from sklearn.preprocessing import StandardScaler
+from target_scaling import (
+    inject_scaler_config, inverse_from_parameters, validate_scaler_config,
+    scaler_transform,
+)
 
 from config.path import (
     MODEL_PATHS, PERIOGT_CONFIG_PATH, VAL_DATASET_DIR,
-    CONTINUE_TRAIN_DATASET_DIR, TB_LOG_DIR, RESULT_DIR, ensure_dir,
+    CONTINUE_TRAIN_DATASET_DIR, TB_LOG_DIR, RESULT_DIR, PROJECT_ROOT, ensure_dir,
 )
-from config.prompt import build_prompt
+from domain_embedding_cache import precompute_domain_embeddings, load_domain_cached_splits
+from config.prompt import STRUCT_INPUT, build_prompt
 from config import config_continue_train as ct_cfg
 from utils import (
     compute_metrics, inverse_transform, load_ratio_encoding,
+    fit_scaler, transform_targets, save_config_yaml,
     build_ratio_vector, load_trainable_weights,
     extract_article_ids, set_seed,
     periogt_collate_fn, precompute_periogt_data,
@@ -71,6 +76,9 @@ SEED = 42
 
 # Inference batch size
 BATCH_SIZE = 4
+
+# Used only when a requested domain LLM cache is missing.
+EMBEDDING_BATCH_SIZE = 1
 
 # Output directory
 OUTPUT_DIR = "continue_train_results/continue"
@@ -159,42 +167,6 @@ def extract_smiles_data(entries: List[Dict], ratio_encoding: Optional[Dict]):
         smiles_lists.append(sl)
         ratio_vectors_lists.append(rvl)
     return smiles_lists, ratio_vectors_lists
-
-
-def precompute_embeddings(
-    entries: List[Dict], dataset_name: str, input_type: int,
-    llm, device: str, batch_size: int = 1,
-    cache_path: Optional[str] = None,
-) -> List[dict]:
-    """
-    When the backbone is frozen, precompute LLM text embeddings for all samples.
-    cache_path: if specified, prefer loading from disk cache; compute and save if not exists.
-    Returns list of {"hidden": Tensor(seq, dim), "mask": Tensor(seq,)} per sample.
-    """
-    if cache_path and os.path.exists(cache_path):
-        print(f"  Loading cached embeddings: {cache_path}")
-        return torch.load(cache_path, map_location="cpu", weights_only=False)
-
-    cache = []
-    for start in range(0, len(entries), batch_size):
-        end = min(start + batch_size, len(entries))
-        batch_entries = entries[start:end]
-        texts = [build_prompt(e, dataset_name, input_type) for e in batch_entries]
-        with torch.no_grad():
-            text_hidden, text_mask = encode_texts(llm, texts, device)
-        for j in range(text_hidden.size(0)):
-            seq_len = int(text_mask[j].sum().item())
-            cache.append({
-                "hidden": text_hidden[j, :seq_len].cpu(),
-                "mask": text_mask[j, :seq_len].cpu(),
-            })
-
-    if cache_path:
-        ensure_dir(os.path.dirname(cache_path))
-        torch.save(cache, cache_path)
-        print(f"  Saved embeddings cache: {cache_path}")
-
-    return cache
 
 
 def infer_dataset_name(data_file: str) -> str:
@@ -316,7 +288,8 @@ def load_continue_train_data(dataset_name: str) -> tuple:
     pkl_path = os.path.join(CONTINUE_TRAIN_DATASET_DIR, dataset_name, pkl_name)
     if not os.path.exists(pkl_path):
         print(f"[Error] Split pkl not found: {pkl_path}")
-        print(f"  Please run: python generate_split_continue_train.py")
+        print("  Restore the matching published JSON/PKL pair. Offline recovery tools: "
+              "../outputs/dataset_tools/README.md")
         sys.exit(1)
 
     with open(json_path, "r", encoding="utf-8") as f:
@@ -482,9 +455,10 @@ def compute_epoch_metrics(model, data_loader, scaler_mean, scaler_std,
     preds_scaled = np.concatenate(all_preds)
     targets_scaled = np.concatenate(all_targets)
 
-    # Restore to original scale
-    preds_orig = preds_scaled * scaler_std + scaler_mean
-    targets_orig = targets_scaled * scaler_std + scaler_mean
+    # Loss remains in standardized target space; metrics return to physical units.
+    transform = cfg.get("_TARGET_TRANSFORM", "identity")
+    preds_orig = inverse_from_parameters(preds_scaled, scaler_mean, scaler_std, transform)
+    targets_orig = inverse_from_parameters(targets_scaled, scaler_mean, scaler_std, transform)
 
     metrics = compute_metrics(preds_orig, targets_orig)
     return metrics, avg_loss
@@ -538,10 +512,11 @@ def continue_train_loop(
     struct_only_flag = is_struct_only(cfg)
     encoder_name = cfg.get("STRUCT_ENCODER", "polybert")
     _need_entry = (struct_only_flag and encoder_name == "polybert")
+    input_type = STRUCT_INPUT if (struct_only_flag and encoder_name == "llm") else INPUT_TYPE
 
     # Build training dataset
     train_ds = ContinueTrainDataset(
-        train_data, train_targets_scaled, dataset_name, INPUT_TYPE,
+        train_data, train_targets_scaled, dataset_name, input_type,
         article_ids=train_article_ids,
         cached_embeddings=train_cached_embeddings,
         periogt_data=train_periogt_data,
@@ -555,7 +530,7 @@ def continue_train_loop(
     val_loader = None
     if val_data and val_targets_scaled is not None and len(val_data) > 0:
         val_ds = ContinueTrainDataset(
-            val_data, val_targets_scaled, dataset_name, INPUT_TYPE,
+            val_data, val_targets_scaled, dataset_name, input_type,
             article_ids=val_article_ids,
             cached_embeddings=val_cached_embeddings,
             periogt_data=val_periogt_data,
@@ -595,7 +570,9 @@ def continue_train_loop(
         scaler_mean = cfg.get("_SCALER_MEAN", 0.0)
         scaler_std = cfg.get("_SCALER_STD", 1.0)
         for i, aid in enumerate(train_article_ids):
-            val_orig = float(train_targets_scaled[i]) * scaler_std + scaler_mean
+            val_orig = float(inverse_from_parameters(
+                train_targets_scaled[i], scaler_mean, scaler_std,
+                cfg.get("_TARGET_TRANSFORM", "identity")))
             aid_int = int(aid)
             if aid_int not in train_article_ranges:
                 train_article_ranges[aid_int] = (val_orig, val_orig)
@@ -803,7 +780,7 @@ def run_inference(model, data: List[Dict], dataset_name: str,
 
             if struct_only_flag:
                 if encoder_name == "llm":
-                    texts = [build_prompt(e, dataset_name, 9) for e in batch_entries]
+                    texts = [build_prompt(e, dataset_name, STRUCT_INPUT) for e in batch_entries]
                     if cached_embeddings is not None:
                         text_hidden, text_mask = _unpack_cached(
                             cached_embeddings, start, end, device)
@@ -918,12 +895,12 @@ def validate_input_type(entries: List[Dict], input_type: int, label: str = "data
 
 # ======================== Main Flow ========================
 
-def main():
+def main(*, config_path=None, output_dir_override=None):
     weights_dir = WEIGHTS_DIR
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # ---- Validate config file ----
-    config_yaml_path = os.path.join(weights_dir, "config.yaml")
+    config_yaml_path = config_path or os.path.join(weights_dir, "config.yaml")
     if not os.path.exists(config_yaml_path):
         print(f"[Error] config.yaml not found in {weights_dir}")
         sys.exit(1)
@@ -934,6 +911,10 @@ def main():
 
     # ---- Load config ----
     cfg = load_config_from_yaml(config_yaml_path)
+    cfg.pop("USE_CHAT_TEMPLATE", None)  # Historical configs cannot change raw input formatting.
+    input_type = STRUCT_INPUT if (is_struct_only(cfg) and cfg.get("STRUCT_ENCODER") == "llm") else INPUT_TYPE
+    if ct_cfg.LOG_TARGET_DATASETS is not None:
+        cfg["LOG_TARGET_DATASETS"] = ct_cfg.LOG_TARGET_DATASETS
     dataset_name = DATASET_NAME if DATASET_NAME else infer_dataset_name(TEST_FILE)
 
     # ---- Scaler handling ----
@@ -943,6 +924,9 @@ def main():
         scaler = None  # Delay fitting until after training data is loaded
     else:
         scaler_path = os.path.join(weights_dir, "scaler.pkl")
+        if not os.path.exists(scaler_path):
+            scale_property = "E" if dataset_name == "E_article" else dataset_name
+            scaler_path = os.path.join(weights_dir, f"scaler_{scale_property}.pkl")
         if not os.path.exists(scaler_path):
             print(f"[Error] scaler.pkl not found in {weights_dir}")
             sys.exit(1)
@@ -954,7 +938,7 @@ def main():
 
     # ---- Output directory ----
     run_name = f"{dataset_name}_ct_{timestamp}"
-    output_dir = os.path.join(OUTPUT_DIR, run_name)
+    output_dir = output_dir_override or os.path.join(OUTPUT_DIR, run_name)
     ensure_dir(output_dir)
 
     # ---- TensorBoard ----
@@ -966,7 +950,7 @@ def main():
     # ---- Load test data ----
     with open(TEST_FILE, "r", encoding="utf-8") as f:
         test_data = json.load(f)
-    validate_input_type(test_data, INPUT_TYPE, label="test")
+    validate_input_type(test_data, input_type, label="test")
 
     # Infer the actual property key (may differ from DATASET_NAME when the
     # continue_train_dataset folder name != the properties dict key, e.g.
@@ -988,9 +972,11 @@ def main():
     # ---- Load and split train/val from continue_train_dataset (based on pkl indices) ----
     all_train_entries, all_train_targets_raw, all_val_entries, all_val_targets_raw, prop_name = \
         load_continue_train_data(dataset_name)
-    validate_input_type(all_train_entries, INPUT_TYPE, label="train")
+    if prop_name != test_prop_key:
+        raise ValueError(f"Training target {prop_name!r} differs from test target {test_prop_key!r}")
+    validate_input_type(all_train_entries, input_type, label="train")
     if all_val_entries:
-        validate_input_type(all_val_entries, INPUT_TYPE, label="val")
+        validate_input_type(all_val_entries, input_type, label="val")
 
     print(f"\n[Train] {len(all_train_entries)} entries")
     print(f"[Val] {len(all_val_entries)} entries")
@@ -1001,38 +987,35 @@ def main():
 
     # ---- Scaler fitting (random init mode) or use existing scaler ----
     if scaler is None:
-        scaler = StandardScaler()
-        scaler.fit(all_train_targets_raw.reshape(-1, 1))
-        print(f"[Scaler] Fitted from training data: mean={scaler.mean_[0]:.4f}, std={scaler.scale_[0]:.4f}")
-        # Save new scaler
-        scaler_save_path = os.path.join(output_dir, "scaler.pkl")
-        with open(scaler_save_path, "wb") as f:
-            pickle.dump(scaler, f)
+        scaler = fit_scaler(all_train_targets_raw, list(range(len(all_train_targets_raw))),
+                            cfg=cfg, dataset_name=prop_name)
+        print(f"[Scaler] Fitted from training data: transform={scaler_transform(scaler)}, "
+              f"mean={scaler.mean_[0]:.4f}, std={scaler.scale_[0]:.4f}")
+    else:
+        validate_scaler_config(scaler, cfg, prop_name, context="Continue training with pretrained head")
+    inject_scaler_config(cfg, scaler, prop_name)
+    # Store the exact scaler beside these weights even when inherited unchanged.
+    scaler_save_path = os.path.join(output_dir, "scaler.pkl")
+    with open(scaler_save_path, "wb") as f:
+        pickle.dump(scaler, f)
+    save_config_yaml(cfg, os.path.join(output_dir, "config.yaml"))
 
     # ---- Article ID mapping ----
-    all_titles_train = [(e.get("title", "") or "") for e in all_train_entries]
-    title_to_id = {}
-    for t in all_titles_train:
-        if t not in title_to_id:
-            title_to_id[t] = len(title_to_id)
-    train_article_ids = np.array([title_to_id[t] for t in all_titles_train])
+    combined_article_ids = np.array(extract_article_ids(all_train_entries + all_val_entries))
+    train_article_ids = combined_article_ids[:len(all_train_entries)]
 
     val_article_ids = None
     all_val_targets_scaled = None
     if all_val_entries:
-        val_titles = [(e.get("title", "") or "") for e in all_val_entries]
-        for t in val_titles:
-            if t not in title_to_id:
-                title_to_id[t] = len(title_to_id)
-        val_article_ids = np.array([title_to_id[t] for t in val_titles])
-        all_val_targets_scaled = (all_val_targets_raw - scaler.mean_[0]) / scaler.scale_[0]
+        val_article_ids = combined_article_ids[len(all_train_entries):]
+        all_val_targets_scaled = transform_targets(scaler, all_val_targets_raw)
 
     print(f"\n[Total] train={len(all_train_entries)}, val={len(all_val_entries)}, "
           f"test={len(test_data)}")
 
     # ---- Normalize target values ----
-    all_train_targets_scaled = (all_train_targets_raw - scaler.mean_[0]) / scaler.scale_[0]
-    test_targets_scaled = (test_targets_raw - scaler.mean_[0]) / scaler.scale_[0]
+    all_train_targets_scaled = transform_targets(scaler, all_train_targets_raw)
+    test_targets_scaled = transform_targets(scaler, test_targets_raw)
 
     # ---- Device ----
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -1069,10 +1052,24 @@ def main():
         (not struct_only_flag) or
         (struct_only_flag and cfg.get("STRUCT_ENCODER") == "llm")
     )
+    train_cached_embeddings = None
+    val_cached_embeddings = None
+    test_cached_embeddings = None
     if need_external_llm:
+        # Missing caches are populated before constructing the regression model;
+        # complete caches never load the external backbone.
         model_key = cfg["MODEL_TYPE"]
-        print(f"\n[LLM] Loading {model_key}...")
-        llm = load_external_llm(model_key, device=device)
+        precompute_domain_embeddings(
+            dataset_name, model_key, [input_type], batch_size=EMBEDDING_BATCH_SIZE,
+            test_file=TEST_FILE,
+        )
+        train_cached_embeddings, val_cached_embeddings, test_cached_embeddings = \
+            load_domain_cached_splits(
+                dataset_name, model_key, input_type, test_file=TEST_FILE,
+                split_pkl_name=ct_cfg.CONTINUE_TRAIN_SPLIT_PKL_NAME,
+            )
+        print(f"[Domain cache] Loaded train={len(train_cached_embeddings)}, "
+              f"val={len(val_cached_embeddings)}, test={len(test_cached_embeddings)}")
 
     encoder_name = cfg.get("STRUCT_ENCODER", "polybert")
     enable_hybrid = cfg.get("ENABLE_HYBRID_ENCODING", False)
@@ -1103,26 +1100,30 @@ def main():
         # as fallback, scan from main dataset (must ensure scan range matches training-time scan)
         if ratio_encoding is None:
             fallback_ratio_path = os.path.join(output_dir, "ratio_encoding.json")
-            print(f"[Ratio] ratio_encoding.json not found, scanning main dataset/{dataset_name}/ ...")
-            scan_and_save_ratio_encoding([dataset_name], save_path=fallback_ratio_path)
+            print(f"[Ratio] ratio_encoding.json not found, scanning main dataset/{prop_name}/ ...")
+            scan_and_save_ratio_encoding([prop_name], save_path=fallback_ratio_path)
             ratio_encoding = load_ratio_encoding(fallback_ratio_path)
+            cfg["_RATIO_ENCODING_PATH"] = fallback_ratio_path
         else:
             print(f"[Ratio] Loaded ratio_encoding from: {ratio_path}")
         print("[PerioGT] Preparing graph data...")
         use_prompt = cfg.get("USE_PERIOGT_PROMPT", True)
         train_periogt_data = precompute_periogt_data(
-            dataset_name, all_train_entries, ratio_encoding,
+            prop_name, all_train_entries, ratio_encoding,
             use_prompt=use_prompt)
         if all_val_entries:
             val_periogt_data = precompute_periogt_data(
-                dataset_name, all_val_entries, ratio_encoding,
+                prop_name, all_val_entries, ratio_encoding,
                 use_prompt=use_prompt)
         test_periogt_data = precompute_periogt_data(
-            dataset_name, test_data, ratio_encoding,
+            prop_name, test_data, ratio_encoding,
             use_prompt=use_prompt)
 
     from models.base_model import PropertyPredictionModel, StructureOnlyModel
 
+    # Cache misses may instantiate a backbone; warm/cold caches must not alter
+    # the random initialization of the trainable head or training RNG stream.
+    set_seed(SEED)
     print("[Model] Building model...")
     if struct_only_flag:
         model = StructureOnlyModel(cfg)
@@ -1137,37 +1138,15 @@ def main():
         print(f"[Weights] Loading {weight_path}")
         load_trainable_weights(model, weight_path, device=device)
 
-    # ---- Pre-embedding (when backbone is frozen) ----
-    train_cached_embeddings = None
-    val_cached_embeddings = None
-    test_cached_embeddings = None
-
-    if need_external_llm:
-        print(f"\n[Pre-Embedding] Precomputing text embeddings (frozen backbone)...")
-        print(f"  Train: {len(all_train_entries)} entries...")
-        train_cached_embeddings = precompute_embeddings(
-            all_train_entries, dataset_name, INPUT_TYPE, llm, device, batch_size=1)
-        if all_val_entries:
-            print(f"  Val: {len(all_val_entries)} entries...")
-            val_cached_embeddings = precompute_embeddings(
-                all_val_entries, dataset_name, INPUT_TYPE, llm, device, batch_size=1)
-        print(f"  Test: {len(test_data)} entries...")
-        test_cached_embeddings = precompute_embeddings(
-            test_data, dataset_name, INPUT_TYPE, llm, device, batch_size=1)
-        print("[Pre-Embedding] Done. Releasing LLM...")
-        del llm
-        llm = None
-        torch.cuda.empty_cache()
-
     # ---- Pre-finetune evaluation ----
     print("\n[Pre-FT Evaluation] Testing before fine-tuning...")
     model.eval()
     preds_scaled_pre = run_inference(
-        model, test_data, dataset_name, cfg, device,
+        model, test_data, prop_name, cfg, device,
         llm=llm, cached_embeddings=test_cached_embeddings,
         struct_encoder=struct_encoder_ext, ratio_encoding=ratio_encoding,
         periogt_data=test_periogt_data)
-    preds_orig_pre = preds_scaled_pre * scaler.scale_[0] + scaler.mean_[0]
+    preds_orig_pre = inverse_transform(scaler, preds_scaled_pre)
     metrics_pre = compute_metrics(preds_orig_pre, test_targets_raw)
     print(f"  R2: {metrics_pre['R2']:.4f}, RMSE: {metrics_pre['RMSE']:.4f}, MAE: {metrics_pre['MAE']:.4f}")
 
@@ -1178,14 +1157,13 @@ def main():
         tb_writer.add_scalar("test/MAE_before_ft", metrics_pre["MAE"], 0)
 
     # ---- Continue-training fine-tuning ----
-    cfg["_SCALER_MEAN"] = float(scaler.mean_[0])
-    cfg["_SCALER_STD"] = float(scaler.scale_[0])
+    inject_scaler_config(cfg, scaler, prop_name)
 
     model = continue_train_loop(
         model, all_train_entries, all_val_entries if all_val_entries else None,
         all_train_targets_scaled,
         all_val_targets_scaled,
-        dataset_name, cfg,
+        prop_name, cfg,
         train_article_ids=train_article_ids,
         val_article_ids=val_article_ids,
         device=device,
@@ -1204,11 +1182,11 @@ def main():
     print("\n[Post-FT Evaluation] Testing after fine-tuning...")
     model.eval()
     preds_scaled_post = run_inference(
-        model, test_data, dataset_name, cfg, device,
+        model, test_data, prop_name, cfg, device,
         llm=llm, cached_embeddings=test_cached_embeddings,
         struct_encoder=struct_encoder_ext, ratio_encoding=ratio_encoding,
         periogt_data=test_periogt_data)
-    preds_orig_post = preds_scaled_post * scaler.scale_[0] + scaler.mean_[0]
+    preds_orig_post = inverse_transform(scaler, preds_scaled_post)
     metrics_post = compute_metrics(preds_orig_post, test_targets_raw)
     print(f"  R2: {metrics_post['R2']:.4f}, RMSE: {metrics_post['RMSE']:.4f}, MAE: {metrics_post['MAE']:.4f}")
 
@@ -1227,25 +1205,25 @@ def main():
     torch.cuda.empty_cache()
 
     # ---- Save results ----
+    # Refresh after ratio-path resolution and actual continue-training options.
+    cfg["_CONTINUE_TRAIN_DROPOUT_OVERRIDE"] = ct_cfg.CONTINUE_TRAIN_MLP_DROPOUT
+    save_config_yaml(cfg, os.path.join(output_dir, "config.yaml"))
     # Save config snapshot
     cfg_snapshot = {
         "continue_train_config": {
-            "CONTINUE_TRAIN_EPOCHS": ct_cfg.CONTINUE_TRAIN_EPOCHS,
-            "CONTINUE_TRAIN_PATIENCE": ct_cfg.CONTINUE_TRAIN_PATIENCE,
-            "CONTINUE_TRAIN_LR": ct_cfg.CONTINUE_TRAIN_LR,
-            "CONTINUE_TRAIN_BATCH_SIZE": ct_cfg.CONTINUE_TRAIN_BATCH_SIZE,
-            "CONTINUE_TRAIN_SPLIT_PKL_NAME": ct_cfg.CONTINUE_TRAIN_SPLIT_PKL_NAME,
-            "RANDOM_INIT_WEIGHTS": ct_cfg.RANDOM_INIT_WEIGHTS,
-            "MSE_WEIGHT": ct_cfg.MSE_WEIGHT,
-            "ARTICLE_CONSISTENCY_WEIGHT": ct_cfg.ARTICLE_CONSISTENCY_WEIGHT,
-            "ARTICLE_BIAS_WEIGHT": ct_cfg.ARTICLE_BIAS_WEIGHT,
-            "ARTICLE_RANKING_WEIGHT": ct_cfg.ARTICLE_RANKING_WEIGHT,
+            key: value for key, value in vars(ct_cfg).items() if key.isupper()
         },
         "weights_dir": weights_dir,
-        "test_file": TEST_FILE,
+        "test_file": os.path.relpath(os.path.abspath(TEST_FILE), PROJECT_ROOT).replace("\\", "/"),
         "dataset_name": dataset_name,
-        "input_type": INPUT_TYPE,
+        "target_property": prop_name,
+        "target_transform": scaler_transform(scaler),
+        "effective_log_target_datasets": cfg.get("LOG_TARGET_DATASETS", []),
+        "input_format": "raw_text",
+        "input_type": input_type,
         "seed": SEED,
+        "inference_batch_size": BATCH_SIZE,
+        "embedding_batch_size": EMBEDDING_BATCH_SIZE,
         "n_train": len(all_train_entries),
         "n_val": len(all_val_entries),
         "n_test": len(test_data),
@@ -1294,6 +1272,62 @@ def main():
     print(f"  Output: {output_dir}")
     print(f"  TensorBoard: {tb_log_dir}")
     print(f"{'='*50}")
+    return output_dir
+
+
+def run_from_saved_config(run_dir, weights_dir_override=None, output_dir=None, *, seed_override=None):
+    """Replay one domain run using its saved architecture and run snapshot.
+
+    Intended for separate worker processes. Global settings are restored even
+    after an error; this function is not safe for concurrent Python threads.
+    Missing settings in historical snapshots retain current config defaults
+    and are explicitly reported (older snapshots did not save every option).
+    seed_override pairs main-task weights_seedN.pth with domain training seed N;
+    it leaves the saved split and all training hyperparameters unchanged.
+    """
+    run_dir = os.path.abspath(run_dir)
+    with open(os.path.join(run_dir, "continue_train_config.json"), encoding="utf-8") as handle:
+        saved = json.load(handle)
+    required = ("weights_dir", "test_file", "dataset_name", "input_type", "seed", "continue_train_config")
+    missing = [key for key in required if key not in saved]
+    if missing:
+        raise ValueError(f"Incomplete domain snapshot in {run_dir}: {missing}")
+
+    def project_path(path):
+        path = os.fspath(path).replace("\\", os.sep)
+        return path if os.path.isabs(path) else os.path.join(PROJECT_ROOT, path)
+
+    module = sys.modules[__name__]
+    overrides = {
+        "WEIGHTS_DIR": project_path(weights_dir_override or saved["weights_dir"]),
+        "TEST_FILE": project_path(saved["test_file"]),
+        "DATASET_NAME": saved["dataset_name"],
+        "INPUT_TYPE": saved["input_type"],
+        "SEED": int(saved["seed"] if seed_override is None else seed_override),
+        "BATCH_SIZE": saved.get("inference_batch_size", BATCH_SIZE),
+        "EMBEDDING_BATCH_SIZE": saved.get("embedding_batch_size", EMBEDDING_BATCH_SIZE),
+    }
+    old_globals = {key: getattr(module, key) for key in overrides}
+    ct_overrides = saved["continue_train_config"]
+    unknown = [key for key in ct_overrides if not hasattr(ct_cfg, key)]
+    if unknown:
+        raise ValueError(f"Unsupported saved continue-training options: {unknown}")
+    old_ct = {key: getattr(ct_cfg, key) for key in ct_overrides}
+    defaults = sorted(key for key in vars(ct_cfg) if key.isupper() and key not in ct_overrides)
+    if defaults:
+        print(f"[Replay] Historical snapshot omitted these options; retaining config defaults: {defaults}")
+    try:
+        for key, value in overrides.items():
+            setattr(module, key, value)
+        for key, value in ct_overrides.items():
+            setattr(ct_cfg, key, value)
+        return main(config_path=os.path.join(run_dir, "config.yaml"),
+                    output_dir_override=os.path.abspath(output_dir or run_dir))
+    finally:
+        for key, value in old_globals.items():
+            setattr(module, key, value)
+        for key, value in old_ct.items():
+            setattr(ct_cfg, key, value)
 
 
 if __name__ == "__main__":

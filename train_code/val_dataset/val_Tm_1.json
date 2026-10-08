@@ -1,6 +1,6 @@
 [
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -16,7 +16,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene glycol (PEG); polymer grade PEG1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene glycol (PEG); polymer grade PEG1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -36,7 +36,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -52,7 +52,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene glycol (PEG); polymer grade PEG5; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene glycol (PEG); polymer grade PEG5; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -72,7 +72,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -88,7 +88,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE1; reported melt flow rate / melt volume rate / viscosity number: 0.85 g (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE1; reported melt flow rate / melt volume rate / viscosity number: 0.85 g (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -108,7 +108,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -124,7 +124,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE7; reported melt flow rate / melt volume rate / viscosity number: 12 g (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE7; reported melt flow rate / melt volume rate / viscosity number: 12 g (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -144,7 +144,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -160,7 +160,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene ultra-high molecular weight (UHMWPE); polymer grade UHMWPE1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene ultra-high molecular weight (UHMWPE); polymer grade UHMWPE1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -180,7 +180,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -196,7 +196,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE13; reported melt flow rate / melt volume rate / viscosity number: 25 g (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene high density (HDPE); polymer grade HDPE13; reported melt flow rate / melt volume rate / viscosity number: 25 g (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -216,7 +216,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -232,7 +232,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene ultra-high molecular weight (UHMWPE); polymer grade UHMWPE2; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene ultra-high molecular weight (UHMWPE); polymer grade UHMWPE2; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -252,7 +252,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -268,7 +268,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP3; reported melt flow rate / melt volume rate / viscosity number: 3.5 g (10 min)-1(230 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP3; reported melt flow rate / melt volume rate / viscosity number: 3.5 g (10 min)-1(230 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -288,7 +288,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -304,7 +304,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP1; reported melt flow rate / melt volume rate / viscosity number: 25 g (10 min)-1(230 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP1; reported melt flow rate / melt volume rate / viscosity number: 25 g (10 min)-1(230 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -324,7 +324,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -340,7 +340,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP6; reported melt flow rate / melt volume rate / viscosity number: 20 g (10 min)-1(230 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polypropylene (PP); polymer grade PP6; reported melt flow rate / melt volume rate / viscosity number: 20 g (10 min)-1(230 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -360,11 +360,11 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
-      "repeat_unit_psmiles": "[*]O[*]",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Formaldehyde",
@@ -382,7 +382,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C8; reported melt flow rate / melt volume rate / viscosity number: 8 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C8; reported melt flow rate / melt volume rate / viscosity number: 8 cm3 (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -402,11 +402,11 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
-      "repeat_unit_psmiles": "[*]O[*]",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Formaldehyde",
@@ -424,7 +424,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C9; reported melt flow rate / melt volume rate / viscosity number: 11 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C9; reported melt flow rate / melt volume rate / viscosity number: 11 cm3 (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -444,11 +444,11 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
-      "repeat_unit_psmiles": "[*]O[*]",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Formaldehyde",
@@ -466,7 +466,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C10; reported melt flow rate / melt volume rate / viscosity number: 11 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylene-copolymer (POM-C); polymer grade POM-C10; reported melt flow rate / melt volume rate / viscosity number: 11 cm3 (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -486,11 +486,11 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
-      "repeat_unit_psmiles": "[*]O[*]",
+      "repeat_unit_psmiles": "[*]OC[*]",
       "monomers": [
         {
           "name": "Formaldehyde",
@@ -502,7 +502,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylen-homopolymer (POM-H); polymer grade POM-H3; reported melt flow rate / melt volume rate / viscosity number: 21 cm3 (10 min)-1(190 °C, 2.16 kg).",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyoxymethylen-homopolymer (POM-H); polymer grade POM-H3; reported melt flow rate / melt volume rate / viscosity number: 21 cm3 (10 min)-1(190 °C, 2.16 kg).",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -522,7 +522,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -531,20 +531,20 @@
         {
           "name": "Decamethylenediamine",
           "smiles": "NCCCCCCCCCCN",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Sebacic acid",
           "smiles": "OC(=O)CCCCCCCCC(=O)O",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 10.10 (PA 10.10); polymer grade PA10.10-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyamide 10.10 (PA 10.10); polymer grade PA10.10-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -564,7 +564,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -572,7 +572,7 @@
       "monomers": [
         {
           "name": "Caprolactam",
-          "smiles": "O=C1CCCCN1",
+          "smiles": "O=C1CCCCCN1",
           "ratio_value": null,
           "ratio_unit": null
         }
@@ -580,7 +580,7 @@
       "additives": [],
       "is_homopolymer": true
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 6 (PA 6); polymer grade PA6-5; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyamide 6 (PA 6); polymer grade PA6-5; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -600,29 +600,35 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
-      "repeat_unit_psmiles": "[*]NC(=O)CCCCCCCCC(=O)NCCCCCC[*]",
+      "repeat_unit_psmiles": null,
       "monomers": [
         {
           "name": "Hexamethylenediamine",
           "smiles": "NCCCCCCN",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Sebacic acid",
           "smiles": "OC(=O)CCCCCCCCC(=O)O",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
+        },
+        {
+          "name": "Adipic acid",
+          "smiles": "OC(=O)CCCCC(=O)O",
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 6.10/6.6 (PA 6.10/6.6); polymer grade PA6.10/6.6-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyamide 6.10/6.6 (PA 6.10/6.6); polymer grade PA6.10/6.6-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -642,7 +648,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -651,20 +657,20 @@
         {
           "name": "1,3-Propanediol",
           "smiles": "OCCCO",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Terephthalic acid",
           "smiles": "OC(=O)c1ccc(C(=O)O)cc1",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polytrimethylene terephthalate (PTT); polymer grade PTT-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polytrimethylene terephthalate (PTT); polymer grade PTT-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -684,7 +690,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -693,20 +699,20 @@
         {
           "name": "Tetramethylenediamine",
           "smiles": "NCCCCN",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Sebacic acid",
           "smiles": "OC(=O)CCCCCCCCC(=O)O",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 4.10 (PA 4.10); polymer grade PA4.10-3; reported melt flow rate / melt volume rate / viscosity number: 210 cm3g-1.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyamide 4.10 (PA 4.10); polymer grade PA4.10-3; reported melt flow rate / melt volume rate / viscosity number: 210 cm3g-1.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -726,7 +732,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -735,20 +741,20 @@
         {
           "name": "Ethylene glycol",
           "smiles": "OCCO",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Terephthalic acid",
           "smiles": "OC(=O)c1ccc(C(=O)O)cc1",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyethylene terephthalate (PET); polymer grade PET-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyethylene terephthalate (PET); polymer grade PET-1; reported melt flow rate / melt volume rate / viscosity number: not reported.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -768,7 +774,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -777,20 +783,20 @@
         {
           "name": "Hexamethylenediamine",
           "smiles": "NCCCCCCN",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Adipic acid",
           "smiles": "OC(=O)CCCCC(=O)O",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 6.6 (PA 6.6); polymer grade PA6.6-3; reported melt flow rate / melt volume rate / viscosity number: 150 cm3g-1.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyamide 6.6 (PA 6.6); polymer grade PA6.6-3; reported melt flow rate / melt volume rate / viscosity number: 150 cm3g-1.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -810,7 +816,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -819,20 +825,20 @@
         {
           "name": "Tetramethylenediamine",
           "smiles": "NCCCCN",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         },
         {
           "name": "Adipic acid",
           "smiles": "OC(=O)CCCCC(=O)O",
-          "ratio_value": 50,
-          "ratio_unit": "mol%"
+          "ratio_value": null,
+          "ratio_unit": null
         }
       ],
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polyamide 4.6 (PA 4.6); polymer grade PA4.6-1; reported melt flow rate / melt volume rate / viscosity number: 185 cm3g-1.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polyamide 4.6 (PA 4.6); polymer grade PA4.6-1; reported melt flow rate / melt volume rate / viscosity number: 185 cm3g-1.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {
@@ -852,7 +858,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1002/mame.201800355",
     "title": "Applicability of Polymeric Materials as Phase Change Materials",
     "year": 2018,
     "chemical_composition": {
@@ -872,7 +878,7 @@
         },
         {
           "name": "Caprolactam",
-          "smiles": "O=C1CCCCN1",
+          "smiles": "O=C1CCCCCN1",
           "ratio_value": null,
           "ratio_unit": null
         }
@@ -880,7 +886,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "DSC 1 (Mettler Toledo), N2 atmosphere, 10 °C/min heating rate, 2nd heating cycle, ISO 11357-2. Source material metadata from Weingrill Table 1: polymer type Polythalamide 6T/6 (PA 6T/6); polymer grade PA6T/6-1; reported melt flow rate / melt volume rate / viscosity number: 130 cm3g-1.",
+    "processing_history": "DSC 1 (Mettler Toledo); 5–10 mg granules in 40 µL aluminium crucibles under N2. Heating/cooling at +10/−10 °C/min with 5 min equilibration at the lower scan limit. Melting peak evaluated from the second heating scan; ISO 11357-2 as stated in the source. Source material metadata from Weingrill Table 1: polymer type Polythalamide 6T/6 (PA 6T/6); polymer grade PA6T/6-1; reported melt flow rate / melt volume rate / viscosity number: 130 cm3g-1.",
     "hierarchical_structure": "Semi-crystalline",
     "properties": {
       "Tm": {

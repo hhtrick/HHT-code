@@ -19,14 +19,16 @@ PATIENCE = 15                             # Early stopping patience: stop if val
 GRADIENT_CLIP_VAL = 1.0                   # Gradient clipping threshold to prevent gradient explosion
 GRADIENT_ACCUMULATION_STEPS = 1           # Gradient accumulation steps, effective batch = GRADIENT_ACCUMULATION_STEPS * BATCH_SIZE
 FLOAT32_MATMUL_PRECISION = "high"         # PyTorch matmul precision ('highest' | 'high' | 'medium')
-SPLIT_PKL = "split_random.pkl"            # Dataset split index filename (default: pure random split; alternatives: 'split.pkl' for article-aware leaky split, 'split_article.pkl' for strict article-isolated split)
+SPLIT_PKL = "split_random.pkl"            # Dataset split index filename (default: pure random split; alternatives: 'split_article.pkl' for strict article-isolated split)
+LOG_TARGET_DATASETS = []        # ln(y), then train-only StandardScaler; [] disables. All targets must be >0; reported metrics use original units.
+SWEEP_TRAIN_FRACTIONS = False              # True: SPLIT_PKL's 20/40/60/80% files, then full file; sequential runs with all SEEDS
 
 # ======================== Model Parameters ========================
-MODEL_TYPE = "qwen3_4b_base"              # LLM type: 'qwen3_4b_instruct_2507' | 'qwen3_4b_thinking_2507' | 'qwen3_4b_base' | 'qwen3_8b_base' | 'qwen3_0_6b_base' | 'chemdfm_v1_5_8b' | 'qwen3_4b_base_cpt_1' | 'qwen3_4b_base_cpt_2' | 'qwen3_4b_base_cpt_3'
+MODEL_TYPE = "chemdfm_v1_5_8b"              # LLM type: 'qwen3_4b_instruct_2507' | 'qwen3_4b_thinking_2507' | 'qwen3_4b_base' | 'qwen3_8b_base' | 'qwen3_0_6b_base' | 'chemdfm_v1_5_8b'
 FROZEN_BACKBONE = True                    # True: freeze LLM, use precomputed embedding cache; False: LoRA fine-tune LLM
 POOLING_TYPE = "sigmoid_pooling"        # Semantic stream pooling strategy: 'last_token' | 'mean_pooling' | 'sum_pooling' | 'attention_pooling' | 'sigmoid_pooling'
-INPUT_CONTENT = [1, 2, 3, 4, 5, 6, 7, 8, 9]  # Input type list for training (1-9); multiple elements = random sampling per step (type-10 dynamic augmentation mode)
-EVAL_INPUT_CONTENT = [1]                  # Input type list for validation/testing; multiple elements = random sampling per step
+INPUT_CONTENT = [2, 4]  # Input type list for training (1-9); multiple elements = random sampling per step (type-10 dynamic augmentation mode)
+EVAL_INPUT_CONTENT = [2]                  # Input type list for validation/testing; multiple elements = random sampling per step
 
 # ======================== LoRA Parameters (effective when FROZEN_BACKBONE=False) ========================
 LORA_R = 8                                # LoRA rank (dimension of low-rank matrices)

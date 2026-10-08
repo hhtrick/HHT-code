@@ -2,7 +2,8 @@
 chemdfm_v1_5_8b.py — ChemDFM-v1.5-8B Model Wrapper
 """
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from models.llm_io import resolve_model_path, load_llm_tokenizer, load_llm_model
+from models.llm_tokenization import tokenize_llm_texts
 from typing import List
 
 
@@ -14,30 +15,17 @@ class ChemDFM_v1_5_8B:
     def __init__(self, model_path: str, device: str = "cuda",
                  torch_dtype=torch.float16):
         self.device = device
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_path, trust_remote_code=True
-        )
-        self.tokenizer.padding_side = "right"
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_path,
-            trust_remote_code=True,
-            dtype=torch_dtype,
-        ).to(device)
+        model_path = resolve_model_path(model_path)
+        self.tokenizer = load_llm_tokenizer(model_path)
+        self.model = load_llm_model(model_path, torch_dtype).to(device)
         self.model.config.output_hidden_states = True
         self.hidden_dim = self.model.config.hidden_size
 
     def tokenize(self, texts: List[str]):
         device = next(self.model.parameters()).device
-        return self.tokenizer(
-            texts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-        ).to(device)
+        return tokenize_llm_texts(self.tokenizer, texts).to(device)
 
     def get_hidden_states(self, inputs) -> torch.Tensor:
         """Return hidden states from the last decoder layer (batch, seq_len, hidden_dim)"""
-        outputs = self.model(**inputs, output_hidden_states=True)
+        outputs = self.model(**inputs, output_hidden_states=True, use_cache=False)
         return outputs.hidden_states[-1]

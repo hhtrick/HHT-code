@@ -36,18 +36,20 @@ MODEL_WEIGHTS_DIR = os.path.join(AUTODL_TMP_DIR, "model_weights")
 
 # Model paths
 MODEL_PATHS = {
-    "qwen3_4b_instruct_2507": os.path.join(MODEL_WEIGHTS_DIR, "Qwen","Qwen3-4B-Instruct-2507"),
-    "qwen3_4b_thinking_2507": os.path.join(MODEL_WEIGHTS_DIR, "Qwen","Qwen3-4B-Thinking-2507"),
-    "qwen3_4b_base":          os.path.join(MODEL_WEIGHTS_DIR, "Qwen","Qwen3-4B-Base"),
-    "qwen3_8b_base":          os.path.join(MODEL_WEIGHTS_DIR, "Qwen","Qwen3-8B-Base"),
-    "qwen3_0_6b_base":        os.path.join(MODEL_WEIGHTS_DIR, "Qwen","Qwen3-0.6B-Base"),
-    "chemdfm_v1_5_8b":        os.path.join(MODEL_WEIGHTS_DIR, "OpenDFM","ChemDFM-v1.5-8B"),
-    "qwen3_4b_base_cpt_1":    os.path.join(MODEL_WEIGHTS_DIR, "CPT","qwen3_4b_base_cpt_r4"),
-    "qwen3_4b_base_cpt_2":    os.path.join(MODEL_WEIGHTS_DIR, "CPT","qwen3_4b_base_cpt_r8"),
-    "qwen3_4b_base_cpt_3":    os.path.join(MODEL_WEIGHTS_DIR, "CPT","qwen3_4b_base_cpt_r16"),
+    "qwen3_4b_instruct_2507": os.path.join(MODEL_WEIGHTS_DIR, "models","Qwen--Qwen3-4B-Instruct-2507"),
+    "qwen3_4b_thinking_2507": os.path.join(MODEL_WEIGHTS_DIR, "models","Qwen--Qwen3-4B-Thinking-2507"),
+    "qwen3_4b_base":          os.path.join(MODEL_WEIGHTS_DIR, "models","Qwen--Qwen3-4B-Base"),
+    "qwen3_8b_base":          os.path.join(MODEL_WEIGHTS_DIR, "models","Qwen--Qwen3-8B-Base"),
+    "qwen3_0_6b_base":        os.path.join(MODEL_WEIGHTS_DIR, "models","Qwen--Qwen3-0.6B-Base"),
+    "chemdfm_v1_5_8b":        os.path.join(MODEL_WEIGHTS_DIR, "models","OpenDFM--ChemDFM-v1.5-8B"),
     "polybert":                os.path.join(MODEL_WEIGHTS_DIR, "PolyBERT"),
     "periogt":                 os.path.join(MODEL_WEIGHTS_DIR, "PerioGT", "base.pth"),
 }
+
+# LLM attention backend: FlashAttention-2 accelerates hidden-state forward passes.
+# Unsupported GPU/dtype or flash-attn import/CUDA-library failures fall back to SDPA.
+LLM_ATTENTION_IMPLEMENTATION = "flash_attention_2"  # or "sdpa", "eager"
+LLM_ALLOW_SDPA_FALLBACK = True
 
 # PerioGT config path (uses config.yaml in code directory)
 PERIOGT_CONFIG_PATH = os.path.join(PROJECT_ROOT, "models", "PerioGT", "config.yaml")

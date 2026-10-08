@@ -4,7 +4,7 @@ inference.py — General inference script
 Supports two types of weight directories:
     1) Directories produced by train.py: contain config.yaml + scaler.pkl + weights_seed*.pth
     2) Directories produced by continue_train_inference.py: contain
-         continue_train_config.json + weights_seed{SEED}.pth (+ scaler.pkl only when RANDOM_INIT)
+         continue_train_config.json + weights_seed{SEED}.pth + config.yaml/scaler.pkl
          The "weights_dir" field in that JSON points to the original train.py output directory,
          from which config.yaml / ratio_encoding.json / scaler.pkl are read to instantiate the model.
 
@@ -13,7 +13,7 @@ Inference outputs (written to OUTPUT_DIR):
     - metrics.csv: R2 / RMSE / MAE metrics
     - When POOLING_TYPE in {attention_pooling, sigmoid_pooling}:
             pooling_weights[_before_ct|_after_ct].json
-            records the token list and corresponding pooling weights for each entry, viewable with visualize_pooling_weights.py.
+            records the token list and corresponding pooling weights for downstream inspection.
 """
 import os
 import sys
@@ -28,7 +28,8 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 
 from config.path import MODEL_PATHS, ensure_dir
-from config.prompt import build_prompt
+from config.prompt import STRUCT_INPUT, build_prompt
+from target_scaling import validate_scaler_config, scaler_transform, validate_targets
 from utils import (
     compute_metrics, inverse_transform, load_ratio_encoding,
     build_ratio_vector, load_trainable_weights,
@@ -107,7 +108,8 @@ def _resolve_ratio_path(cfg: Dict[str, Any], train_weights_dir: str) -> Optional
 
 # ======================== Weight Directory Resolution ========================
 
-def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool) -> Dict[str, Any]:
+def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool,
+                           property_name: str = "") -> Dict[str, Any]:
     """
     Returns a dictionary:
       {
@@ -133,14 +135,16 @@ def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool) -> Dic
         if not os.path.isdir(train_weights_dir):
             print(f"[Warning] Original train.py weights_dir not found: {train_weights_dir}")
 
-        config_yaml = os.path.join(train_weights_dir, "config.yaml")
+        config_yaml = os.path.join(weights_dir, "config.yaml")
+        if not os.path.exists(config_yaml):
+            config_yaml = os.path.join(train_weights_dir, "config.yaml")
         ct_weight = os.path.join(weights_dir, f"weights_seed{seed}.pth")
         if not os.path.exists(ct_weight):
             print(f"[Error] Continue-train weight not found: {ct_weight}")
             sys.exit(1)
         pre_weight = os.path.join(train_weights_dir, f"weights_seed{seed}.pth")
 
-        # scaler: CT directory takes priority (RANDOM_INIT mode saves scaler there), otherwise use original train directory
+        # New CT runs store their exact scaler; legacy runs fall back to the original directory.
         scaler_path = os.path.join(weights_dir, "scaler.pkl")
         if not os.path.exists(scaler_path):
             scaler_path = os.path.join(train_weights_dir, "scaler.pkl")
@@ -161,6 +165,10 @@ def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool) -> Dic
             sys.exit(1)
         stages = [("inference", weight)]
 
+    if not os.path.exists(scaler_path) and property_name:
+        # Joint transfer training stores one scaler per property.
+        scaler_path = os.path.join(train_weights_dir, f"scaler_{property_name}.pkl")
+
     if not os.path.exists(config_yaml):
         print(f"[Error] config.yaml not found: {config_yaml}")
         sys.exit(1)
@@ -173,6 +181,17 @@ def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool) -> Dic
     if ratio_path:
         cfg["_RATIO_ENCODING_PATH"] = ratio_path
 
+    stage_scaler_paths = {stage: scaler_path for stage, _ in stages}
+    stage_config_paths = {stage: config_yaml for stage, _ in stages}
+    if "before_ct" in stage_scaler_paths:
+        before_scaler = os.path.join(train_weights_dir, "scaler.pkl")
+        if not os.path.exists(before_scaler) and property_name:
+            before_scaler = os.path.join(train_weights_dir, f"scaler_{property_name}.pkl")
+        if not os.path.exists(before_scaler):
+            raise FileNotFoundError(f"Pre-CT weights require their original scaler: {before_scaler}")
+        stage_scaler_paths["before_ct"] = before_scaler
+        stage_config_paths["before_ct"] = os.path.join(train_weights_dir, "config.yaml")
+
     return {
         "is_ct": is_ct,
         "train_weights_dir": train_weights_dir,
@@ -181,6 +200,8 @@ def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool) -> Dic
         "scaler_path": scaler_path,
         "ratio_path": ratio_path,
         "stages": stages,
+        "stage_scaler_paths": stage_scaler_paths,
+        "stage_config_paths": stage_config_paths,
     }
 
 
@@ -270,7 +291,7 @@ def run_inference(model, data: List[Dict], dataset_name: str,
             if struct_only and encoder_name != "llm":
                 pass
             else:
-                use_type = 9 if (struct_only and encoder_name == "llm") else INPUT_TYPE
+                use_type = STRUCT_INPUT if (struct_only and encoder_name == "llm") else INPUT_TYPE
                 texts = [build_prompt(e, dataset_name, use_type) for e in batch]
                 if frozen and llm is not None:
                     inputs = llm.tokenize(texts)
@@ -379,12 +400,16 @@ def main():
         print(f"[Error] DATA_FILE not found: {DATA_FILE}")
         sys.exit(1)
 
-    src = resolve_weight_sources(weights_dir, SEED, COMPARE_BEFORE_AFTER_CT)
-    cfg = src["cfg"]
-    scaler = _load_pickle(src["scaler_path"])
-
     dataset_name = _infer_dataset_name(DATA_FILE)
     data = _load_json(DATA_FILE)
+    if data and dataset_name not in data[0].get("properties", {}):
+        candidates = [key for key, value in data[0].get("properties", {}).items()
+                      if isinstance(value, dict) and "value" in value]
+        if len(candidates) != 1:
+            raise ValueError(f"Cannot infer one target property from {DATA_FILE}: {candidates}")
+        dataset_name = candidates[0]
+    src = resolve_weight_sources(weights_dir, SEED, COMPARE_BEFORE_AFTER_CT, dataset_name)
+    cfg = src["cfg"]
     targets_raw = np.array(
         [float(e["properties"][dataset_name]["value"][0]) for e in data],
         dtype=np.float64,
@@ -460,6 +485,10 @@ def main():
     stage_results: Dict[str, Dict[str, Any]] = {}
     for stage_name, weight_path in src["stages"]:
         print(f"\n{'='*60}\n  Stage: {stage_name}  ({os.path.basename(weight_path)})\n{'='*60}")
+        scaler = _load_pickle(src["stage_scaler_paths"][stage_name])
+        scale_cfg = _load_yaml(src["stage_config_paths"][stage_name])
+        validate_scaler_config(scaler, scale_cfg, dataset_name, context=stage_name)
+        validate_targets(targets_raw, scaler_transform(scaler))
         load_trainable_weights(model, weight_path, device=device)
         model.eval()
 
@@ -548,9 +577,10 @@ def main():
         "train_weights_dir": src["train_weights_dir"],
         "data_file": DATA_FILE,
         "dataset_name": dataset_name,
-        "input_type": INPUT_TYPE,
+        "input_type": STRUCT_INPUT if (struct_only and encoder_name == "llm") else INPUT_TYPE,
         "seed": SEED,
         "stages": [{"name": n, "weight": w} for n, w in src["stages"]],
+        "input_format": "raw_text",
         "pooling_type": pool_type,
         "collect_pooling_weights": collect_pooling,
         "compare_before_after_ct": COMPARE_BEFORE_AFTER_CT,

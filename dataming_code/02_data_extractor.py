@@ -1,9 +1,9 @@
 """
-data_extractor.py — Two-stage LLM data extraction main pipeline.
+data_extractor.py — 两阶段 LLM 数据提取主流程。
 
-Stage 1: qwen3.5-plus-2026-02-15 extracts structured JSON data from Markdown
-Stage 2: glm-5 reviews and corrects Stage 1 output
-Final: format_checker validates format and routes to appropriate files
+阶段一: qwen3.5-plus-2026-02-15 从 Markdown 中提取结构化 JSON 数据
+阶段二: glm-5 审查并修正阶段一的输出
+最后: format_checker 验证格式并分流保存
 """
 
 import os
@@ -23,30 +23,30 @@ from format_checker import check_and_route
 
 load_dotenv()
 
-# ================= Configuration Parameters =================
-# Async concurrency count
+# ================= 配置参数 =================
+# 异步并发数
 CONCURRENCY = 24
 
-# Max retry count on exceptions
+# 异常最大重试次数
 MAX_RETRIES = 3
 
-# Target dataset list, options: "Tg", "Tm", "n", "eps", "E", "UTS"
+# 目标数据集列表，可选: "Tg", "Tm", "n", "eps", "E", "UTS"
 TARGET_DATASETS = ["E"]
 
-# Processing mode: "test" — random 3 files + save reasoning chains; "prod" — full processing
+# 处理模式: "test" — 随机 3 个文件 + 保存思维链; "prod" — 全量处理
 MODE = "prod"
 
-# Ignore progress file, force reprocess all files (use with caution when previous run failed entirely)
-# Note: setting to True will reprocess ALL files including previously successful ones
+# 忽略进度文件，强制重新处理所有文件（用于在上一次全部失败后重新运行）
+# 注意：设为 True 会重新处理包括已成功文件在内的全部文件，请谨慎使用
 IGNORE_PROGRESS = False
 
-# Stage 1 model
+# 阶段一模型
 MODEL_STAGE1 = "qwen3.5-plus-2026-02-15"
 
-# Stage 2 model
+# 阶段二模型
 MODEL_STAGE2 = "glm-5"
 
-# Working root directory
+# 工作根目录
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # =============================================
 
@@ -58,14 +58,14 @@ client = AsyncOpenAI(
 
 
 # ===========================================================================
-# Progress Management (Checkpoint Resume)
+# 进度管理（断电恢复）
 # ===========================================================================
 def _progress_file(dataset: str) -> str:
     return os.path.join(BASE_DIR, dataset, f"{dataset}_extraction_progress.txt")
 
 
 def load_done_files(dataset: str) -> set:
-    """Load set of completed filenames. Returns empty set if IGNORE_PROGRESS=True."""
+    """加载已完成文件名集合。若 IGNORE_PROGRESS=True 则返回空集合。"""
     if IGNORE_PROGRESS:
         return set()
     pf = _progress_file(dataset)
@@ -76,7 +76,7 @@ def load_done_files(dataset: str) -> set:
 
 
 def mark_done(dataset: str, filename: str):
-    """Mark a file as processed."""
+    """标记一个文件为已处理。"""
     pf = _progress_file(dataset)
     with open(pf, "a", encoding="utf-8") as f:
         f.write(filename + "\n")
@@ -87,14 +87,14 @@ def _no_data_file(dataset: str) -> str:
 
 
 def log_no_data(dataset: str, filename: str):
-    """Log filename that failed to extract data."""
+    """记录未能提取到数据的文件名。"""
     ndf = _no_data_file(dataset)
     with open(ndf, "a", encoding="utf-8") as f:
         f.write(filename + "\n")
 
 
 # ===========================================================================
-# LLM Calling
+# LLM 调用
 # ===========================================================================
 async def call_llm(
     prompt: str,
@@ -102,8 +102,8 @@ async def call_llm(
     sem: asyncio.Semaphore,
 ) -> dict:
     """
-    Call LLM (with thinking mode enabled), returns {"content": ..., "reasoning": ...}.
-    Includes retry logic with detailed diagnostic logging.
+    调用 LLM（带思考模式），返回 {"content": ..., "reasoning": ...}。
+    含重试逻辑，附带详细诊断日志。
     """
     for attempt in range(MAX_RETRIES):
         t_start = time.monotonic()
@@ -120,7 +120,7 @@ async def call_llm(
             msg_dict = response.choices[0].message.model_dump()
             reasoning = msg_dict.get("reasoning_content", "")
 
-            # Clean possible markdown wrapping
+            # 清理可能的 markdown 包裹
             content = content.strip()
             if content.startswith("```json"):
                 content = content[7:]
@@ -137,20 +137,20 @@ async def call_llm(
             exc_type = type(e).__name__
             if attempt < MAX_RETRIES - 1:
                 print(
-                    f"  [WARN] {model} attempt {attempt + 1} failed "
-                    f"(elapsed {elapsed:.2f}s): [{exc_type}] {e}, "
-                    f"retrying in {2 ** attempt}s...",
+                    f"  [WARN] {model} 第 {attempt + 1} 次尝试失败 "
+                    f"(耗时 {elapsed:.2f}s): [{exc_type}] {e}，"
+                    f"{2 ** attempt}s 后重试...",
                     flush=True,
                 )
                 await asyncio.sleep(2 ** attempt)
             else:
                 print(
-                    f"  [ERROR] {model} call failed ({MAX_RETRIES} attempts): "
+                    f"  [ERROR] {model} 调用失败 ({MAX_RETRIES} 次): "
                     f"[{exc_type}] {e}",
                     flush=True,
                 )
                 print(
-                    f"  [ERROR] Last attempt took {elapsed:.2f}s, full traceback:\n"
+                    f"  [ERROR] 最后一次尝试耗时 {elapsed:.2f}s，完整堆栈:\n"
                     + traceback.format_exc(),
                     flush=True,
                 )
@@ -160,7 +160,7 @@ async def call_llm(
 
 
 def _parse_json_array(text: str) -> list | None:
-    """Try to parse a JSON array from text."""
+    """尝试从文本中解析出 JSON 数组。"""
     text = text.strip()
     if not text:
         return None
@@ -172,7 +172,7 @@ def _parse_json_array(text: str) -> list | None:
             return [data]
         return None
     except json.JSONDecodeError:
-        # Try to find first [ and last ]
+        # 尝试找到第一个 [ 和最后一个 ]
         start = text.find("[")
         end = text.rfind("]")
         if start != -1 and end != -1 and end > start:
@@ -194,11 +194,11 @@ async def process_single_file(
     sem2: asyncio.Semaphore,
 ) -> dict:
     """
-    Process a single Markdown file with two-stage extraction.
-    sem1: dedicated to Stage 1, sem2: dedicated to Stage 2, independent to avoid mutual blocking.
+    对单个 Markdown 文件执行两阶段提取。
+    sem1 专用于阶段一，sem2 专用于阶段二，互相独立，避免相互阻塞。
 
     Returns:
-        Result dict containing stage1/stage2 data and filename metadata.
+        结果字典，包含 stage1/stage2 数据以及文件名等元信息。
     """
     filename = os.path.splitext(os.path.basename(md_path))[0]
 
@@ -215,20 +215,20 @@ async def process_single_file(
         "error": None,
     }
 
-    # --- Stage 1: Extraction ---
+    # --- 阶段一: 提取 ---
     prompt1 = get_extraction_prompt(prop_key, md_text)
     resp1 = await call_llm(prompt1, MODEL_STAGE1, sem1)
 
     stage1_data = _parse_json_array(resp1["content"])
     if stage1_data is None:
-        result["error"] = f"Stage 1 returned unparseable JSON: {resp1['content'][:200]}"
+        result["error"] = f"Stage 1 返回无法解析为 JSON: {resp1['content'][:200]}"
         result["stage1_reasoning"] = resp1["reasoning"]
         return result
 
     result["stage1_entries"] = stage1_data
     result["stage1_reasoning"] = resp1["reasoning"]
 
-    # --- Stage 2: Review ---
+    # --- 阶段二: 审查 ---
     extracted_json_str = json.dumps(stage1_data, ensure_ascii=False, indent=2)
     prompt2 = get_review_prompt(prop_key, extracted_json_str, md_text)
     resp2 = await call_llm(prompt2, MODEL_STAGE2, sem2)
@@ -237,11 +237,11 @@ async def process_single_file(
     result["stage2_reasoning"] = resp2["reasoning"]
 
     if stage2_data is not None and len(stage2_data) > 0:
-        # Review found issues, use corrected data
+        # 审查发现问题，使用修正后的数据
         result["stage2_entries"] = stage2_data
         result["final_entries"] = stage2_data
     else:
-        # Review passed, use Stage 1 data
+        # 审查通过，使用阶段一数据
         result["final_entries"] = stage1_data
 
     return result
@@ -251,50 +251,50 @@ async def process_single_file(
 # 主流程
 # ===========================================================================
 async def main():
-    # Two stages use independent semaphores to prevent Stage 1 coroutines from starving Stage 2
+    # 两个阶段使用独立信号量，避免 stage-1 协程长期压占信号量导致 stage-2 饥饿
     sem1 = asyncio.Semaphore(CONCURRENCY)  # 阶段一专用
     sem2 = asyncio.Semaphore(CONCURRENCY)  # 阶段二专用
 
-    # --- Environment Info ---
-    print(f"[INFO] Python platform: {platform.system()} {platform.version()}", flush=True)
-    print(f"[INFO] Mode: {MODE} | Concurrency: {CONCURRENCY} | Max retries: {MAX_RETRIES}", flush=True)
-    print(f"[INFO] Stage 1 model: {MODEL_STAGE1} | Stage 2 model: {MODEL_STAGE2}", flush=True)
+    # --- 环境信息 ---
+    print(f"[INFO] Python 平台: {platform.system()} {platform.version()}", flush=True)
+    print(f"[INFO] 模式: {MODE} | 并发数: {CONCURRENCY} | 最大重试: {MAX_RETRIES}", flush=True)
+    print(f"[INFO] 阶段一模型: {MODEL_STAGE1} | 阶段二模型: {MODEL_STAGE2}", flush=True)
 
     for dataset in TARGET_DATASETS:
         md_dir = os.path.join(BASE_DIR, dataset, "md")
         dataset_dir = os.path.join(BASE_DIR, dataset)
 
         if not os.path.exists(md_dir):
-            print(f"[{dataset}] md directory does not exist: {md_dir}, skipping.")
+            print(f"[{dataset}] md 目录不存在: {md_dir}，跳过。")
             continue
 
-        # Collect all md files
+        # 收集所有 md 文件
         all_md_files = sorted([
             f for f in os.listdir(md_dir) if f.lower().endswith(".md")
         ])
 
         if not all_md_files:
-            print(f"[{dataset}] md directory is empty, skipping.")
+            print(f"[{dataset}] md 目录为空，跳过。")
             continue
 
-        # Checkpoint resume: filter out already processed files
+        # 断点恢复: 过滤已处理文件
         done_files = load_done_files(dataset)
         pending_files = [f for f in all_md_files if os.path.splitext(f)[0] not in done_files]
 
-        # Test mode: randomly sample 3
+        # 测试模式: 随机抽取 3 个
         if MODE == "test":
             pending_files = random.sample(pending_files, min(3, len(pending_files)))
 
-        print(f"\n[{dataset}] Total: {len(all_md_files)} | Done: {len(done_files)} | Processing: {len(pending_files)} | Mode: {MODE}")
+        print(f"\n[{dataset}] 总计: {len(all_md_files)} | 已完成: {len(done_files)} | 本次处理: {len(pending_files)} | 模式: {MODE}")
 
         if not pending_files:
-            print(f"[{dataset}] No files to process.")
+            print(f"[{dataset}] 无待处理文件。")
             continue
 
-        # Test mode output file (includes reasoning chains)
+        # 测试模式输出文件（含思维链）
         test_output_file = os.path.join(dataset_dir, f"{dataset}_test_output.json")
 
-        # Process files one by one (Stage 1/Stage 2 each controlled by independent semaphores)
+        # 逐文件处理（stage-1/stage-2 各自通过独立信号量控制并发）
         async def _worker(md_filename):
             md_path = os.path.join(md_dir, md_filename)
             return await process_single_file(md_path, dataset, dataset_dir, sem1, sem2)
@@ -306,24 +306,24 @@ async def main():
         total_errors = 0
         total_no_data = 0
 
-        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"[{dataset}] Extraction progress"):
+        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"[{dataset}] 提取进度"):
             result = await coro
             filename = result["filename"]
 
             if result["error"]:
                 print(f"  [WARN] {filename}: {result['error']}")
                 total_errors += 1
-                # Even on error, mark as processed to avoid getting stuck repeatedly
+                # 即使出错也标记为已处理，避免反复卡住
                 mark_done(dataset, filename)
                 continue
 
             final_entries = result["final_entries"] or []
 
-            # No data extracted: log filename, skip further processing
+            # 无数据提取情况：记录文件名，跳过后续处理
             if not final_entries:
                 total_no_data += 1
                 log_no_data(dataset, filename)
-                # Test mode still saves reasoning chains for debugging
+                # 测试模式仍保存思维链以便调试
                 if MODE == "test":
                     test_record = {
                         "filename": filename,
@@ -347,10 +347,10 @@ async def main():
                 mark_done(dataset, filename)
                 continue
 
-            # Add filename field to each entry (below doi)
+            # 为每个条目添加 filename 字段（添加在 doi 下方）
             for entry in final_entries:
                 if isinstance(entry, dict):
-                    # Rebuild dict to ensure filename appears after doi
+                    # 重新构建 dict 以确保 filename 在 doi 之后
                     new_entry = {}
                     for k, v in entry.items():
                         new_entry[k] = v
@@ -361,12 +361,12 @@ async def main():
                     entry.clear()
                     entry.update(new_entry)
 
-            # Format check and routing
+            # 格式检查与分流
             v, iv = check_and_route(final_entries, dataset, dataset_dir, filename)
             total_valid += v
             total_invalid += iv
 
-            # Test mode: save reasoning chains
+            # 测试模式: 保存思维链
             if MODE == "test":
                 test_record = {
                     "filename": filename,
@@ -376,7 +376,7 @@ async def main():
                     "stage2_reasoning": result["stage2_reasoning"],
                     "final_entries": final_entries,
                 }
-                # Append to file
+                # 追加写入
                 existing = []
                 if os.path.exists(test_output_file):
                     try:
@@ -388,14 +388,14 @@ async def main():
                 with open(test_output_file, "w", encoding="utf-8") as f:
                     json.dump(existing, f, ensure_ascii=False, indent=2)
 
-            # Mark as done
+            # 标记完成
             mark_done(dataset, filename)
 
-        print(f"[{dataset}] Done. Valid: {total_valid} | Invalid: {total_invalid} | No data: {total_no_data} | Errors: {total_errors}")
+        print(f"[{dataset}] 完成。合格: {total_valid} | 不合格: {total_invalid} | 无数据: {total_no_data} | 错误: {total_errors}")
 
 
 if __name__ == "__main__":
-    # Must set before asyncio.run(), otherwise it won't affect current loop
+    # 必须在 asyncio.run() 之前设置，否则对当前循环无效
     if platform.system() == "Windows":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(main())

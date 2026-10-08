@@ -17,10 +17,10 @@ MODE = "prod" # "test" or "prod"
 
 MODEL_NAME = "qwen3.5-plus-2026-02-15"
 
-# Ignore progress file, force reprocess all entries (use with caution)
+# 忽略进度文件，强制重新处理所有条目（谨慎使用）
 IGNORE_PROGRESS = False
 
-# Working root directory
+# 工作根目录
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # =================================================
 
@@ -136,14 +136,14 @@ Here is the JSON data of the polymer sample to process (Target Property: {TARGET
 
 
 # ===========================================================================
-# Progress Management (Checkpoint Resume)
+# 进度管理（断点恢复）
 # ===========================================================================
 def _progress_file(dataset: str) -> str:
     return os.path.join(BASE_DIR, "final", f"{dataset}_processor_progress.txt")
 
 
 def load_done_indices(dataset: str) -> set:
-    """Load set of completed entry indices. Returns empty set if IGNORE_PROGRESS=True."""
+    """加载已完成条目索引集合。若 IGNORE_PROGRESS=True 则返回空集合。"""
     if IGNORE_PROGRESS:
         return set()
     pf = _progress_file(dataset)
@@ -154,14 +154,14 @@ def load_done_indices(dataset: str) -> set:
 
 
 def mark_done_index(dataset: str, idx: int):
-    """Mark an entry index as processed."""
+    """标记一个条目索引为已处理。"""
     pf = _progress_file(dataset)
     with open(pf, "a", encoding="utf-8") as f:
         f.write(str(idx) + "\n")
 
 
 def load_existing_results(output_file: str) -> list:
-    """Load existing output results."""
+    """加载已有的输出结果。"""
     if not os.path.exists(output_file):
         return []
     try:
@@ -271,20 +271,20 @@ async def main():
         if MODE == "test":
             data = data[:3]
         
-        # Checkpoint resume: load completed indices and existing results
+        # 断点恢复：加载已完成的索引和已有结果
         done_indices = load_done_indices(dataset)
         results = load_existing_results(final_file)
         
-        # Filter pending entries (preserve original indices)
+        # 筛选待处理条目（保留原始索引）
         pending = [(i, item) for i, item in enumerate(data) if i not in done_indices]
         
-        print(f"[{dataset}] Total: {len(data)} | Done: {len(done_indices)} | Processing this run: {len(pending)}")
+        print(f"[{dataset}] 总计: {len(data)} | 已完成: {len(done_indices)} | 本次处理: {len(pending)}")
         
         if not pending:
-            print(f"[{dataset}] No entries to process.")
+            print(f"[{dataset}] 无待处理条目。")
             continue
         
-        # Create async tasks for each pending entry, carrying index info
+        # 为每个待处理条目创建异步任务，同时携带索引信息
         async def _worker(idx, item):
             result = await process_single_item(item, dataset, sem)
             result["_idx"] = idx
@@ -297,11 +297,11 @@ async def main():
             idx = res.pop("_idx")
             results.append(res)
             
-            # Write complete results to output file (ensures file is always valid JSON)
+            # 写入完整结果到输出文件（确保文件始终是合法 JSON）
             with open(final_file, "w", encoding="utf-8") as f:
                 json.dump(results, f, ensure_ascii=False, indent=2)
             
-            # Mark this index as done
+            # 标记该索引已完成
             mark_done_index(dataset, idx)
                 
         print(f"Dataset {dataset} saved to {final_file} with {len(results)} records.")

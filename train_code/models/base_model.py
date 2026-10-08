@@ -8,14 +8,15 @@ import pytorch_lightning as pl
 from peft import get_peft_model, LoraConfig, TaskType
 from typing import List, Optional, Dict, Any
 from sklearn.metrics import r2_score
+from target_scaling import inverse_from_parameters
 
+from models.llm_io import resolve_model_path, get_llm_hidden_dim
 from models.qwen3_4b_instruct_2507 import Qwen3_4B_Instruct_2507
 from models.qwen3_4b_thinking_2507 import Qwen3_4B_Thinking_2507
 from models.qwen3_4b_base import Qwen3_4B_Base
 from models.qwen3_8b_base import Qwen3_8B_Base
 from models.qwen3_0_6b_base import Qwen3_0_6B_Base
 from models.chemdfm_v1_5_8b import ChemDFM_v1_5_8B
-from models.qwen3_4b_base_cpt import Qwen3_4B_Base_CPT
 from models.polybert import PolyBERTEncoder, POLYBERT_HIDDEN_DIM
 from models.PerioGT import PerioGTEncoder, PERIOGT_HIDDEN_DIM
 
@@ -27,12 +28,8 @@ STRUCT_ENCODER_REGISTRY = {
 
 def get_struct_hidden_dim(encoder_name: str, cfg: dict = None) -> int:
     if encoder_name == "llm":
-        from transformers import AutoConfig
         model_type = cfg.get("MODEL_TYPE", "qwen3_4b_base")
-        auto_cfg = AutoConfig.from_pretrained(
-            _resolve_config_path(model_type), trust_remote_code=True
-        )
-        return auto_cfg.hidden_size
+        return get_llm_hidden_dim(_resolve_config_path(model_type))
     base_dim = STRUCT_ENCODER_REGISTRY[encoder_name]["hidden_dim"]
     # PolyBERT etc. encoders concatenate ratio information vectors, so ratio_dim must be added
     if encoder_name == "polybert":
@@ -58,23 +55,12 @@ LLM_REGISTRY = {
     "qwen3_8b_base":          Qwen3_8B_Base,
     "qwen3_0_6b_base":        Qwen3_0_6B_Base,
     "chemdfm_v1_5_8b":        ChemDFM_v1_5_8B,
-    "qwen3_4b_base_cpt_1":    Qwen3_4B_Base_CPT,
-    "qwen3_4b_base_cpt_2":    Qwen3_4B_Base_CPT,
-    "qwen3_4b_base_cpt_3":    Qwen3_4B_Base_CPT,
-}
-
-# CPT model -> base model mapping (CPT is a LoRA adapter directory, no standalone config.json)
-_CPT_BASE_MAP = {
-    "qwen3_4b_base_cpt_1": "qwen3_4b_base",
-    "qwen3_4b_base_cpt_2": "qwen3_4b_base",
-    "qwen3_4b_base_cpt_3": "qwen3_4b_base",
 }
 
 def _resolve_config_path(model_type: str) -> str:
-    """CPT model is a LoRA adapter directory; fall back to the base model path to get config.json"""
+    """Resolve the selected model's own checkpoint for config.json."""
     from config.path import MODEL_PATHS
-    base_type = _CPT_BASE_MAP.get(model_type, model_type)
-    return MODEL_PATHS[base_type]
+    return resolve_model_path(MODEL_PATHS[model_type])
 
 
 def get_activation(name: str) -> nn.Module:
@@ -420,11 +406,7 @@ class PropertyPredictionModel(pl.LightningModule):
         else:
             # Frozen mode: get hidden_dim from config, do not load model
             # Use model config file to retrieve hidden_dim
-            from transformers import AutoConfig
-            auto_cfg = AutoConfig.from_pretrained(
-                _resolve_config_path(model_type), trust_remote_code=True
-            )
-            llm_hidden_dim = auto_cfg.hidden_size
+            llm_hidden_dim = get_llm_hidden_dim(_resolve_config_path(model_type))
             self.llm = None
 
         self.llm_hidden_dim = llm_hidden_dim
@@ -760,20 +742,21 @@ class PropertyPredictionModel(pl.LightningModule):
 
     def _inverse(self, arr: np.ndarray) -> np.ndarray:
         """Inverse-transform standardized values back to original scale"""
-        return arr * self._scaler_std + self._scaler_mean
+        return inverse_from_parameters(arr, self._scaler_mean, self._scaler_std,
+                                       self.cfg.get("_TARGET_TRANSFORM", "identity"))
 
     def on_train_epoch_end(self):
         if self._train_preds:
             preds = torch.cat(self._train_preds).cpu().numpy()
             targets = torch.cat(self._train_targets).cpu().numpy()
-            r2 = float(r2_score(targets, preds)) if len(targets) > 1 else 0.0
             preds_orig = self._inverse(preds)
             targets_orig = self._inverse(targets)
+            r2 = float(r2_score(targets_orig, preds_orig)) if len(targets_orig) > 1 else 0.0
             rmse = float(np.sqrt(np.mean((preds_orig - targets_orig) ** 2)))
             mae = float(np.mean(np.abs(preds_orig - targets_orig)))
-            self.log("train/rmse", rmse, prog_bar=False)
-            self.log("train/r2", r2, prog_bar=False)
-            self.log("train/mae", mae, prog_bar=False)
+            self.log("train/normalized_rmse" if self.cfg.get("_NORMALIZED_METRICS", False) else "train/rmse", rmse, prog_bar=False)
+            self.log("train/normalized_r2" if self.cfg.get("_NORMALIZED_METRICS", False) else "train/r2", r2, prog_bar=False)
+            self.log("train/normalized_mae" if self.cfg.get("_NORMALIZED_METRICS", False) else "train/mae", mae, prog_bar=False)
             # Store target value range per article in training set (for leak-split evaluation metrics)
             if self._train_article_ids:
                 aids = torch.cat(self._train_article_ids).cpu().numpy()
@@ -790,14 +773,14 @@ class PropertyPredictionModel(pl.LightningModule):
         if self._val_preds:
             preds = torch.cat(self._val_preds).cpu().numpy()
             targets = torch.cat(self._val_targets).cpu().numpy()
-            r2 = float(r2_score(targets, preds)) if len(targets) > 1 else 0.0
             preds_orig = self._inverse(preds)
             targets_orig = self._inverse(targets)
+            r2 = float(r2_score(targets_orig, preds_orig)) if len(targets_orig) > 1 else 0.0
             rmse = float(np.sqrt(np.mean((preds_orig - targets_orig) ** 2)))
             mae = float(np.mean(np.abs(preds_orig - targets_orig)))
-            self.log("val/rmse", rmse, prog_bar=True)
-            self.log("val/r2", r2, prog_bar=True)
-            self.log("val/mae", mae, prog_bar=False)
+            self.log("val/normalized_rmse" if self.cfg.get("_NORMALIZED_METRICS", False) else "val/rmse", rmse, prog_bar=True)
+            self.log("val/normalized_r2" if self.cfg.get("_NORMALIZED_METRICS", False) else "val/r2", r2, prog_bar=True)
+            self.log("val/normalized_mae" if self.cfg.get("_NORMALIZED_METRICS", False) else "val/mae", mae, prog_bar=False)
             # Article-aware metrics (epoch-level only)
             if self._val_article_ids:
                 aids = torch.cat(self._val_article_ids).cpu().numpy()
@@ -827,14 +810,14 @@ class PropertyPredictionModel(pl.LightningModule):
         if self._test_preds:
             preds = torch.cat(self._test_preds).cpu().numpy()
             targets = torch.cat(self._test_targets).cpu().numpy()
-            r2 = float(r2_score(targets, preds)) if len(targets) > 1 else 0.0
             preds_orig = self._inverse(preds)
             targets_orig = self._inverse(targets)
+            r2 = float(r2_score(targets_orig, preds_orig)) if len(targets_orig) > 1 else 0.0
             rmse = float(np.sqrt(np.mean((preds_orig - targets_orig) ** 2)))
             mae = float(np.mean(np.abs(preds_orig - targets_orig)))
-            self.log("test/rmse", rmse)
-            self.log("test/r2", r2)
-            self.log("test/mae", mae)
+            self.log("test/normalized_rmse" if self.cfg.get("_NORMALIZED_METRICS", False) else "test/rmse", rmse)
+            self.log("test/normalized_r2" if self.cfg.get("_NORMALIZED_METRICS", False) else "test/r2", r2)
+            self.log("test/normalized_mae" if self.cfg.get("_NORMALIZED_METRICS", False) else "test/mae", mae)
         self._test_preds.clear()
         self._test_targets.clear()
 
@@ -923,7 +906,7 @@ class StructureOnlyModel(pl.LightningModule):
     Supports polybert / periogt / llm encoders:
     - polybert: frozen mode uses precomputed embeddings; finetune mode uses LoRA.
     - periogt: always trains full parameters (no frozen/LoRA).
-    - llm: frozen mode uses precomputed type 9 embeddings; finetune mode uses LoRA.
+    - llm: frozen mode uses reduced structural input embeddings; finetune mode uses LoRA.
     """
     strict_loading = False
 
@@ -958,7 +941,7 @@ class StructureOnlyModel(pl.LightningModule):
             self.llm = None
 
         elif encoder_name == "llm":
-            # LLM struct stream: use the LLM to process type 9 inputs
+            # Standalone LLM: use the reduced structural input.
             self.frozen = cfg.get("FROZEN_BACKBONE", True)
             model_type = cfg["MODEL_TYPE"]
             from config.path import MODEL_PATHS
@@ -979,11 +962,7 @@ class StructureOnlyModel(pl.LightningModule):
                 self.llm.model.print_trainable_parameters()
                 self._llm_backbone = self.llm.model
             else:
-                from transformers import AutoConfig
-                auto_cfg = AutoConfig.from_pretrained(
-                    _resolve_config_path(model_type), trust_remote_code=True
-                )
-                struct_hidden = auto_cfg.hidden_size
+                struct_hidden = get_llm_hidden_dim(_resolve_config_path(model_type))
                 self.llm = None
             self.llm_layer_norm = nn.LayerNorm(struct_hidden)
             struct_pool_type = cfg["STRUCT_POOLING_TYPE"]
@@ -1218,20 +1197,21 @@ class StructureOnlyModel(pl.LightningModule):
         return result
 
     def _inverse(self, arr: np.ndarray) -> np.ndarray:
-        return arr * self._scaler_std + self._scaler_mean
+        return inverse_from_parameters(arr, self._scaler_mean, self._scaler_std,
+                                       self.cfg.get("_TARGET_TRANSFORM", "identity"))
 
     def on_train_epoch_end(self):
         if self._train_preds:
             preds = torch.cat(self._train_preds).cpu().numpy()
             targets = torch.cat(self._train_targets).cpu().numpy()
-            r2 = float(r2_score(targets, preds)) if len(targets) > 1 else 0.0
             preds_orig = self._inverse(preds)
             targets_orig = self._inverse(targets)
+            r2 = float(r2_score(targets_orig, preds_orig)) if len(targets_orig) > 1 else 0.0
             rmse = float(np.sqrt(np.mean((preds_orig - targets_orig) ** 2)))
             mae = float(np.mean(np.abs(preds_orig - targets_orig)))
-            self.log("train/rmse", rmse, prog_bar=False)
-            self.log("train/r2", r2, prog_bar=False)
-            self.log("train/mae", mae, prog_bar=False)
+            self.log("train/normalized_rmse" if self.cfg.get("_NORMALIZED_METRICS", False) else "train/rmse", rmse, prog_bar=False)
+            self.log("train/normalized_r2" if self.cfg.get("_NORMALIZED_METRICS", False) else "train/r2", r2, prog_bar=False)
+            self.log("train/normalized_mae" if self.cfg.get("_NORMALIZED_METRICS", False) else "train/mae", mae, prog_bar=False)
             # Store target value range per article in training set (for leak-split evaluation metrics)
             if self._train_article_ids:
                 aids = torch.cat(self._train_article_ids).cpu().numpy()
@@ -1248,14 +1228,14 @@ class StructureOnlyModel(pl.LightningModule):
         if self._val_preds:
             preds = torch.cat(self._val_preds).cpu().numpy()
             targets = torch.cat(self._val_targets).cpu().numpy()
-            r2 = float(r2_score(targets, preds)) if len(targets) > 1 else 0.0
             preds_orig = self._inverse(preds)
             targets_orig = self._inverse(targets)
+            r2 = float(r2_score(targets_orig, preds_orig)) if len(targets_orig) > 1 else 0.0
             rmse = float(np.sqrt(np.mean((preds_orig - targets_orig) ** 2)))
             mae = float(np.mean(np.abs(preds_orig - targets_orig)))
-            self.log("val/rmse", rmse, prog_bar=True)
-            self.log("val/r2", r2, prog_bar=True)
-            self.log("val/mae", mae, prog_bar=False)
+            self.log("val/normalized_rmse" if self.cfg.get("_NORMALIZED_METRICS", False) else "val/rmse", rmse, prog_bar=True)
+            self.log("val/normalized_r2" if self.cfg.get("_NORMALIZED_METRICS", False) else "val/r2", r2, prog_bar=True)
+            self.log("val/normalized_mae" if self.cfg.get("_NORMALIZED_METRICS", False) else "val/mae", mae, prog_bar=False)
             # Article-aware metrics (epoch-level only)
             if self._val_article_ids:
                 aids = torch.cat(self._val_article_ids).cpu().numpy()
@@ -1285,14 +1265,14 @@ class StructureOnlyModel(pl.LightningModule):
         if self._test_preds:
             preds = torch.cat(self._test_preds).cpu().numpy()
             targets = torch.cat(self._test_targets).cpu().numpy()
-            r2 = float(r2_score(targets, preds)) if len(targets) > 1 else 0.0
             preds_orig = self._inverse(preds)
             targets_orig = self._inverse(targets)
+            r2 = float(r2_score(targets_orig, preds_orig)) if len(targets_orig) > 1 else 0.0
             rmse = float(np.sqrt(np.mean((preds_orig - targets_orig) ** 2)))
             mae = float(np.mean(np.abs(preds_orig - targets_orig)))
-            self.log("test/rmse", rmse)
-            self.log("test/r2", r2)
-            self.log("test/mae", mae)
+            self.log("test/normalized_rmse" if self.cfg.get("_NORMALIZED_METRICS", False) else "test/rmse", rmse)
+            self.log("test/normalized_r2" if self.cfg.get("_NORMALIZED_METRICS", False) else "test/r2", r2)
+            self.log("test/normalized_mae" if self.cfg.get("_NORMALIZED_METRICS", False) else "test/mae", mae)
         self._test_preds.clear()
         self._test_targets.clear()
 

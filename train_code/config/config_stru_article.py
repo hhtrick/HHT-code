@@ -20,9 +20,11 @@ GRADIENT_CLIP_VAL = 1.0                   # Gradient clipping threshold to preve
 GRADIENT_ACCUMULATION_STEPS = 1           # Gradient accumulation steps, effective batch = GRADIENT_ACCUMULATION_STEPS * BATCH_SIZE
 FLOAT32_MATMUL_PRECISION = "high"         # PyTorch matmul precision ('highest' | 'high' | 'medium')
 SPLIT_PKL = "split_random.pkl"            # Dataset split index filename (default: pure random split; alternatives: 'split.pkl' for article-aware leaky split, 'split_article.pkl' for strict article-isolated split)
+LOG_TARGET_DATASETS = ["E", "UTS"]        # ln(y), then train-only StandardScaler; [] disables. All targets must be >0; reported metrics use original units.
+SWEEP_TRAIN_FRACTIONS = False              # True: SPLIT_PKL's 20/40/60/80% files, then full file; sequential runs with all SEEDS
 
 # ======================== Structural Encoder ========================
-STRUCT_ENCODER = "periogt"                # Structural encoder name: 'polybert' | 'periogt' | 'llm' (llm uses LLM to process chemical_composition input)
+STRUCT_ENCODER = "periogt"                # 'polybert' | 'periogt' | 'llm'; llm uses reduced structural fields (see below)
 FROZEN_BACKBONE = True                    # True: freeze encoder, use precomputed embedding cache; False: LoRA fine-tune encoder
 
 # ======================== LoRA Parameters (effective when FROZEN_BACKBONE=False) ========================
@@ -36,8 +38,10 @@ LORA_TARGET_MODULES_STRUCT = [            # Structural encoder LoRA target modul
 # ======================== Structural Stream Pooling Settings ========================
 USE_PERIOGT_PROMPT = True                 # True: enable periodic prompt enhancement (PA + pretrained model generates prompt); False: use only node initial chemical features
 
-STRUCT_POOLING_TYPE = "mean_pooling"      # Structural stream pooling: 'mean_pooling' | 'attention_pooling'
-STRUCT_PROJ_DIM = 128                     # Structural stream attention_pooling intermediate projection dimension
+# LLM: 'last_token' | 'mean_pooling' | 'sum_pooling' | 'attention_pooling' | 'sigmoid_pooling'
+# PolyBERT: 'mean_pooling' | 'attention_pooling'; PerioGT uses its own graph readout.
+STRUCT_POOLING_TYPE = "mean_pooling"      # For LLM sigmoid gating, set this to 'sigmoid_pooling' (not POOLING_TYPE)
+STRUCT_PROJ_DIM = 128                     # LLM attention/sigmoid or PolyBERT attention projection dimension
 
 # ======================== MLP Projection Head Parameters ========================
 # Regression head: input_dim -> d1 -> d2 -> 1
@@ -46,7 +50,12 @@ MLP_ACTIVATION = "SiLU"                   # Activation function: 'SiLU' | 'ReLU'
 MLP_DROPOUT = 0.2                         # MLP inter-layer Dropout ratio
 
 # ======================== LLM Structural Stream Parameters (effective when STRUCT_ENCODER='llm') ========================
-MODEL_TYPE = "qwen3_4b_base"              # LLM type: 'qwen3_4b_instruct_2507' | 'qwen3_4b_thinking_2507' | 'qwen3_4b_base' | 'qwen3_8b_base' | 'qwen3_0_6b_base' | 'chemdfm_v1_5_8b' | 'qwen3_4b_base_cpt_1' | 'qwen3_4b_base_cpt_2' | 'qwen3_4b_base_cpt_3'
+# Input: chemical_composition.monomers[].{smiles, ratio_value, ratio_unit}
+# plus is_homopolymer. Excludes names, pSMILES, additives and processing history.
+# Same prediction prompt as Type 9, no chat template; preserves raw ratios/all monomers.
+# This matches field selection, not encoder-specific truncation/missing-value handling.
+# Precompute via precompute_embeddings.py: INPUT_TYPES = ["struct"]. Type 9 stays unchanged.
+MODEL_TYPE = "qwen3_4b_base"              # LLM type: 'qwen3_4b_instruct_2507' | 'qwen3_4b_thinking_2507' | 'qwen3_4b_base' | 'qwen3_8b_base' | 'qwen3_0_6b_base' | 'chemdfm_v1_5_8b'
 LORA_TARGET_MODULES_LLM = [              # LLM LoRA target module names (Qwen3 attention and FFN projection layers)
     "q_proj", "k_proj", "v_proj", "o_proj",
     "gate_proj", "up_proj", "down_proj"

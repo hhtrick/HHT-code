@@ -1,13 +1,13 @@
 """
-prompt.py — Centralized management module for all prompts in the data mining pipeline.
+prompt.py — 数据挖掘流程中所有提示词的集中管理模块。
 
-Contains:
-- Stage 1: Data extraction prompts for 6 polymer properties (EXTRACTION_PROMPTS)
-- Stage 2: Data review and correction prompt (REVIEW_PROMPT_TEMPLATE)
+包含:
+- 阶段一: 6 类聚合物属性的数据提取提示词 (EXTRACTION_PROMPTS)
+- 阶段二: 数据审查与修正提示词 (REVIEW_PROMPT_TEMPLATE)
 """
 
 # ===========================================================================
-# Generic JSON Template (referenced internally by each property extraction prompt)
+# 通用 JSON 模板（用于各属性提取提示词内部引用）
 # ===========================================================================
 _JSON_TEMPLATE = '''
 {{
@@ -45,7 +45,7 @@ _JSON_TEMPLATE = '''
 '''
 
 # ===========================================================================
-# Property Metadata
+# 属性元信息
 # ===========================================================================
 PROPERTY_META = {
     "Tg": {
@@ -81,7 +81,7 @@ PROPERTY_META = {
 }
 
 # ===========================================================================
-# Property-Specific Example JSON (embedded in each extraction prompt)
+# 属性特定的示例 JSON（嵌入到各提示词中）
 # ===========================================================================
 _EXAMPLES = {
     "Tg": '''[
@@ -252,7 +252,7 @@ _EXAMPLES = {
 
 
 def _build_extraction_prompt(prop_key: str) -> str:
-    """Build the Stage 1 data extraction prompt for a given property."""
+    """构建指定属性的阶段一数据提取提示词。"""
     meta = PROPERTY_META[prop_key]
     full_name = meta["full_name"]
     typical_units = meta["typical_units"]
@@ -311,19 +311,19 @@ Here is the text of the literature to process:
 
 
 # ===========================================================================
-# Stage 1 Extraction Prompt Dictionary
+# 阶段一提取提示词字典
 # ===========================================================================
 EXTRACTION_PROMPTS = {k: _build_extraction_prompt(k) for k in PROPERTY_META}
 
 
 def get_extraction_prompt(prop_key: str, md_text: str) -> str:
-    """Return the complete Stage 1 prompt with the literature Markdown content appended."""
+    """返回拼接了文献 Markdown 内容的完整阶段一提示词。"""
     base = EXTRACTION_PROMPTS[prop_key]
     return base + "\n" + md_text
 
 
 # ===========================================================================
-# Stage 2: Data Review and Correction Prompt
+# 阶段二：数据审查与修正提示词
 # ===========================================================================
 _REVIEW_RULES_BRIEF = '''
 Key extraction rules for reference:
@@ -369,7 +369,7 @@ You MUST output **ONLY** a valid JSON array. Do NOT include any Markdown formatt
 
 
 def get_review_prompt(prop_key: str, extracted_json_str: str, md_text: str) -> str:
-    """Return the Stage 2 review prompt with extracted data and source text appended."""
+    """返回拼接了提取数据和原文的阶段二审查提示词。"""
     meta = PROPERTY_META[prop_key]
     return REVIEW_PROMPT_TEMPLATE.replace(
         "{PROP_FULL_NAME}", meta["full_name"]

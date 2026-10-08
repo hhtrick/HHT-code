@@ -1652,7 +1652,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1016/j.matpr.2017.06.113",
     "title": "Investigation of Mechanical and Thermal Properties of Silica-Reinforced Epoxy Composites by Using Experiment and Empirical Model",
     "year": 2017,
     "chemical_composition": {
@@ -1723,7 +1723,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 2.16 ± 0.06 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -1772,7 +1772,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.42 ± 0.03 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -1827,7 +1827,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.57 ± 0.05 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -1869,7 +1869,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.92 ± 0.04 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -1911,7 +1911,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.83 ± 0.06 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:27 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -1953,7 +1953,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.84 ± 0.05 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2008,7 +2008,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.47 ± 0.04 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2057,7 +2057,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.48 ± 0.06 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 60 °C for 16 hours (16h60) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2099,7 +2099,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.64 ± 0.01 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. Post-cured at 80 °C for 5 hours (5h80) in fan assisted oven. Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2148,7 +2148,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 1.37 ± 0.03 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2190,7 +2190,7 @@
       "additives": [],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.35 ± 0.02 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:55 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2245,7 +2245,7 @@
       ],
       "is_homopolymer": false
     },
-    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638. Value reported as 0.18 ± 0.03 GPa.",
+    "processing_history": "Mixed resin:hardener at 100:79 g ratio. Poured into silicone molds (ASTM D638 Type 5). Cured at room temperature for 24h. No post-curing (NPC). Young's Modulus measured by uniaxial tensile test on Instron 4204 according to ASTM D638.",
     "hierarchical_structure": null,
     "properties": {
       "E": {
@@ -2265,7 +2265,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1016/j.conbuildmat.2018.11.202",
     "title": "Mechanical, thermal and microstructural properties of epoxy-OAT composites",
     "year": 2018,
     "chemical_composition": {
@@ -2301,7 +2301,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1016/j.polymertesting.2015.09.001",
     "title": "High-toughness/low-friction ductile epoxy coatings reinforced with carbon nanostructures",
     "year": 2015,
     "chemical_composition": {
@@ -2356,7 +2356,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1016/j.polymertesting.2015.09.001",
     "title": "High-toughness/low-friction ductile epoxy coatings reinforced with carbon nanostructures",
     "year": 2015,
     "chemical_composition": {
@@ -2417,7 +2417,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1016/j.polymertesting.2015.09.001",
     "title": "High-toughness/low-friction ductile epoxy coatings reinforced with carbon nanostructures",
     "year": 2015,
     "chemical_composition": {
@@ -2862,7 +2862,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s002890050300",
     "title": "Multifunctional naphthalene containing epoxy resins and their modification by hydrosilation for electronic application",
     "year": 1998,
     "chemical_composition": {
@@ -2904,7 +2904,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s002890050300",
     "title": "Multifunctional naphthalene containing epoxy resins and their modification by hydrosilation for electronic application",
     "year": 1998,
     "chemical_composition": {
@@ -2946,7 +2946,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s002890050300",
     "title": "Multifunctional naphthalene containing epoxy resins and their modification by hydrosilation for electronic application",
     "year": 1998,
     "chemical_composition": {
@@ -5227,7 +5227,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.3390/polym11111866",
     "title": "Hydroxyl-Terminated Triazine Derivatives Grafted Graphene Oxide for Epoxy Composites: Enhancement of Interfacial and Mechanical Properties",
     "year": 2019,
     "chemical_composition": {
@@ -5276,7 +5276,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.3390/polym11111866",
     "title": "Hydroxyl-Terminated Triazine Derivatives Grafted Graphene Oxide for Epoxy Composites: Enhancement of Interfacial and Mechanical Properties",
     "year": 2019,
     "chemical_composition": {
@@ -5318,7 +5318,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.3390/polym11111866",
     "title": "Hydroxyl-Terminated Triazine Derivatives Grafted Graphene Oxide for Epoxy Composites: Enhancement of Interfacial and Mechanical Properties",
     "year": 2019,
     "chemical_composition": {
@@ -9379,7 +9379,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s13726-015-0351-2",
     "title": "The effect of nanoparticles in single‑lap composite joints studied by experimental and numerical analyses",
     "year": 2015,
     "chemical_composition": {
@@ -9428,7 +9428,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s13726-015-0351-2",
     "title": "The effect of nanoparticles in single‑lap composite joints studied by experimental and numerical analyses",
     "year": 2015,
     "chemical_composition": {
@@ -9483,7 +9483,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s13726-015-0351-2",
     "title": "The effect of nanoparticles in single‑lap composite joints studied by experimental and numerical analyses",
     "year": 2015,
     "chemical_composition": {
@@ -9538,7 +9538,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1051/matecconf/201712103015",
     "title": "Effect of fatigue testing on the properties of Glass-Epoxy composites using the acoustic tool",
     "year": null,
     "chemical_composition": {
@@ -9587,7 +9587,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1051/matecconf/201712103015",
     "title": "Effect of fatigue testing on the properties of Glass-Epoxy composites using the acoustic tool",
     "year": null,
     "chemical_composition": {
@@ -9636,7 +9636,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1051/matecconf/201712103015",
     "title": "Effect of fatigue testing on the properties of Glass-Epoxy composites using the acoustic tool",
     "year": null,
     "chemical_composition": {
@@ -9685,7 +9685,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1051/matecconf/201712103015",
     "title": "Effect of fatigue testing on the properties of Glass-Epoxy composites using the acoustic tool",
     "year": null,
     "chemical_composition": {
@@ -9734,7 +9734,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1051/matecconf/201712103015",
     "title": "Effect of fatigue testing on the properties of Glass-Epoxy composites using the acoustic tool",
     "year": null,
     "chemical_composition": {
@@ -9783,7 +9783,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1007/s11029-018-9763-3",
     "title": "PHYSICAL PROPERTIES OF AN EPOXY COMPOSITE MODIFIED BY $\\mathbf { C _ { 6 0 } }$ FULLERENES",
     "year": null,
     "chemical_composition": {
@@ -9832,7 +9832,7 @@
     }
   },
   {
-    "doi": null,
+    "doi": "10.1016/j.compositesb.2016.04.056",
     "title": "Mechanical characterization and optimization of a new unidirectional flax/paper/epoxy composite",
     "year": 2016,
     "chemical_composition": {

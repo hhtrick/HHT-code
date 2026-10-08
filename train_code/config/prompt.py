@@ -1,9 +1,12 @@
 """
-prompt.py — Manage 9 input prompt templates and construction logic
+prompt.py — Manage 9 semantic templates and the standalone LLM structural input
 """
 import json
 import random
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
+
+
+STRUCT_INPUT = "struct"
 
 
 def _extract_chemical_composition(entry: Dict[str, Any]) -> Dict[str, Any]:
@@ -98,6 +101,27 @@ def _build_type9(entry: Dict[str, Any], target_property: str, unit: str) -> str:
     return f"Here is the data of a polymer, {json_str}, please predict {target_property} based on the data, in units of {unit}"
 
 
+def _build_struct(entry: Dict[str, Any], target_property: str, unit: str) -> str:
+    """Shared structural fields only; preserve source values and monomer order.
+
+    This aligns the supplied fields, not each encoder's preprocessing: PolyBERT
+    skips empty SMILES, PerioGT uses two slots, and both override homopolymer
+    ratios. Names, pSMILES, additives and experimental history are excluded.
+    """
+    chem = _extract_chemical_composition(entry)
+    data = {
+        "chemical_composition": {
+            "monomers": [
+                {key: monomer.get(key) for key in ("smiles", "ratio_value", "ratio_unit")}
+                for monomer in chem.get("monomers", [])
+            ],
+            "is_homopolymer": chem.get("is_homopolymer", False),
+        },
+    }
+    json_str = json.dumps(data, ensure_ascii=False)
+    return f"Here is the data of a polymer, {json_str}, please predict {target_property} based on the data, in units of {unit}"
+
+
 # Template mapping (1-9 are concrete templates; type 10 "dynamic prompt sampling" is implemented by INPUT_CONTENT containing multiple types)
 PROMPT_BUILDERS = {
     1: _build_type1,
@@ -113,12 +137,12 @@ PROMPT_BUILDERS = {
 
 
 def build_prompt(entry: Dict[str, Any], target_property: str,
-                 input_type: int) -> str:
+                 input_type: Union[int, str]) -> str:
     """
-    Build prompt based on input_type (1-9).
+    Build a semantic prompt (1-9) or the named standalone structural prompt.
     """
     unit = _get_unit(entry, target_property)
-    builder = PROMPT_BUILDERS[input_type]
+    builder = _build_struct if input_type == STRUCT_INPUT else PROMPT_BUILDERS[input_type]
     return builder(entry, target_property, unit)
 
 

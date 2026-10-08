@@ -6,6 +6,7 @@ import sys
 import copy
 import json
 import importlib
+import itertools
 import numpy as np
 import pandas as pd
 import torch
@@ -16,7 +17,7 @@ from typing import Dict, Any, List
 
 from config.path import (
     RESULT_DIR, TB_LOG_DIR,
-    ensure_dir,
+    ensure_dir, get_split_pkl_path,
 )
 from utils import (
     load_dataset, load_split_indices, extract_targets,
@@ -31,8 +32,10 @@ from utils import (
     precompute_periogt_data, load_periogt_cache,
     evaluate_test_set,
     extract_article_ids, _is_article_aware,
+    required_llm_input_types,
 )
 from models.base_model import PropertyPredictionModel, StructureOnlyModel
+from target_scaling import inject_scaler_config
 
 # ======================== Training Parameter Settings ========================
 # Datasets to train on (list)
@@ -100,13 +103,14 @@ def _build_trainer_device_kwargs(cfg: Dict[str, Any], context: str = "training")
 def _extract_grid_values(search_space: Dict, param_name: str,
                          linked_unpacking: Dict, default) -> List:
     """Extract all candidate values for a parameter from the search space (including linked_grid values)"""
-    values = set()
+    values = []
     # Directly in grid
     if param_name in search_space:
         domain = search_space[param_name]
         if hasattr(domain, 'categories'):
             for v in domain.categories:
-                values.add(v)
+                if v not in values:
+                    values.append(v)
     # In linked_grid
     for link_key, param_names in linked_unpacking.items():
         if param_name in param_names:
@@ -115,10 +119,63 @@ def _extract_grid_values(search_space: Dict, param_name: str,
                 domain = search_space[link_key]
                 if hasattr(domain, 'categories'):
                     for combo in domain.categories:
-                        values.add(combo[idx])
+                        if combo[idx] not in values:
+                            values.append(combo[idx])
     if not values:
-        values.add(default)
-    return list(values)
+        values.append(default)
+    return values
+
+
+def _grid_llm_cache_plan(fixed_cfg, search_space, linked_unpacking):
+    """Find each model's actual input union, retaining linked-grid relationships."""
+    relevant = {"MODEL_TYPE", "FROZEN_BACKBONE", "STRUCT_ENCODER",
+                "ENABLE_HYBRID_ENCODING", "INPUT_CONTENT", "EVAL_INPUT_CONTENT"}
+    dimensions = []
+    for key, domain in search_space.items():
+        names = linked_unpacking.get(key, [key])
+        if relevant.intersection(names):
+            dimensions.append((key, domain.categories))
+    plan = {}
+    for combination in itertools.product(*(values for _, values in dimensions)):
+        cfg = dict(fixed_cfg)
+        for (key, _), value in zip(dimensions, combination):
+            if key in linked_unpacking:
+                cfg.update(zip(linked_unpacking[key], value))
+            else:
+                cfg[key] = value
+        types = required_llm_input_types(cfg)
+        if types:
+            model_key = cfg.get("MODEL_TYPE", "qwen3_4b_base")
+            selected = plan.setdefault(model_key, [])
+            selected.extend(t for t in types if t not in selected)
+    return plan
+
+
+def training_split_configs(cfg, dataset_names, grid_param_names=()):
+    """Expand the existing frozen splits; never generate or change index files."""
+    if "SWEEP_TRAIN_FRACTIONS" in grid_param_names:
+        raise ValueError("SWEEP_TRAIN_FRACTIONS is a fixed outer-loop option, not a grid dimension.")
+    if cfg.get("SWEEP_TRAIN_FRACTIONS", False):
+        if "SPLIT_PKL" in grid_param_names:
+            raise ValueError("Choose either SWEEP_TRAIN_FRACTIONS or a SPLIT_PKL grid, not both.")
+        full = cfg["SPLIT_PKL"]
+        if full not in ("split_random.pkl", "split_article.pkl"):
+            raise ValueError("For a fraction sweep set SPLIT_PKL to split_random.pkl or split_article.pkl.")
+        stem = os.path.splitext(full)[0]
+        filenames = [f"{stem}_{pct}pct.pkl" for pct in (20, 40, 60, 80)] + [full]
+    else:
+        filenames = [cfg["SPLIT_PKL"]]
+    if "SPLIT_PKL" not in grid_param_names:
+        missing = [get_split_pkl_path(ds, name) for ds in dataset_names for name in filenames
+                   if not os.path.isfile(get_split_pkl_path(ds, name))]
+        if missing:
+            raise FileNotFoundError("Missing split files (no training started): " + ", ".join(missing))
+    configs = []
+    for filename in filenames:
+        run_cfg = copy.deepcopy(cfg)
+        run_cfg["SPLIT_PKL"] = filename
+        configs.append(run_cfg)
+    return configs
 
 
 def load_grid_yaml(yaml_path: str):
@@ -149,6 +206,8 @@ def load_grid_yaml(yaml_path: str):
     grid_param_names = []
 
     for key, spec in grid.items():
+        if key == "USE_CHAT_TEMPLATE":
+            raise ValueError("Remove obsolete USE_CHAT_TEMPLATE from the YAML grid; LLM inputs are always raw text.")
         if isinstance(spec, dict) and '_generate' in spec:
             gen_type = spec['_generate']
             if gen_type == 'pairs_d1_gt_d2':
@@ -181,6 +240,8 @@ def load_grid_yaml(yaml_path: str):
     linked_unpacking = {}
     for link_key, link_spec in linked_grid.items():
         params = link_spec['params']
+        if "USE_CHAT_TEMPLATE" in params:
+            raise ValueError("Remove obsolete USE_CHAT_TEMPLATE from linked_grid; LLM inputs are always raw text.")
         values = [tuple(v) for v in link_spec['values']]
         search_space[link_key] = tune.grid_search(values)
         linked_unpacking[link_key] = params
@@ -205,11 +266,13 @@ def train_single_config(cfg: Dict[str, Any], dataset_name: str,
     struct_only = _is_struct_only(cfg)
 
     # ---- Load data ----
+    if struct_only and cfg.get("STRUCT_ENCODER") == "llm":
+        cfg["_LLM_STRUCT_INPUT"] = "monomer_smiles_ratios_is_homopolymer"
     data = load_dataset(dataset_name)
     split_pkl = cfg["SPLIT_PKL"]
     split_indices = load_split_indices(dataset_name, split_pkl)
     targets_raw = extract_targets(data, dataset_name)
-    scaler = fit_scaler(targets_raw, split_indices["train"])
+    scaler = fit_scaler(targets_raw, split_indices["train"], cfg=cfg, dataset_name=dataset_name)
     targets_scaled = transform_targets(scaler, targets_raw)
 
     # Save scaler
@@ -260,10 +323,10 @@ def train_single_config(cfg: Dict[str, Any], dataset_name: str,
             model_key = f"struct_llm_{llm_model_key}"
             if frozen_struct:
                 if not skip_precompute:
-                    print(f"\n[Embedding] Precomputing LLM embeddings for type 9 ({llm_model_key})...")
+                    print(f"\n[Embedding] Precomputing reduced structural LLM inputs ({llm_model_key})...")
                     precompute_llm_embeddings(
                         dataset_name, llm_model_key, data,
-                        batch_size=1
+                        batch_size=1, input_types=required_llm_input_types(cfg)
                     )
                 struct_embeddings = None
             else:
@@ -298,7 +361,7 @@ def train_single_config(cfg: Dict[str, Any], dataset_name: str,
                 print(f"\n[Embedding] Precomputing LLM embeddings ({model_key})...")
                 precompute_llm_embeddings(
                     dataset_name, model_key, data,
-                    batch_size=1
+                    batch_size=1, input_types=required_llm_input_types(cfg)
                 )
                 if enable_hybrid:
                     encoder_name = cfg.get("STRUCT_ENCODER", "polybert")
@@ -342,8 +405,7 @@ def train_single_config(cfg: Dict[str, Any], dataset_name: str,
             # Non-frozen hybrid mode: no cache, real-time encoding (with gradient)
 
     # Inject scaler params into cfg for TensorBoard logging at original scale
-    cfg["_SCALER_MEAN"] = float(scaler.mean_[0])
-    cfg["_SCALER_STD"] = float(scaler.scale_[0])
+    inject_scaler_config(cfg, scaler, dataset_name)
 
     # Save full config immediately (including scaler info), record before training starts to prevent loss on interruption
     save_config_yaml(cfg, os.path.join(experiment_dir, "config.yaml"))
@@ -555,22 +617,20 @@ def train_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
     fixed_cfg["_RATIO_ENCODING_PATH"] = ratio_path
 
     # Determine if precomputation might be needed (considering FROZEN_BACKBONE changes via linked_grid)
-    might_be_frozen = fixed_cfg.get("FROZEN_BACKBONE", True)
-    if not might_be_frozen:
-        for link_key, params in linked_unpacking.items():
-            if "FROZEN_BACKBONE" in params:
-                might_be_frozen = True
-                break
+    might_be_frozen = any(_extract_grid_values(
+        search_space, "FROZEN_BACKBONE", linked_unpacking,
+        fixed_cfg.get("FROZEN_BACKBONE", True),
+    ))
 
     # Extract all possible MODEL_TYPE and STRUCT_ENCODER values from search space
-    all_model_types = _extract_grid_values(
-        search_space, "MODEL_TYPE", linked_unpacking,
-        fixed_cfg.get("MODEL_TYPE", "qwen3_4b_base")
-    )
     all_struct_encoders = _extract_grid_values(
         search_space, "STRUCT_ENCODER", linked_unpacking,
         fixed_cfg.get("STRUCT_ENCODER", "polybert")
     )
+
+    for model_key, input_types in _grid_llm_cache_plan(fixed_cfg, search_space, linked_unpacking).items():
+        precompute_llm_embeddings(dataset_name, model_key, data,
+                                  batch_size=1, input_types=input_types)
 
     if struct_only:
         for encoder_name in all_struct_encoders:
@@ -583,13 +643,7 @@ def train_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
                     use_prompt=True, use_cache=True,
                 )
             elif encoder_name == "llm":
-                if might_be_frozen:
-                    for llm_model_key in all_model_types:
-                        print(f"\n[Pre-compute] LLM type 9 embeddings for {dataset_name} ({llm_model_key})")
-                        precompute_llm_embeddings(
-                            dataset_name, llm_model_key, data,
-                            batch_size=1
-                        )
+                pass  # Selected LLM inputs were prepared above.
             elif might_be_frozen:
                 print(f"\n[Pre-compute] Struct embeddings for {dataset_name} ({encoder_name})")
                 precompute_struct_embeddings(
@@ -598,12 +652,6 @@ def train_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
                     ratio_encoding_path=ratio_path,
                 )
     elif might_be_frozen:
-        for model_key in all_model_types:
-            print(f"\n[Pre-compute] LLM embeddings for {dataset_name} ({model_key})")
-            precompute_llm_embeddings(
-                dataset_name, model_key, data,
-                batch_size=1
-            )
         if fixed_cfg.get("ENABLE_HYBRID_ENCODING", False):
             for encoder_name in all_struct_encoders:
                 if encoder_name == "periogt":
@@ -761,63 +809,40 @@ def train_ray_tune(fixed_cfg: Dict[str, Any], search_space: Dict,
 def main():
     from datetime import datetime
 
+    yaml_full_path = None
     if GRID_YAML:
-        # ---- YAML Grid Search Mode ----
         yaml_full_path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), GRID_YAML
         )
         base_cfg, search_space, grid_param_names, linked_unpacking = \
             load_grid_yaml(yaml_full_path)
+    else:
+        base_cfg = load_config_as_dict(CONFIG_MODULE)
+        search_space, grid_param_names, linked_unpacking = {}, [], {}
 
-        if not search_space:
-            # No grid params in YAML, treat as single-config training
-            for dataset_name in TRAIN_DATASETS:
-                print(f"\n{'#'*70}")
-                print(f"  Dataset: {dataset_name}")
-                print(f"{'#'*70}")
-                ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                if _is_struct_only(base_cfg):
-                    model_label = f"struct_{base_cfg.get('STRUCT_ENCODER', 'polybert')}"
-                else:
-                    model_label = base_cfg.get('MODEL_TYPE', 'model')
-                exp_dir = os.path.join(RESULT_DIR, f"{dataset_name}_{model_label}_{ts}")
-                ensure_dir(exp_dir)
-                train_single_config(base_cfg, dataset_name, exp_dir, skip_test=True)
-        else:
-            # YAML Grid Search
-            for dataset_name in TRAIN_DATASETS:
-                print(f"\n{'#'*70}")
-                print(f"  Dataset: {dataset_name} (YAML Grid Search)")
-                print(f"{'#'*70}")
-                ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                grid_dir = os.path.join(RESULT_DIR, f"{dataset_name}_grid_{ts}")
-                ensure_dir(grid_dir)
+    split_configs = training_split_configs(base_cfg, TRAIN_DATASETS, grid_param_names)
+    for dataset_name in TRAIN_DATASETS:
+        for split_cfg in split_configs:
+            # Keep scaler, ratio encoding and per-run mutations isolated.
+            cfg = copy.deepcopy(split_cfg)
+            split_label = os.path.splitext(cfg["SPLIT_PKL"])[0]
+            print(f"\n{'#'*70}\n  Dataset: {dataset_name}; split: {split_label}\n{'#'*70}")
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            if search_space:
+                grid_dir = os.path.join(RESULT_DIR, f"{dataset_name}_{split_label}_grid_{ts}")
                 train_ray_tune(
-                    copy.deepcopy(base_cfg), search_space, dataset_name, grid_dir,
+                    cfg, search_space, dataset_name, grid_dir,
                     grid_param_names=grid_param_names,
                     linked_unpacking=linked_unpacking,
                     yaml_path=yaml_full_path,
                 )
-    else:
-        # ---- Single Config Module Mode ----
-        cfg = load_config_as_dict(CONFIG_MODULE)
-
-        for dataset_name in TRAIN_DATASETS:
-            print(f"\n{'#'*70}")
-            print(f"  Dataset: {dataset_name}")
-            print(f"{'#'*70}")
-
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            if _is_struct_only(cfg):
-                model_label = f"struct_{cfg.get('STRUCT_ENCODER', 'polybert')}"
             else:
-                model_label = cfg.get('MODEL_TYPE', 'model')
-            exp_dir = os.path.join(
-                RESULT_DIR,
-                f"{dataset_name}_{model_label}_{ts}"
-            )
-            ensure_dir(exp_dir)
-            train_single_config(cfg, dataset_name, exp_dir)
+                model_label = (f"struct_{cfg.get('STRUCT_ENCODER', 'polybert')}"
+                               if _is_struct_only(cfg) else cfg.get("MODEL_TYPE", "model"))
+                exp_dir = os.path.join(RESULT_DIR, f"{dataset_name}_{model_label}_{split_label}_{ts}")
+                ensure_dir(exp_dir)
+                # YAML mode remains validation-only, as before.
+                train_single_config(cfg, dataset_name, exp_dir, skip_test=bool(GRID_YAML))
 
 
 if __name__ == "__main__":

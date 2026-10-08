@@ -20,6 +20,7 @@ CONTINUE_TRAIN_GRADIENT_CLIP_VAL = 1.0          # Gradient clipping threshold
 CONTINUE_TRAIN_GRADIENT_ACCUMULATION_STEPS = 1  # Gradient accumulation steps (>1 effectively increases batch_size)
 CONTINUE_TRAIN_MLP_DROPOUT = None               # MLP dropout rate (None = use original model config; set to float to override)
 RANDOM_INIT_WEIGHTS = False                     # Randomly initialize model weights and scaler (True: skip pretrained weights, refit scaler from training data)
+LOG_TARGET_DATASETS = None                      # None inherits checkpoint config; list overrides (e.g. ["E", "UTS"]). False mode rejects changes incompatible with the saved scaler/head.
 
 # ======================== Data Source (allocation from continue_train_dataset) ========================
 # Training and validation data all come from continue_train_dataset/{name}/{name}.json,
@@ -31,9 +32,9 @@ CONTINUE_TRAIN_SPLIT_PKL_NAME = "split_continue_train.pkl"
 # ======================== Article-Aware Loss Parameters (independently adjustable during continue training) ========================
 #   L = w_mse * L_mse + w_consist * L_consist + w_bias * L_bias + w_rank * L_rank
 MSE_WEIGHT = 1.0                          # w_mse: MSE loss weight
-ARTICLE_CONSISTENCY_WEIGHT = 0.2          # w_consist: Article consistency loss weight
-ARTICLE_BIAS_WEIGHT = 0.2                 # w_bias: Article bias loss weight
-ARTICLE_RANKING_WEIGHT = 0.2              # w_rank: Article ranking loss weight
+ARTICLE_CONSISTENCY_WEIGHT = 0          # w_consist: Article consistency loss weight
+ARTICLE_BIAS_WEIGHT = 0                 # w_bias: Article bias loss weight
+ARTICLE_RANKING_WEIGHT = 0              # w_rank: Article ranking loss weight
 
 # ======================== Gaussian Noise Parameters ========================
 NOISE_ENABLED = False                     # Noise is typically not added during continue training
