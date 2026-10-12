@@ -14,15 +14,14 @@ CONCURRENCY = 64
 MAX_RETRIES = 3
 TARGET_DATASETS = ["E"] # "Tg", "Tm", "n", "eps", "E", "UTS"
 MODE = "prod" # "test" or "prod"
-
 MODEL_NAME = "qwen3.5-plus-2026-02-15"
 
-# 忽略进度文件，强制重新处理所有条目（谨慎使用）
+# Reprocess all input records; existing outputs are appended.
 IGNORE_PROGRESS = False
 
-# 工作根目录
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# =================================================
+
 
 client = AsyncOpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
@@ -135,15 +134,12 @@ Here is the JSON data of the polymer sample to process (Target Property: {TARGET
 """
 
 
-# ===========================================================================
-# 进度管理（断点恢复）
-# ===========================================================================
 def _progress_file(dataset: str) -> str:
     return os.path.join(BASE_DIR, "final", f"{dataset}_processor_progress.txt")
 
 
 def load_done_indices(dataset: str) -> set:
-    """加载已完成条目索引集合。若 IGNORE_PROGRESS=True 则返回空集合。"""
+    """Return completed input indices, or an empty set when IGNORE_PROGRESS is enabled."""
     if IGNORE_PROGRESS:
         return set()
     pf = _progress_file(dataset)
@@ -154,14 +150,14 @@ def load_done_indices(dataset: str) -> set:
 
 
 def mark_done_index(dataset: str, idx: int):
-    """标记一个条目索引为已处理。"""
+    """Record a completed input index."""
     pf = _progress_file(dataset)
     with open(pf, "a", encoding="utf-8") as f:
         f.write(str(idx) + "\n")
 
 
 def load_existing_results(output_file: str) -> list:
-    """加载已有的输出结果。"""
+    """Load the existing JSON output array."""
     if not os.path.exists(output_file):
         return []
     try:
@@ -184,11 +180,11 @@ async def call_llm_with_retry(prompt: str, sem: asyncio.Semaphore) -> dict:
                     response_format={"type": "json_object"},
                     extra_body={"enable_thinking": True}
                 )
-                
+
                 content = response.choices[0].message.content or ""
                 msg_dict = response.choices[0].message.model_dump()
                 reasoning = msg_dict.get("reasoning_content", "")
-                
+
                 # remove optional markdown formatting if present
                 content = content.strip()
                 if content.startswith("```json"):
@@ -196,8 +192,13 @@ async def call_llm_with_retry(prompt: str, sem: asyncio.Semaphore) -> dict:
                 if content.endswith("```"):
                     content = content[:-3]
                 content = content.strip()
-                    
+
                 parsed = json.loads(content)
+                if not isinstance(parsed, dict) or any(
+                    not isinstance(parsed.get(key), str) or not parsed[key].strip()
+                    for key in ("descriptive_text", "reasoning_analysis")
+                ):
+                    raise ValueError("Expected non-empty descriptive_text and reasoning_analysis strings")
                 return {
                     "result": parsed,
                     "reasoning": reasoning
@@ -207,7 +208,7 @@ async def call_llm_with_retry(prompt: str, sem: asyncio.Semaphore) -> dict:
                 print(f"Error after {MAX_RETRIES} attempts: {e}")
                 return {"result": None, "reasoning": ""}
             await asyncio.sleep(1)
-            
+
     return {"result": None, "reasoning": ""}
 
 
@@ -218,93 +219,98 @@ async def process_single_item(item: dict, dataset_name: str, sem: asyncio.Semaph
         "processing_history": item.get("processing_history"),
         "hierarchical_structure": item.get("hierarchical_structure")
     }
-    
+
     # Task 2 payload
     input_data_2 = {
         "chemical_composition": item.get("chemical_composition"),
         "processing_history": item.get("processing_history")
     }
-    
+
     prompt1 = PROMPT_TASK1.replace("{TARGET_PROPERTY}", dataset_name).replace("{INPUT_JSON_DATA}", json.dumps(input_data_1, ensure_ascii=False))
     prompt2 = PROMPT_TASK2.replace("{TARGET_PROPERTY}", dataset_name).replace("{INPUT_JSON_DATA}", json.dumps(input_data_2, ensure_ascii=False))
-    
+
     task1, task2 = await asyncio.gather(
         call_llm_with_retry(prompt1, sem),
         call_llm_with_retry(prompt2, sem)
     )
-    
+
     # attach outputs to the original item
     item["analysis_with_hierarchical_structure"] = task1["result"]
     item["analysis_without_hierarchical_structure"] = task2["result"]
-    
+
     if MODE == "test":
         item["reasoning_chain_with_hierarchical_structure"] = task1["reasoning"]
         item["reasoning_chain_without_hierarchical_structure"] = task2["reasoning"]
-        
+
     return item
 
 async def main():
-    if platform.system() == "Windows":
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-        
-    os.makedirs("final", exist_ok=True)
+    final_dir = os.path.join(BASE_DIR, "final")
+    os.makedirs(final_dir, exist_ok=True)
     sem = asyncio.Semaphore(CONCURRENCY)
-    
+
     for dataset in TARGET_DATASETS:
-        folder_path = dataset
+        folder_path = os.path.join(BASE_DIR, dataset)
         if not os.path.exists(folder_path):
             print(f"Folder {folder_path} doesn't exist, skipping.")
             continue
-        
-        # 读取带 title 的文件（由 03_add_title.py 生成）
+
+
         input_file = os.path.join(folder_path, f"{dataset}_extracted_titled.json")
         if not os.path.exists(input_file):
             print(f"No titled JSON file found: {input_file}, skipping.")
             continue
-        final_file = os.path.join("final", f"{dataset}.json")
-        
+        final_file = os.path.join(final_dir, f"{dataset}.json")
+
         print(f"Processing {dataset} dataset from {input_file} (Mode: {MODE})")
-        
+
         with open(input_file, "r", encoding="utf-8") as f:
             data = json.load(f)
-            
+
         if MODE == "test":
             data = data[:3]
-        
-        # 断点恢复：加载已完成的索引和已有结果
+
+
         done_indices = load_done_indices(dataset)
         results = load_existing_results(final_file)
-        
-        # 筛选待处理条目（保留原始索引）
+
+
         pending = [(i, item) for i, item in enumerate(data) if i not in done_indices]
-        
-        print(f"[{dataset}] 总计: {len(data)} | 已完成: {len(done_indices)} | 本次处理: {len(pending)}")
-        
+
+        print(f"[{dataset}] Total: {len(data)} | Completed: {len(done_indices)} | Pending this run: {len(pending)}")
+
         if not pending:
-            print(f"[{dataset}] 无待处理条目。")
+            print(f"[{dataset}] No pending records.")
             continue
-        
-        # 为每个待处理条目创建异步任务，同时携带索引信息
+
+
         async def _worker(idx, item):
             result = await process_single_item(item, dataset, sem)
             result["_idx"] = idx
             return result
-        
+
         tasks = [_worker(i, item) for i, item in pending]
-        
+
         for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=f"Processing {dataset}"):
             res = await coro
             idx = res.pop("_idx")
+            if any(res.get(key) is None for key in (
+                "analysis_with_hierarchical_structure", "analysis_without_hierarchical_structure"
+            )):
+                print(f"[{dataset}] Record {idx}: text generation failed; left pending for retry.")
+                continue
             results.append(res)
-            
-            # 写入完整结果到输出文件（确保文件始终是合法 JSON）
+
+
             with open(final_file, "w", encoding="utf-8") as f:
                 json.dump(results, f, ensure_ascii=False, indent=2)
-            
-            # 标记该索引已完成
+
+
             mark_done_index(dataset, idx)
-                
+
         print(f"Dataset {dataset} saved to {final_file} with {len(results)} records.")
 
 if __name__ == "__main__":
+    if platform.system() == "Windows":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(main())

@@ -10,6 +10,7 @@ HHT represents polymer composition and processing history as text, encodes it wi
 │   └── README.md
 ├── dataming_code/    # PDF → Markdown → extraction/review → text generation → JSON export
 │   └── README.md
+├── mined_publications.csv  # Unique DOI–property pairs for the released datasets
 └── README.md
 ```
 
@@ -21,9 +22,18 @@ See the [training guide](train_code/README.md) and [data-mining guide](dataming_
 - **HHT-C:** complete chemical-composition information without processing history, implemented as input Type 9.
 - **Structural comparisons:** adapted PolyBERT and PerioGT, plus LLM-struct with reduced structural input fields.
 - **Evaluation:** fixed entry-level random and DOI-based article-level splits, three training seeds, nested training fractions, joint training and domain-specific continual training.
+- **Additional article-held-out evaluation:** complete test articles held out with entry-level random training–validation splitting, for all six properties and the epoxy E domain (Supplementary Note 14).
+- **Hybrid comparisons:** gated fusion of HHT with PolyBERT or PerioGT using the fixed configurations in Supplementary Note 15.
 - **Article-level baseline:** training-article means or medians, with the corresponding global training statistic for unseen articles.
 
 The frozen LLM path caches final-layer hidden states. Pooling and regression are trained from these caches; input prompts are used without a chat-template wrapper. PolyBERT and PerioGT retain their own preprocessing and training behavior. PerioGT's graph backbone is trainable.
+
+The additional experiments use the existing training entry points. Select
+`config.config_paper` in `train.py` for published main-task model/split presets,
+or `config.config_continue_article_holdout` in `continue_train_inference.py` for
+the E-domain extension. The supplied fixed indices reproduce the reported
+partitions. See the training guide for model choices, initialization and seed
+settings; no one-time experiment runner is required.
 
 ## Included datasets
 

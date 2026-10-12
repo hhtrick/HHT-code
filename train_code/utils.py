@@ -889,6 +889,11 @@ def save_config_yaml(cfg: Dict[str, Any], save_path: str):
         yaml.dump(serializable, f, default_flow_style=False, allow_unicode=True)
 
 
+def seed_standard_deviation(values):
+    """Sample standard deviation across training seeds, as reported in the paper."""
+    return float(np.std(values, ddof=1)) if len(values) > 1 else float("nan")
+
+
 def save_csv_summary(results: List[Dict], save_path: str):
     """Save CSV summary table"""
     ensure_dir(os.path.dirname(save_path))
@@ -1083,7 +1088,7 @@ def evaluate_test_set(best_model, test_loader, cfg, scaler,
     if article_ids_list:
         all_article_ids = np.concatenate(article_ids_list)
         parts = []
-        # Article Range Hit Rate（需要训练集文章范围）
+        # Article range hit rate uses ranges derived from the training records.
         if train_article_ranges:
             from models.base_model import _compute_article_range_hit_rate, _compute_article_nars
             hr = _compute_article_range_hit_rate(preds_orig, all_article_ids, train_article_ranges)

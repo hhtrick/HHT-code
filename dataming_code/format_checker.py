@@ -1,9 +1,4 @@
-"""
-format_checker.py — JSON 格式验证与分流模块。
-
-验证从两阶段 LLM 管道中提取的聚合物属性数据是否严格满足
-预定义的 JSON Schema，并将合格数据与不合格数据分流保存。
-"""
+"""Validate required JSON fields and route accepted and rejected extraction records."""
 
 import json
 import os
@@ -11,7 +6,7 @@ from typing import Tuple
 
 
 def _validate_monomer(monomer: dict) -> list:
-    """验证单个 monomer 对象。"""
+    """Validate one monomer object."""
     errors = []
     if not isinstance(monomer, dict):
         return ["monomer entry is not a dict"]
@@ -28,7 +23,7 @@ def _validate_monomer(monomer: dict) -> list:
 
 
 def _validate_additive(additive: dict) -> list:
-    """验证单个 additive 对象。"""
+    """Validate one additive object."""
     errors = []
     if not isinstance(additive, dict):
         return ["additive entry is not a dict"]
@@ -40,19 +35,10 @@ def _validate_additive(additive: dict) -> list:
 
 
 def validate_entry(entry: dict, prop_key: str) -> Tuple[bool, list]:
-    """
-    验证单个数据条目是否满足格式要求。
-
-    Args:
-        entry: 数据条目（dict）
-        prop_key: 目标属性键名（"Tg", "Tm", "n", "eps", "E", "UTS"）
-
-    Returns:
-        (is_valid, errors): 是否合格，以及错误信息列表
-    """
+    """Return (is_valid, errors) for a record and its target property key."""
     errors = []
 
-    # 顶层字段检查
+
     if not isinstance(entry, dict):
         return False, ["entry is not a dict"]
 
@@ -91,7 +77,7 @@ def validate_entry(entry: dict, prop_key: str) -> Tuple[bool, list]:
         # additives
         additives = cc.get("additives")
         if additives is None:
-            # 允许缺失，视为空数组
+
             pass
         elif not isinstance(additives, list):
             errors.append("'additives' must be array or null")
@@ -152,21 +138,7 @@ def check_and_route(
     dataset_dir: str,
     filename: str | None = None,
 ) -> Tuple[int, int]:
-    """
-    对一组条目进行格式验证，合格的追加到 {prop_key}_extracted.json，
-    不合格的追加到 {prop_key}_format_errors.json。
-
-    存储格式为 JSON 数组，每次追加时读取已有数组、合并后重写。
-
-    Args:
-        entries: 数据条目列表
-        prop_key: 目标属性键名
-        dataset_dir: 数据集文件夹路径（如 "Tg/"）
-        filename: 来源文件名（可选，附加到错误记录中方便定位）
-
-    Returns:
-        (valid_count, invalid_count)
-    """
+    """Validate records and append them to the accepted or format-error JSON arrays."""
     os.makedirs(dataset_dir, exist_ok=True)
 
     valid_file = os.path.join(dataset_dir, f"{prop_key}_extracted.json")
@@ -193,7 +165,7 @@ def check_and_route(
             error_entries.append(error_record)
             invalid_count += 1
 
-    # 追加合格条目
+
     if valid_entries:
         existing = []
         if os.path.exists(valid_file):
@@ -206,7 +178,7 @@ def check_and_route(
         with open(valid_file, "w", encoding="utf-8") as f:
             json.dump(existing, f, ensure_ascii=False, indent=2)
 
-    # 追加不合格条目
+
     if error_entries:
         existing = []
         if os.path.exists(error_file):

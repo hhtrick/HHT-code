@@ -73,6 +73,7 @@ The table gives entry-level random partitions. Each dataset also contains:
 
 - `split_random.pkl`: entry-level random split.
 - `split_article.pkl`: disjoint source-article split, grouping by normalized DOI with title fallback when needed.
+- `split_holdout_whole.pkl`: complete test articles held out, with the remaining records randomly split into training and validation (Supplementary Note 14). Training and validation can share articles; neither shares a test DOI.
 - `split_random_{20,40,60,80}pct.pkl` and corresponding `split_article_*pct.pkl`: nested training subsets, with fixed validation/test indices for each split family.
 
 Pickle indices are zero-based positions in the matching JSON array. Preserve their order and use the supplied JSON/PKL pairs together. Curated counts need not equal exact 70/10/20 proportions. The scripts use these saved partitions; they do not create a new split for each seed.
@@ -86,6 +87,12 @@ Domain data use separate files:
 | `E_article` | 505 | 173 | `val_dataset/val_E_article_1.json` | 201 |
 
 The corresponding pool and `split_continue_train.pkl` are in `continue_train_dataset/{key}/`. Despite the historical folder name, `val_dataset` contains the held-out **domain test sets**, not the domain early-stopping validation sets.
+
+For the additional E-domain evaluation in Supplementary Note 14, use
+`continue_train_dataset/E_article/split_holdout_whole.pkl`. Its 505 training and
+173 validation indices refer to the same 678-row `E_article.json`. It reuses all
+201 records in `val_E_article_1.json` as the test set. No domain JSON is duplicated
+or reordered, and the original article-disjoint split remains available.
 
 ## 4. Precompute LLM embeddings
 
@@ -116,6 +123,10 @@ python train.py
 ```
 
 ### Standard HHT and HHT-C
+
+For the reported fixed configurations, an alternative to editing the working
+defaults is `CONFIG_MODULE="config.config_paper"` with `GRID_YAML=None`. Select
+`PAPER_MODEL` and `PAPER_PROTOCOL` in that module as described below.
 
 Use `CONFIG_MODULE="config.config_article"`. For the standard HHT configuration:
 
@@ -152,6 +163,10 @@ The adapted structure encoders read `monomers[].smiles`, not `repeat_unit_psmile
 
 Main training uses a maximum of 200 epochs, warmup followed by cosine annealing, and validation-loss early stopping with patience 15. The selected checkpoint is evaluated on the fixed test split. Three seeds repeat training, not partition generation. Result folders include configuration, target scaler, per-seed trainable weights, metrics and predictions. Structural configurations also require the saved ratio encoding when loading a model.
 
+CSV summaries report the mean and **sample** standard deviation across seeds
+(`ddof=1`), matching the paper. With only one seed, the standard deviation is
+undefined (`nan`); each seed's metrics remain available separately.
+
 ## 6. Data scaling, grid search and joint training
 
 For data scaling, set `SWEEP_TRAIN_FRACTIONS=True`. With `SPLIT_PKL="split_random.pkl"`, the program runs the 20%, 40%, 60%, 80% and full random training partitions in order. Selecting `split_article.pkl` does the same for article splits.
@@ -172,7 +187,50 @@ For grid search, set `GRID_YAML` in `train.py` to a path below. Each YAML declar
 
 The last two grids search consistency, bias and ranking weights independently over `[0.0, 0.01, 0.1, 0.2]`: 64 combinations per selected encoder. They optimize loss coefficients, not article properties or labels. Their fixed MSE coefficient comes from the base configuration. Adjust Ray concurrency and GPU fractions to your hardware. Validation results drive grid selection; test evaluation is skipped during grid search.
 
-For joint training, choose `TRAIN_DATASETS` and the configuration in `train_transfer.py`, then run `python train_transfer.py`. It combines the selected training/validation partitions and reports property-specific test metrics. The model contains optional hybrid-stream machinery, but hybrid fusion was not part of the reported comparison protocol and has no dedicated grid in this release.
+For joint training, choose `TRAIN_DATASETS` and the configuration in `train_transfer.py`, then run `python train_transfer.py`. It combines the selected training/validation partitions and reports property-specific test metrics. The separately reported hybrid experiments use `train.py` and the fixed settings below; they have no dedicated hyperparameter grid.
+
+### Article-held-out evaluation and hybrid models
+
+Set `CONFIG_MODULE="config.config_paper"` in `train.py` and keep `GRID_YAML=None`.
+In `config/config_paper.py`, choose `PAPER_MODEL` from `HHT`, `HHT-C`, `LLM-struct`,
+`PolyBERT`, or `PerioGT`, and select `PAPER_PROTOCOL`:
+
+| Protocol | Index file | Evaluation |
+|---|---|---|
+| `random` | `split_random.pkl` | Entry-level random split |
+| `article` | `split_article.pkl` | Article-disjoint training, validation and test |
+| `article_holdout` | `split_holdout_whole.pkl` | Unseen test articles, random training–validation split |
+
+These presets use the existing training loop and saved JSON data, three seeds
+(42, 62, 82), one GPU per run, no log target transformation, and the reported
+encoder, pooling and regression-head settings. They do not search hyperparameters
+or select new articles. Run one model at a time; the six properties are already
+listed in `TRAIN_DATASETS`.
+
+The fixed `article_holdout` partitions have the following sizes:
+
+| Property | Training | Validation | Test | Test articles |
+|---|---:|---:|---:|---:|
+| Tg | 1,316 | 188 | 214 | 32 |
+| Tm | 1,040 | 149 | 159 | 33 |
+| E | 1,009 | 145 | 148 | 30 |
+| UTS | 1,458 | 209 | 210 | 39 |
+| eps | 871 | 125 | 290 | 37 |
+| n | 1,000 | 143 | 157 | 25 |
+
+These test articles were selected with consideration of target-range coverage,
+as described in Supplementary Note 14. This is a fixed exploratory protocol,
+not a new random split for each run. The test cohort differs from `split_article.pkl`;
+numerical comparisons between the two protocols therefore do not isolate the
+effect of the validation split alone. The supplied indices reproduce the reported
+experiment; no index-generation or one-time orchestration script is needed.
+
+For the two hybrid experiments in Supplementary Note 15, choose
+`PAPER_MODEL="HHT+PolyBERT"` or `"HHT+PerioGT"` with `PAPER_PROTOCOL="random"`.
+The existing model projects both pooled streams to 512 dimensions, combines them
+using a sigmoid gate with 256 hidden units, and predicts with the [128, 64, 1]
+MLP. Both use the standard HHT [2,4]→[2] text inputs. Only the reported fixed fusion
+configuration is supplied, without a dedicated hybrid search.
 
 ## 7. Domain-specific continual training
 
@@ -196,6 +254,36 @@ The domain loop uses AdamW and linear warmup followed by a constant learning rat
 With `RANDOM_INIT_WEIGHTS=False`, the script starts from the selected main-task weights and their target scaler. With `True`, it resets task-specific trainable parameters and fits a new scaler on the domain training data; downloaded pretrained encoder initialization is retained. Repeat with `SEED=42`, `62`, and `82` for three-seed results. In the pretrained condition, each seed must use the corresponding `weights_seed{SEED}.pth` from the main-task run.
 
 Cache precomputation is shared with `precompute_embeddings.py`; available domain LLM caches are reused. A domain result contains its configuration, trainable weights, scaler, predictions, metrics and plots. One-time multi-experiment replay and seed-supplement orchestration scripts are intentionally excluded; the reusable domain entry point remains available.
+
+### E domain with fixed test articles and random training–validation splitting
+
+For Supplementary Note 14, set the following in `continue_train_inference.py`:
+
+```python
+CONTINUE_CONFIG_MODULE = "config.config_continue_article_holdout"
+WEIGHTS_DIR = "autodl-tmp/results/<main_E_random_split_run>"
+DATASET_NAME = "E_article"
+TEST_FILE = "val_dataset/val_E_article_1.json"
+INPUT_TYPE = 2  # HHT; use 9 for HHT-C; LLM-struct is inferred from its config.
+SEED = 42      # Repeat with 62 and 82, matching the main-task seed.
+```
+
+Then run `python continue_train_inference.py` for each model, seed and
+initialization condition. The selected preset uses 100 epochs, patience 10,
+batch size 16, 10 warmup steps and a learning rate of **1e-4 for both conditions**.
+Set `RANDOM_INIT_WEIGHTS=False` or `True` in
+`config/config_continue_article_holdout.py`. Use the corresponding main E random
+experiment directory for each of the five models. The same main configuration is
+required in the random condition; its task weights and scaler are not loaded.
+In the inherited condition, the matching seed's task weights and main-task scaler
+are loaded. Test predictions are saved before and after continual training.
+
+The LLM caches are exactly the existing `E_article` pool/test caches; changing
+the split only changes their index views. Precompute them using
+`DOMAIN_DATASETS=["E_article"]`, `INPUT_TYPES=[2, 9, "struct"]` and the ChemDFM
+backbone in `precompute_embeddings.py`. This does not require a separate domain
+name or a copied dataset. The 35 test DOIs are absent from both development
+partitions. The 149 domain DOIs are also absent from the main E dataset.
 
 ## 8. Inference and article-level baseline
 

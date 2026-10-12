@@ -27,6 +27,7 @@ import json
 import pickle
 import copy
 import re
+import importlib
 import numpy as np
 import pandas as pd
 import torch
@@ -48,7 +49,6 @@ from config.path import (
 )
 from domain_embedding_cache import precompute_domain_embeddings, load_domain_cached_splits
 from config.prompt import STRUCT_INPUT, build_prompt
-from config import config_continue_train as ct_cfg
 from utils import (
     compute_metrics, inverse_transform, load_ratio_encoding,
     fit_scaler, transform_targets, save_config_yaml,
@@ -59,6 +59,9 @@ from utils import (
 )
 
 # ======================== Inference Parameter Settings ========================
+# Use config.config_continue_article_holdout for Supplementary Note 14.
+CONTINUE_CONFIG_MODULE = "config.config_continue_train"
+
 # Model weights folder (containing config.yaml, scaler.pkl, weights_seed*.pth, etc.)
 WEIGHTS_DIR = "autodl-tmp/results/E_chemdfm_v1_5_8b_20260507_160338"
 
@@ -83,6 +86,8 @@ EMBEDDING_BATCH_SIZE = 1
 # Output directory
 OUTPUT_DIR = "continue_train_results/continue"
 # ==============================================================
+
+ct_cfg = importlib.import_module(CONTINUE_CONFIG_MODULE)
 
 
 # ======================== Helper Functions ========================

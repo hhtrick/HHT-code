@@ -26,7 +26,7 @@ from utils import (
     load_cached_struct_embeddings,
     build_dataloaders, build_struct_dataloaders, set_seed,
     compute_metrics, plot_parity,
-    save_config_yaml, save_csv_summary,
+    save_config_yaml, save_csv_summary, seed_standard_deviation,
     save_trainable_weights,
     scan_and_save_ratio_encoding, load_ratio_encoding,
     precompute_periogt_data, load_periogt_cache,
@@ -41,7 +41,7 @@ from target_scaling import inject_scaler_config
 # Datasets to train on (list)
 TRAIN_DATASETS = ["Tg","Tm","E","UTS","eps","n"]
 
-# Single-config training module: "config.config_article" | "config.config_stru_article"
+# Config module: config.config_article | config.config_stru_article | config.config_paper
 CONFIG_MODULE = "config.config_article"
 
 # YAML grid search config file path (set to enable YAML grid search)
@@ -545,9 +545,9 @@ def train_single_config(cfg: Dict[str, Any], dataset_name: str,
 
     summary = {
         "dataset": dataset_name,
-        "Mean_R2": f"{np.mean(r2_vals):.4f} ± {np.std(r2_vals):.4f}",
-        "Mean_RMSE": f"{np.mean(rmse_vals):.4f} ± {np.std(rmse_vals):.4f}",
-        "Mean_MAE": f"{np.mean(mae_vals):.4f} ± {np.std(mae_vals):.4f}",
+        "Mean_R2": f"{np.mean(r2_vals):.4f} ± {seed_standard_deviation(r2_vals):.4f}",
+        "Mean_RMSE": f"{np.mean(rmse_vals):.4f} ± {seed_standard_deviation(rmse_vals):.4f}",
+        "Mean_MAE": f"{np.mean(mae_vals):.4f} ± {seed_standard_deviation(mae_vals):.4f}",
     }
 
     # CSV
@@ -562,7 +562,7 @@ def train_single_config(cfg: Dict[str, Any], dataset_name: str,
     for article_metric in ["article_range_hit_rate", "article_nars"]:
         vals = [m[article_metric] for m in all_test_results if article_metric in m]
         if vals:
-            summary_row[article_metric] = f"{np.mean(vals):.4f} ± {np.std(vals):.4f}"
+            summary_row[article_metric] = f"{np.mean(vals):.4f} ± {seed_standard_deviation(vals):.4f}"
     csv_data.append(summary_row)
     save_csv_summary(csv_data, os.path.join(experiment_dir, "results.csv"))
 

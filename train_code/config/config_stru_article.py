@@ -19,13 +19,13 @@ PATIENCE = 15                             # Early stopping patience: stop if val
 GRADIENT_CLIP_VAL = 1.0                   # Gradient clipping threshold to prevent gradient explosion
 GRADIENT_ACCUMULATION_STEPS = 1           # Gradient accumulation steps, effective batch = GRADIENT_ACCUMULATION_STEPS * BATCH_SIZE
 FLOAT32_MATMUL_PRECISION = "high"         # PyTorch matmul precision ('highest' | 'high' | 'medium')
-SPLIT_PKL = "split_random.pkl"            # Dataset split index filename (default: pure random split; alternatives: 'split.pkl' for article-aware leaky split, 'split_article.pkl' for strict article-isolated split)
+SPLIT_PKL = "split_random.pkl"            # Alternatives: split_article.pkl or split_holdout_whole.pkl.
 LOG_TARGET_DATASETS = ["E", "UTS"]        # ln(y), then train-only StandardScaler; [] disables. All targets must be >0; reported metrics use original units.
 SWEEP_TRAIN_FRACTIONS = False              # True: SPLIT_PKL's 20/40/60/80% files, then full file; sequential runs with all SEEDS
 
 # ======================== Structural Encoder ========================
 STRUCT_ENCODER = "periogt"                # 'polybert' | 'periogt' | 'llm'; llm uses reduced structural fields (see below)
-FROZEN_BACKBONE = True                    # True: freeze encoder, use precomputed embedding cache; False: LoRA fine-tune encoder
+FROZEN_BACKBONE = True                    # PolyBERT/LLM: freeze or use LoRA. PerioGT remains trainable.
 
 # ======================== LoRA Parameters (effective when FROZEN_BACKBONE=False) ========================
 LORA_R = 8                                # LoRA rank (dimension of low-rank matrices)

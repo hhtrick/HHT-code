@@ -43,7 +43,7 @@ class PerioGTEncoder(nn.Module):
     """
     PerioGT structure encoder.
     Converts data entries into molecular graphs and produces high-dimensional vectors via Graph Transformer.
-    
+
     Note: PerioGT always trains full parameters, no frozen backbone or LoRA.
     """
 
@@ -102,7 +102,7 @@ class PerioGTEncoder(nn.Module):
         )
         self.model.triplet_emb.apply(lambda m: init_params(m))
 
-        # Load pretrained weights (partial match, ignore missing new modules)
+        # Load pretrained graph weights; task-specific ratio modules are initialized separately.
         if os.path.exists(pretrained_path):
             state_dict = torch.load(pretrained_path, map_location='cpu', weights_only=True)
             state_dict = {k.replace('module.', ''): v for k, v in state_dict.items()}

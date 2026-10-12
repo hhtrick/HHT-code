@@ -35,8 +35,9 @@ DATASETS = ["Tg", "Tm", "E", "UTS", "eps", "n"]
 # Split pkl filename patterns to scan under the main dataset directory
 # Includes split_random.pkl and split_random_20pct.pkl / 40pct / 60pct / 80pct etc.
 SPLIT_PKL_PATTERNS = ["split_random.pkl", "split_random_*pct.pkl",
-                      "split_article.pkl", "split_article_*pct.pkl"]
-ARTICLE_ID_MODE = "doi"  # DOI first, title fallback (same as training); "title" reproduces the old manuscript grouping
+                      "split_article.pkl", "split_article_*pct.pkl",
+                      "split_holdout_whole.pkl"]
+ARTICLE_ID_MODE = "doi"  # DOI with title fallback; "title" groups by article title only.
 
 # Split pkl filename under the continue-training dataset directory
 CONTINUE_TRAIN_SPLIT_PKL = "split_continue_train.pkl"

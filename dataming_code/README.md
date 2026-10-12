@@ -52,19 +52,19 @@ These scripts are configured through their top-level parameters rather than comm
 
 ### PDF parsing
 
-`01_pdf_to_md.py` controls `BACKEND`, batch size, formula/table parsing and MinerU resource settings. Its temporary processing directory is `0/`. It copies extracted Markdown to the selected property directory and maintains the association with the original PDF filename.
+`01_pdf_to_md.py` controls `BACKEND`, batch size, formula/table parsing and MinerU resource settings. Its temporary processing directory is `0/`; reserve that directory for the parser because it is cleared between batches. The script copies extracted Markdown to the selected property directory and maintains the association with the original PDF filename. On Linux/macOS, worker cleanup is limited to the process group started for the current batch.
 
 ### Extraction and review
 
 `02_data_extractor.py` uses extraction prompts and a separate review prompt from `prompt.py`. The retained model settings are `qwen3.5-plus-2026-02-15` for extraction and `glm-5` for review. Configure model names according to the endpoint you use.
 
-The second stage reviews the draft records against the article text. `format_checker.py` checks required fields and JSON types and separates accepted from rejected outputs. `CONCURRENCY`, `MAX_RETRIES`, `MODE` and `IGNORE_PROGRESS` control execution. Production mode uses progress files to support resuming completed articles; test mode processes a small subset. `IGNORE_PROGRESS=True` requests reprocessing and should be set deliberately.
+The second stage reviews the draft records against the article text. `format_checker.py` checks required fields and JSON types and separates accepted from rejected outputs. `CONCURRENCY`, `MAX_RETRIES`, `MODE` and `IGNORE_PROGRESS` control execution. Production mode uses progress files to resume completed articles; test mode processes a small subset. Failed extraction or review requests remain pending for a later run; an unsuccessful review does not approve the first-stage output. `IGNORE_PROGRESS=True` reprocesses completed articles and appends to existing outputs, so use a fresh output directory when intentionally repeating the full pipeline.
 
 ### Titles and generated text
 
 `03_add_title.py` reads the first Markdown level-one heading as a title. It does not independently verify bibliographic metadata; articles with missing or incorrect headings require later checking.
 
-`04_data_processor.py` creates `analysis_with_hierarchical_structure` and `analysis_without_hierarchical_structure`, each containing `descriptive_text` and `reasoning_analysis`. The retained model is `qwen3.5-plus-2026-02-15`. These are generated input variants, not additional experimentally measured facts. The two variants support the training code's input-strategy ablations.
+`04_data_processor.py` creates `analysis_with_hierarchical_structure` and `analysis_without_hierarchical_structure`, each containing `descriptive_text` and `reasoning_analysis`. The retained model is `qwen3.5-plus-2026-02-15`. Both outputs must contain non-empty text before a record is saved and marked complete; failed records remain pending. Test mode processes the first three records and includes the API reasoning output. These are generated input variants, not additional experimentally measured facts. The two variants support the training code's input-strategy ablations. As in stage 2, forcing reprocessing appends to existing outputs.
 
 ## 3. Record fields
 

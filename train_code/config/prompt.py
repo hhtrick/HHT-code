@@ -149,7 +149,7 @@ def build_prompt(entry: Dict[str, Any], target_property: str,
 def build_prompt_random(entry: Dict[str, Any], target_property: str,
                         input_content: List[int]) -> str:
     """
-    Randomly pick one input_type from the input_content list to build the prompt (type-10 dynamic augmentation mode).
+    Randomly select one configured input type to build the prompt.
     """
     chosen = random.choice(input_content)
     return build_prompt(entry, target_property, chosen)

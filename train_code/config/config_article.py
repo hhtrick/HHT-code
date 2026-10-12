@@ -27,7 +27,7 @@ SWEEP_TRAIN_FRACTIONS = False              # True: SPLIT_PKL's 20/40/60/80% file
 MODEL_TYPE = "chemdfm_v1_5_8b"              # LLM type: 'qwen3_4b_instruct_2507' | 'qwen3_4b_thinking_2507' | 'qwen3_4b_base' | 'qwen3_8b_base' | 'qwen3_0_6b_base' | 'chemdfm_v1_5_8b'
 FROZEN_BACKBONE = True                    # True: freeze LLM, use precomputed embedding cache; False: LoRA fine-tune LLM
 POOLING_TYPE = "sigmoid_pooling"        # Semantic stream pooling strategy: 'last_token' | 'mean_pooling' | 'sum_pooling' | 'attention_pooling' | 'sigmoid_pooling'
-INPUT_CONTENT = [2, 4]  # Input type list for training (1-9); multiple elements = random sampling per step (type-10 dynamic augmentation mode)
+INPUT_CONTENT = [2, 4]  # Training input types (1-9); multiple types enable random sampling per sample.
 EVAL_INPUT_CONTENT = [2]                  # Input type list for validation/testing; multiple elements = random sampling per step
 
 # ======================== LoRA Parameters (effective when FROZEN_BACKBONE=False) ========================

@@ -29,7 +29,7 @@ from utils import (
     precompute_llm_embeddings, precompute_struct_embeddings,
     load_cached_struct_embeddings, load_cached_embeddings,
     set_seed, compute_metrics, plot_parity,
-    save_config_yaml, save_csv_summary,
+    save_config_yaml, save_csv_summary, seed_standard_deviation,
     save_trainable_weights,
     scan_and_save_ratio_encoding, load_ratio_encoding,
     precompute_periogt_data, load_periogt_cache, periogt_cache_exists,
@@ -460,9 +460,9 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
         mae_vals = [m["MAE"] for m in results]
         summary = {
             "dataset": ds_name,
-            "Mean_R2": f"{np.mean(r2_vals):.4f} ± {np.std(r2_vals):.4f}",
-            "Mean_RMSE": f"{np.mean(rmse_vals):.4f} ± {np.std(rmse_vals):.4f}",
-            "Mean_MAE": f"{np.mean(mae_vals):.4f} ± {np.std(mae_vals):.4f}",
+            "Mean_R2": f"{np.mean(r2_vals):.4f} ± {seed_standard_deviation(r2_vals):.4f}",
+            "Mean_RMSE": f"{np.mean(rmse_vals):.4f} ± {seed_standard_deviation(rmse_vals):.4f}",
+            "Mean_MAE": f"{np.mean(mae_vals):.4f} ± {seed_standard_deviation(mae_vals):.4f}",
         }
         csv_data = results.copy()
         summary_row = {
@@ -475,7 +475,7 @@ def train_transfer(cfg: Dict[str, Any], dataset_names: List[str],
         for article_metric in ["article_range_hit_rate", "article_nars"]:
             vals = [m[article_metric] for m in results if article_metric in m]
             if vals:
-                summary_row[article_metric] = f"{np.mean(vals):.4f} ± {np.std(vals):.4f}"
+                summary_row[article_metric] = f"{np.mean(vals):.4f} ± {seed_standard_deviation(vals):.4f}"
         csv_data.append(summary_row)
         save_csv_summary(csv_data, os.path.join(experiment_dir, f"results_{ds_name}.csv"))
         print(f"\n[Summary] {ds_name}: {summary}")

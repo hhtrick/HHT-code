@@ -1,6 +1,4 @@
-"""
-vocab.py — PerioGT 词汇表（来自 PerioGT-main/PerioGT_copolym/data/vocab.py）
-"""
+"""PerioGT vocabulary adapted from PerioGT_copolym/data/vocab.py."""
 import numpy as np
 
 

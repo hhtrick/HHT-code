@@ -144,7 +144,7 @@ def resolve_weight_sources(weights_dir: str, seed: int, compare_ct: bool,
             sys.exit(1)
         pre_weight = os.path.join(train_weights_dir, f"weights_seed{seed}.pth")
 
-        # New CT runs store their exact scaler; legacy runs fall back to the original directory.
+        # Prefer the domain scaler; fall back to the recorded main-task directory if absent.
         scaler_path = os.path.join(weights_dir, "scaler.pkl")
         if not os.path.exists(scaler_path):
             scaler_path = os.path.join(train_weights_dir, "scaler.pkl")
