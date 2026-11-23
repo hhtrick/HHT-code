@@ -1,22 +1,24 @@
-torch
-pytorch-lightning
-transformers>=4.51.0
-peft
-sentencepiece
-accelerate
-scikit-learn
-numpy
-pandas
-matplotlib
-pyyaml
-tqdm
-torch_geometric
-rdkit
-mordred
-filelock
-networkx
-packaging
-ray[tune]
-tensorboard
+torch==2.13.0
+pytorch-lightning==2.6.6
+transformers==5.17.0
+peft==0.21.0
+sentencepiece==0.2.2
+accelerate==1.15.0
+scikit-learn==1.9.1
+scipy==1.17.1
+threadpoolctl==3.7.0
+numpy==1.26.4
+pandas==3.0.6
+matplotlib==3.11.2
+pyyaml==6.0.3
+tqdm==4.70.1
+torch_geometric==2.8.0.post1
+rdkit==2026.3.6
+mordred==1.2.0
+filelock==3.20.3
+networkx==2.8.8
+packaging==25.0
+ray[tune]==2.58.0
+tensorboard==2.21.0
 # Optional CUDA acceleration (install after compatible torch/CUDA):
-# python -m pip install flash-attn --no-build-isolation
+# python -m pip install flash-attn==2.8.3.post1 --no-build-isolation

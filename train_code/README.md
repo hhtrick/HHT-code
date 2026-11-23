@@ -294,3 +294,15 @@ Run `python compute_article_baseline.py` to evaluate the supplied splits. For a 
 ## 9. Reproducibility boundaries
 
 Training labels, corrected structure fields and split indices are distributed together. Original extraction outputs, manual-audit intermediates, old backups, pretrained weights and one-time repair scripts are not required at runtime. The current configuration files remain editable working configurations; use the explicit settings above and the manuscript's protocol when reproducing a specific comparison.
+
+## CPU matched-text baseline
+
+Run this command from `train_code` using an environment with NumPy, SciPy, scikit-learn and threadpoolctl.
+
+```bash
+python run_tfidf_ridge.py
+```
+
+The script uses the six fixed entry-level splits and the same Type 2 text as the matched HHT control. Term frequency is computed per record. Inverse document frequency counts a term once for each source DOI where it occurs in at least one training record. The validation split selects the ridge penalty separately for each property.
+
+Each run writes the ridge results (`*_article_idf.csv`), validation scores, test predictions and a JSON run manifest with checksums for the dataset and split inputs. The corresponding HHT ablation results are reported in Supplementary Tables 9 and 23. Use `--properties Tg` for a single property or `--output-dir PATH` to store results elsewhere.

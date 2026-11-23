@@ -2,6 +2,8 @@
 
 HHT represents polymer composition and processing history as text, encodes it with a pretrained language model, and predicts properties using learned pooling and an MLP regression head. This repository contains the literature-mining pipeline, training code, curated datasets and fixed evaluation partitions for six polymer properties and two continual-training domains.
 
+The [training guide](train_code/README.md#cpu-matched-text-baseline) gives the command and output files for the CPU TF–IDF + Ridge benchmark on matched Type 2 records.
+
 ## Repository structure
 
 ```text
@@ -21,6 +23,7 @@ See the [training guide](train_code/README.md) and [data-mining guide](dataming_
 - **HHT:** frozen LLM representations with sigmoid-gated pooling and an MLP. The standard ChemDFM configuration samples input Types 2 and 4 during training and uses Type 2 for validation and testing.
 - **HHT-C:** complete chemical-composition information without processing history, implemented as input Type 9.
 - **Structural comparisons:** adapted PolyBERT and PerioGT, plus LLM-struct with reduced structural input fields.
+- **Conventional text comparison:** TF–IDF with ridge regression uses the exact Type 2 input and fixed splits of the matched HHT control. Inverse document frequency is fitted across source articles represented in the training split.
 - **Evaluation:** fixed entry-level random and DOI-based article-level splits, three training seeds, nested training fractions, joint training and domain-specific continual training.
 - **Additional article-held-out evaluation:** complete test articles held out with entry-level random training–validation splitting, for all six properties and the epoxy E domain (Supplementary Note 14).
 - **Hybrid comparisons:** gated fusion of HHT with PolyBERT or PerioGT using the fixed configurations in Supplementary Note 15.
